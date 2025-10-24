@@ -44,6 +44,17 @@ class _LoginScreenState extends State<LoginScreen> {
       final data = result['data'];
       final phoneNumber = data.phoneNumber;
 
+      // Check if phoneNumber is available
+      if (phoneNumber == null || phoneNumber.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Phone number not found. Please try again.'),
+            backgroundColor: AppTheme.errorColor,
+          ),
+        );
+        return;
+      }
+
       // Navigate to OTP verification
       Navigator.of(context).push(
         MaterialPageRoute(

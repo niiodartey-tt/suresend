@@ -229,7 +229,6 @@ class TransactionService {
     int limit = 10,
   }) async {
     try {
-      print('TransactionService: Calling API with query: $query, userType: $userType');
       final result = await _apiService.get(
         'transactions/search-users',
         requiresAuth: true,
@@ -240,30 +239,23 @@ class TransactionService {
         },
       );
 
-      print('TransactionService: API response: $result');
-
       if (result['success']) {
         // ApiService wraps the response, so result['data'] contains the backend response
         // Backend returns: { status: 'success', data: { users: [...] } }
         // So we need to access result['data']['data']['users']
         final backendData = result['data'];
-        print('TransactionService: Backend data: $backendData');
 
         if (backendData['status'] == 'success' && backendData['data'] != null) {
           final usersData = backendData['data']['users'] as List;
-          print('TransactionService: Users data: $usersData');
-
           final users = usersData
               .map((u) => UserSearchResult.fromJson(u))
               .toList();
 
-          print('TransactionService: Parsed ${users.length} users');
           return {
             'success': true,
             'data': users,
           };
         } else {
-          print('TransactionService: Invalid backend data structure');
           return {
             'success': false,
             'error': 'Invalid response structure',
@@ -271,10 +263,8 @@ class TransactionService {
         }
       }
 
-      print('TransactionService: API returned error: ${result['error']}');
       return result;
     } catch (e) {
-      print('TransactionService: Exception: $e');
       return {
         'success': false,
         'error': e.toString(),

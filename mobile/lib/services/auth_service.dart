@@ -34,7 +34,10 @@ class AuthService {
       );
 
       if (result['success']) {
-        final authResponse = AuthResponse.fromJson(result['data']);
+        // Backend response structure: { status, message, data: { user, requiresOTP } }
+        // API service wraps it as: { success, data: <backend response> }
+        final backendData = result['data']['data'] ?? result['data'];
+        final authResponse = AuthResponse.fromJson(backendData);
         return {
           'success': true,
           'data': authResponse,
@@ -65,7 +68,10 @@ class AuthService {
       );
 
       if (result['success']) {
-        final authResponse = AuthResponse.fromJson(result['data']);
+        // Backend response structure: { status, message, data: { phoneNumber, requiresOTP } }
+        // API service wraps it as: { success, data: <backend response> }
+        final backendData = result['data']['data'] ?? result['data'];
+        final authResponse = AuthResponse.fromJson(backendData);
         return {
           'success': true,
           'data': authResponse,
@@ -98,7 +104,10 @@ class AuthService {
       );
 
       if (result['success']) {
-        final authResponse = AuthResponse.fromJson(result['data']);
+        // Backend response structure: { status, message, data: { accessToken, refreshToken, user } }
+        // API service wraps it as: { success, data: <backend response> }
+        final backendData = result['data']['data'] ?? result['data'];
+        final authResponse = AuthResponse.fromJson(backendData);
 
         // Store tokens and user data
         if (authResponse.accessToken != null) {
@@ -190,13 +199,16 @@ class AuthService {
       );
 
       if (result['success']) {
-        final user = User.fromJson(result['data']['user']);
+        // Backend response structure: { status, message, data: { user, wallet, stats } }
+        // API service wraps it as: { success, data: <backend response> }
+        final backendData = result['data']['data'] ?? result['data'];
+        final user = User.fromJson(backendData['user']);
         return {
           'success': true,
           'data': {
             'user': user,
-            'wallet': result['data']['wallet'],
-            'stats': result['data']['stats'],
+            'wallet': backendData['wallet'],
+            'stats': backendData['stats'],
           },
         };
       }

@@ -74,7 +74,7 @@ const createEscrow = async (req, res) => {
 
         // Deduct from buyer's wallet
         await client.query(
-          'UPDATE wallets SET balance = balance - $1 WHERE user_id = $2',
+          'UPDATE wallets SET balance = balance - $1::NUMERIC WHERE user_id = $2',
           [amount, buyerId]
         );
 
@@ -82,7 +82,7 @@ const createEscrow = async (req, res) => {
         await client.query(
           `INSERT INTO wallet_transactions
            (wallet_id, amount, type, description, reference, balance_before, balance_after)
-           SELECT id, $1, 'debit', $2, $3, $4, $4 - $1
+           SELECT id, $1::NUMERIC, 'debit', $2, $3, $4::NUMERIC, ($4::NUMERIC - $1::NUMERIC)
            FROM wallets WHERE user_id = $5`,
           [amount, 'Escrow payment', transactionRef, balance, buyerId]
         );
@@ -313,7 +313,7 @@ const confirmDelivery = async (req, res) => {
 
         // Credit seller's wallet
         await client.query(
-          'UPDATE wallets SET balance = balance + $1 WHERE user_id = $2',
+          'UPDATE wallets SET balance = balance + $1::NUMERIC WHERE user_id = $2',
           [amountToRelease, transaction.seller_id]
         );
 
@@ -563,7 +563,7 @@ const cancelTransaction = async (req, res) => {
       // Refund to buyer if paid from wallet
       if (transaction.payment_method === 'wallet') {
         await client.query(
-          'UPDATE wallets SET balance = balance + $1 WHERE user_id = $2',
+          'UPDATE wallets SET balance = balance + $1::NUMERIC WHERE user_id = $2',
           [transaction.amount, userId]
         );
 

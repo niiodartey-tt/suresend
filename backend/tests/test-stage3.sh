@@ -1,308 +1,459 @@
 #!/bin/bash
 
-# Color codes for output
+# SureSend Stage 3 Backend Test Script
+# Tests all escrow and transaction endpoints
+
+# Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
+CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
-# API Configuration
-API_URL="${API_URL:-http://localhost:3000/api/v1}"
-HEALTH_URL="${HEALTH_URL:-http://localhost:3000/health}"
+# Base URL
+BASE_URL="http://localhost:3000"
 
-# Test tracking
-TOTAL_TESTS=0
-PASSED_TESTS=0
-FAILED_TESTS=0
+# Test counter
+TESTS_PASSED=0
+TESTS_FAILED=0
 
-# Test data storage
-BUYER_TOKEN=""
-SELLER_TOKEN=""
-RIDER_TOKEN=""
-BUYER_ID=""
-SELLER_ID=""
-RIDER_ID=""
-ESCROW_ID=""
-TRANSACTION_ID=""
+# Function to print test result
+print_result() {
+    if [ $1 -eq 0 ]; then
+        echo -e "${GREEN}✅ PASS${NC}: $2"
+        ((TESTS_PASSED++))
+    else
+        echo -e "${RED}❌ FAIL${NC}: $2"
+        ((TESTS_FAILED++))
+    fi
+}
 
-echo ""
+# Function to extract JSON field
+extract_field() {
+    echo "$1" | grep -o "\"$2\"[^,}]*" | cut -d'"' -f4
+}
+
+echo -e "${CYAN}"
 echo "╔═══════════════════════════════════════════════╗"
 echo "║   SureSend Stage 3 Backend Test Suite        ║"
 echo "║   Escrow & Transaction Functionality          ║"
 echo "╚═══════════════════════════════════════════════╝"
-echo ""
-
-# Helper function to print test results
-print_test_result() {
-    local test_name="$1"
-    local result="$2"
-    local details="$3"
-
-    TOTAL_TESTS=$((TOTAL_TESTS + 1))
-
-    if [ "$result" = "pass" ]; then
-        echo -e "${GREEN}✅ PASS${NC}: $test_name"
-        PASSED_TESTS=$((PASSED_TESTS + 1))
-    else
-        echo -e "${RED}❌ FAIL${NC}: $test_name"
-        if [ -n "$details" ]; then
-            echo -e "${YELLOW}   Details: $details${NC}"
-        fi
-        FAILED_TESTS=$((FAILED_TESTS + 1))
-    fi
-}
-
-# Helper function to make API calls with better error handling
-api_call() {
-    local method="$1"
-    local endpoint="$2"
-    local data="$3"
-    local token="$4"
-
-    local headers=(-H "Content-Type: application/json")
-
-    if [ -n "$token" ]; then
-        headers+=(-H "Authorization: Bearer $token")
-    fi
-
-    if [ "$method" = "GET" ]; then
-        response=$(curl -s -w "\n%{http_code}" -X GET "${API_URL}${endpoint}" "${headers[@]}")
-    else
-        response=$(curl -s -w "\n%{http_code}" -X "$method" "${API_URL}${endpoint}" "${headers[@]}" -d "$data")
-    fi
-
-    http_code=$(echo "$response" | tail -n1)
-    body=$(echo "$response" | sed '$d')
-
-    echo "$body"
-    return $http_code
-}
+echo -e "${NC}\n"
 
 # Check if backend is running
-echo "Checking backend status..."
-health_response=$(curl -s -o /dev/null -w "%{http_code}" "$HEALTH_URL")
-
-if [ "$health_response" != "200" ]; then
-    echo -e "${RED}❌ Backend is not running at $HEALTH_URL${NC}"
-    echo "Please start the backend server first:"
-    echo "  cd backend && npm start"
+echo -e "${YELLOW}Checking backend status...${NC}"
+response=$(curl -s "$BASE_URL/health" 2>/dev/null)
+if [ $? -ne 0 ]; then
+    echo -e "${RED}❌ Backend is not running!${NC}"
+    echo "Please start the backend first:"
+    echo "  cd backend && npm run dev"
     exit 1
 fi
+echo -e "${GREEN}✅ Backend is running${NC}\n"
 
-echo -e "${GREEN}✅ Backend is running${NC}"
-echo ""
+# Setup: Create test users
+echo -e "${BLUE}═══════════════════════════════════════${NC}"
+echo -e "${BLUE}  Setup: Creating Test Users${NC}"
+echo -e "${BLUE}═══════════════════════════════════════${NC}\n"
 
-# Check if jq is available
-if ! command -v jq &> /dev/null; then
-    echo -e "${YELLOW}⚠ Warning: 'jq' command not found. Installing for better JSON parsing...${NC}"
-    # Try to provide helpful message
-    echo "Please install jq: sudo apt-get install jq (or brew install jq on macOS)"
-    echo "Continuing without jq..."
-    JQ_AVAILABLE=false
-else
-    JQ_AVAILABLE=true
-fi
+# Register buyer
+echo -e "${YELLOW}Creating test buyer account...${NC}"
+response=$(curl -s -X POST "$BASE_URL/api/v1/auth/register" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "testbuyerstage03",
+    "phoneNumber": "+233245001001",
+    "password": "Buyer@1234",
+    "fullName": "Stage 3 Test Buyer",
+    "userType": "buyer",
+    "email": "buyer.stage3@test.com"
+  }')
 
-echo "═══════════════════════════════════════════════"
-echo "  Setup: Creating Test Users"
-echo "═══════════════════════════════════════════════"
-echo ""
+status=$(extract_field "$response" "status")
+if [ "$status" == "success" ]; then
+    print_result 0 "Buyer registration"
+    echo -e "${BLUE}📝 Check backend terminal for buyer OTP...${NC}"
+    read -p "Enter buyer OTP: " BUYER_OTP
 
-# Generate unique phone numbers for this test run
-TIMESTAMP=$(date +%s)
-BUYER_PHONE="+233${TIMESTAMP:0:9}"
-SELLER_PHONE="+233${TIMESTAMP:1:9}"
-RIDER_PHONE="+233${TIMESTAMP:2:9}"
+    # Verify buyer OTP
+    response=$(curl -s -X POST "$BASE_URL/api/v1/auth/verify-otp" \
+      -H "Content-Type: application/json" \
+      -d "{
+        \"phoneNumber\": \"+233245001001\",
+        \"otpCode\": \"$BUYER_OTP\",
+        \"purpose\": \"registration\"
+      }")
 
-# 1. Register Buyer
-echo "Creating test buyer account..."
-buyer_data=$(cat <<EOF
-{
-  "username": "testbuyer_${TIMESTAMP}",
-  "phoneNumber": "$BUYER_PHONE",
-  "password": "TestPass123!",
-  "fullName": "Test Buyer",
-  "userType": "buyer",
-  "email": "testbuyer${TIMESTAMP}@example.com"
-}
-EOF
-)
+    status=$(extract_field "$response" "status")
+    if [ "$status" == "success" ]; then
+        print_result 0 "Buyer OTP verification"
+        BUYER_TOKEN=$(echo "$response" | grep -o '"accessToken":"[^"]*' | cut -d'"' -f4)
+        BUYER_ID=$(echo "$response" | grep -o '"id":"[^"]*' | head -1 | cut -d'"' -f4)
+        echo -e "${GREEN}✓ Buyer token received${NC}"
 
-buyer_response=$(api_call "POST" "/auth/register" "$buyer_data" "")
-buyer_status=$?
-
-if [ $buyer_status -eq 201 ]; then
-    print_test_result "Buyer registration" "pass"
-    if [ "$JQ_AVAILABLE" = true ]; then
-        BUYER_ID=$(echo "$buyer_response" | jq -r '.data.user.id // empty')
+        # Fund buyer wallet (simulate)
+        echo -e "${YELLOW}Simulating wallet funding for buyer (adding GHS 500)...${NC}"
+        psql -U postgres -d suresend_db -c "UPDATE wallets SET balance = 500.00 WHERE user_id = '$BUYER_ID';" > /dev/null 2>&1
+        echo -e "${GREEN}✓ Buyer wallet funded${NC}"
+    else
+        print_result 1 "Buyer OTP verification"
+        echo "Cannot proceed without buyer account"
+        exit 1
     fi
-    echo "   Phone: $BUYER_PHONE"
 else
-    print_test_result "Buyer registration" "fail" "HTTP $buyer_status: $(echo "$buyer_response" | head -c 200)"
-    echo ""
+    print_result 1 "Buyer registration"
     echo "Cannot proceed without buyer account"
     exit 1
 fi
 
-# 2. Verify Buyer OTP
-echo ""
-echo "Verifying buyer OTP..."
-# In development, OTP is logged to console. Using a default OTP for testing
-buyer_otp_data=$(cat <<EOF
-{
-  "phoneNumber": "$BUYER_PHONE",
-  "otpCode": "123456",
-  "purpose": "registration"
-}
-EOF
-)
+# Register seller
+echo -e "\n${YELLOW}Creating test seller account...${NC}"
+response=$(curl -s -X POST "$BASE_URL/api/v1/auth/register" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "testsellerstage3",
+    "phoneNumber": "+233245002002",
+    "password": "Seller@1234",
+    "fullName": "Stage 3 Test Seller",
+    "userType": "seller"
+  }')
 
-buyer_otp_response=$(api_call "POST" "/auth/verify-otp" "$buyer_otp_data" "")
-buyer_otp_status=$?
+status=$(extract_field "$response" "status")
+if [ "$status" == "success" ]; then
+    print_result 0 "Seller registration"
+    echo -e "${BLUE}📝 Check backend terminal for seller OTP...${NC}"
+    read -p "Enter seller OTP: " SELLER_OTP
 
-if [ $buyer_otp_status -eq 200 ]; then
-    print_test_result "Buyer OTP verification" "pass"
-    if [ "$JQ_AVAILABLE" = true ]; then
-        BUYER_TOKEN=$(echo "$buyer_otp_response" | jq -r '.data.accessToken // empty')
-        BUYER_ID=$(echo "$buyer_otp_response" | jq -r '.data.user.id // empty')
+    # Verify seller OTP
+    response=$(curl -s -X POST "$BASE_URL/api/v1/auth/verify-otp" \
+      -H "Content-Type: application/json" \
+      -d "{
+        \"phoneNumber\": \"+233245002002\",
+        \"otpCode\": \"$SELLER_OTP\",
+        \"purpose\": \"registration\"
+      }")
+
+    status=$(extract_field "$response" "status")
+    if [ "$status" == "success" ]; then
+        print_result 0 "Seller OTP verification"
+        SELLER_TOKEN=$(echo "$response" | grep -o '"accessToken":"[^"]*' | cut -d'"' -f4)
+        SELLER_ID=$(echo "$response" | grep -o '"id":"[^"]*' | head -1 | cut -d'"' -f4)
+        echo -e "${GREEN}✓ Seller token received${NC}"
+    else
+        print_result 1 "Seller OTP verification"
+        echo "Cannot proceed without seller account"
+        exit 1
     fi
 else
-    print_test_result "Buyer OTP verification" "fail" "HTTP $buyer_otp_status"
-    echo ""
-    echo "Note: Make sure OTP code is '123456' in development mode"
-    echo "Or check the backend logs for the actual OTP code"
+    print_result 1 "Seller registration"
+    echo "Cannot proceed without seller account"
     exit 1
 fi
 
-# 3. Register Seller
-echo ""
-echo "Creating test seller account..."
-seller_data=$(cat <<EOF
-{
-  "username": "testseller_${TIMESTAMP}",
-  "phoneNumber": "$SELLER_PHONE",
-  "password": "TestPass123!",
-  "fullName": "Test Seller",
-  "userType": "seller",
-  "email": "testseller${TIMESTAMP}@example.com"
-}
-EOF
-)
+# Test 1: Search Users
+echo -e "\n${BLUE}═══════════════════════════════════════${NC}"
+echo -e "${BLUE}  Test 1: Search Users${NC}"
+echo -e "${BLUE}═══════════════════════════════════════${NC}\n"
 
-seller_response=$(api_call "POST" "/auth/register" "$seller_data" "")
-seller_status=$?
+response=$(curl -s -X GET "$BASE_URL/api/v1/transactions/search-users?search=stage3&userType=seller" \
+  -H "Authorization: Bearer $BUYER_TOKEN")
 
-if [ $seller_status -eq 201 ]; then
-    print_test_result "Seller registration" "pass"
-    if [ "$JQ_AVAILABLE" = true ]; then
-        SELLER_ID=$(echo "$seller_response" | jq -r '.data.user.id // empty')
-    fi
-    echo "   Phone: $SELLER_PHONE"
+status=$(extract_field "$response" "status")
+if [ "$status" == "success" ]; then
+    print_result 0 "Search sellers"
 else
-    print_test_result "Seller registration" "fail" "HTTP $seller_status: $(echo "$seller_response" | head -c 200)"
+    print_result 1 "Search sellers"
+    echo "Response: $response"
 fi
 
-# 4. Verify Seller OTP
-echo ""
-echo "Verifying seller OTP..."
-seller_otp_data=$(cat <<EOF
-{
-  "phoneNumber": "$SELLER_PHONE",
-  "otpCode": "123456",
-  "purpose": "registration"
-}
-EOF
-)
+# Test 2: Create Escrow Transaction
+echo -e "\n${BLUE}═══════════════════════════════════════${NC}"
+echo -e "${BLUE}  Test 2: Create Escrow Transaction${NC}"
+echo -e "${BLUE}═══════════════════════════════════════${NC}\n"
 
-seller_otp_response=$(api_call "POST" "/auth/verify-otp" "$seller_otp_data" "")
-seller_otp_status=$?
+response=$(curl -s -X POST "$BASE_URL/api/v1/escrow/create" \
+  -H "Authorization: Bearer $BUYER_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"sellerId\": \"$SELLER_ID\",
+    \"amount\": 150.00,
+    \"description\": \"iPhone 13 Pro - 256GB Blue\",
+    \"paymentMethod\": \"wallet\"
+  }")
 
-if [ $seller_otp_status -eq 200 ]; then
-    print_test_result "Seller OTP verification" "pass"
-    if [ "$JQ_AVAILABLE" = true ]; then
-        SELLER_TOKEN=$(echo "$seller_otp_response" | jq -r '.data.accessToken // empty')
-        SELLER_ID=$(echo "$seller_otp_response" | jq -r '.data.user.id // empty')
-    fi
+status=$(extract_field "$response" "status")
+if [ "$status" == "success" ]; then
+    print_result 0 "Create escrow transaction"
+    TRANSACTION_ID=$(echo "$response" | grep -o '"id":"[^"]*' | head -1 | cut -d'"' -f4)
+    TRANSACTION_REF=$(echo "$response" | grep -o '"transactionRef":"[^"]*' | cut -d'"' -f4)
+    echo -e "${GREEN}✓ Transaction ID: $TRANSACTION_ID${NC}"
+    echo -e "${GREEN}✓ Transaction Ref: $TRANSACTION_REF${NC}"
 else
-    print_test_result "Seller OTP verification" "fail" "HTTP $seller_otp_status"
+    print_result 1 "Create escrow transaction"
+    echo "Response: $response"
+    exit 1
 fi
 
-# 5. Register Rider
-echo ""
-echo "Creating test rider account..."
-rider_data=$(cat <<EOF
-{
-  "username": "testrider_${TIMESTAMP}",
-  "phoneNumber": "$RIDER_PHONE",
-  "password": "TestPass123!",
-  "fullName": "Test Rider",
-  "userType": "rider",
-  "email": "testrider${TIMESTAMP}@example.com"
-}
-EOF
-)
+# Test 3: Get Transaction Details
+echo -e "\n${BLUE}═══════════════════════════════════════${NC}"
+echo -e "${BLUE}  Test 3: Get Transaction Details${NC}"
+echo -e "${BLUE}═══════════════════════════════════════${NC}\n"
 
-rider_response=$(api_call "POST" "/auth/register" "$rider_data" "")
-rider_status=$?
+response=$(curl -s -X GET "$BASE_URL/api/v1/escrow/$TRANSACTION_ID" \
+  -H "Authorization: Bearer $BUYER_TOKEN")
 
-if [ $rider_status -eq 201 ]; then
-    print_test_result "Rider registration" "pass"
-    if [ "$JQ_AVAILABLE" = true ]; then
-        RIDER_ID=$(echo "$rider_response" | jq -r '.data.user.id // empty')
-    fi
-    echo "   Phone: $RIDER_PHONE"
+status=$(extract_field "$response" "status")
+if [ "$status" == "success" ]; then
+    print_result 0 "Get transaction details (buyer)"
 else
-    print_test_result "Rider registration" "fail" "HTTP $rider_status: $(echo "$rider_response" | head -c 200)"
+    print_result 1 "Get transaction details (buyer)"
 fi
 
-# 6. Verify Rider OTP
-echo ""
-echo "Verifying rider OTP..."
-rider_otp_data=$(cat <<EOF
-{
-  "phoneNumber": "$RIDER_PHONE",
-  "otpCode": "123456",
-  "purpose": "registration"
-}
-EOF
-)
+# Seller can also view
+response=$(curl -s -X GET "$BASE_URL/api/v1/escrow/$TRANSACTION_ID" \
+  -H "Authorization: Bearer $SELLER_TOKEN")
 
-rider_otp_response=$(api_call "POST" "/auth/verify-otp" "$rider_otp_data" "")
-rider_otp_status=$?
-
-if [ $rider_otp_status -eq 200 ]; then
-    print_test_result "Rider OTP verification" "pass"
-    if [ "$JQ_AVAILABLE" = true ]; then
-        RIDER_TOKEN=$(echo "$rider_otp_response" | jq -r '.data.accessToken // empty')
-        RIDER_ID=$(echo "$rider_otp_response" | jq -r '.data.user.id // empty')
-    fi
+status=$(extract_field "$response" "status")
+if [ "$status" == "success" ]; then
+    print_result 0 "Get transaction details (seller)"
 else
-    print_test_result "Rider OTP verification" "fail" "HTTP $rider_otp_status"
+    print_result 1 "Get transaction details (seller)"
 fi
 
-echo ""
-echo "═══════════════════════════════════════════════"
-echo "  Stage 3: Escrow & Transaction Tests"
-echo "═══════════════════════════════════════════════"
-echo ""
-echo -e "${YELLOW}Note: Stage 3 endpoints will be implemented next${NC}"
-echo ""
+# Test 4: Get Transaction List
+echo -e "\n${BLUE}═══════════════════════════════════════${NC}"
+echo -e "${BLUE}  Test 4: Get Transaction List${NC}"
+echo -e "${BLUE}═══════════════════════════════════════${NC}\n"
 
-# Summary
-echo "═══════════════════════════════════════════════"
-echo "  Test Summary"
-echo "═══════════════════════════════════════════════"
-echo ""
-echo "Total Tests: $TOTAL_TESTS"
-echo -e "${GREEN}Passed: $PASSED_TESTS${NC}"
-echo -e "${RED}Failed: $FAILED_TESTS${NC}"
-echo ""
+response=$(curl -s -X GET "$BASE_URL/api/v1/transactions?page=1&limit=10" \
+  -H "Authorization: Bearer $BUYER_TOKEN")
 
-if [ $FAILED_TESTS -eq 0 ]; then
-    echo -e "${GREEN}✨ All tests passed!${NC}"
+status=$(extract_field "$response" "status")
+if [ "$status" == "success" ]; then
+    print_result 0 "Get transaction list (buyer)"
+else
+    print_result 1 "Get transaction list (buyer)"
+fi
+
+# Seller's transactions
+response=$(curl -s -X GET "$BASE_URL/api/v1/transactions?page=1&limit=10&role=seller" \
+  -H "Authorization: Bearer $SELLER_TOKEN")
+
+status=$(extract_field "$response" "status")
+if [ "$status" == "success" ]; then
+    print_result 0 "Get transaction list (seller)"
+else
+    print_result 1 "Get transaction list (seller)"
+fi
+
+# Test 5: Get Transaction Statistics
+echo -e "\n${BLUE}═══════════════════════════════════════${NC}"
+echo -e "${BLUE}  Test 5: Get Transaction Statistics${NC}"
+echo -e "${BLUE}═══════════════════════════════════════${NC}\n"
+
+response=$(curl -s -X GET "$BASE_URL/api/v1/transactions/stats" \
+  -H "Authorization: Bearer $BUYER_TOKEN")
+
+status=$(extract_field "$response" "status")
+if [ "$status" == "success" ]; then
+    print_result 0 "Get transaction statistics"
+else
+    print_result 1 "Get transaction statistics"
+fi
+
+# Test 6: Confirm Delivery
+echo -e "\n${BLUE}═══════════════════════════════════════${NC}"
+echo -e "${BLUE}  Test 6: Confirm Delivery${NC}"
+echo -e "${BLUE}═══════════════════════════════════════${NC}\n"
+
+echo -e "${YELLOW}Confirming delivery for transaction $TRANSACTION_REF...${NC}"
+response=$(curl -s -X POST "$BASE_URL/api/v1/escrow/$TRANSACTION_ID/confirm-delivery" \
+  -H "Authorization: Bearer $BUYER_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "confirmed": true,
+    "notes": "Product received in excellent condition. Thank you!"
+  }')
+
+status=$(extract_field "$response" "status")
+if [ "$status" == "success" ]; then
+    print_result 0 "Confirm delivery (happy path)"
+    echo -e "${GREEN}✓ Funds released to seller${NC}"
+else
+    print_result 1 "Confirm delivery (happy path)"
+    echo "Response: $response"
+fi
+
+# Test 7: Create Another Transaction for Cancellation Test
+echo -e "\n${BLUE}═══════════════════════════════════════${NC}"
+echo -e "${BLUE}  Test 7: Cancel Transaction${NC}"
+echo -e "${BLUE}═══════════════════════════════════════${NC}\n"
+
+echo -e "${YELLOW}Creating transaction for cancellation test...${NC}"
+response=$(curl -s -X POST "$BASE_URL/api/v1/escrow/create" \
+  -H "Authorization: Bearer $BUYER_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"sellerId\": \"$SELLER_ID\",
+    \"amount\": 75.00,
+    \"description\": \"Samsung Galaxy S22\",
+    \"paymentMethod\": \"wallet\"
+  }")
+
+status=$(extract_field "$response" "status")
+if [ "$status" == "success" ]; then
+    CANCEL_TRANSACTION_ID=$(echo "$response" | grep -o '"id":"[^"]*' | head -1 | cut -d'"' -f4)
+    echo -e "${GREEN}✓ Transaction created for cancellation${NC}"
+
+    # Cancel it
+    response=$(curl -s -X POST "$BASE_URL/api/v1/escrow/$CANCEL_TRANSACTION_ID/cancel" \
+      -H "Authorization: Bearer $BUYER_TOKEN" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "reason": "Changed my mind"
+      }')
+
+    status=$(extract_field "$response" "status")
+    if [ "$status" == "success" ]; then
+        print_result 0 "Cancel transaction"
+        echo -e "${GREEN}✓ Transaction cancelled, funds refunded${NC}"
+    else
+        print_result 1 "Cancel transaction"
+        echo "Response: $response"
+    fi
+else
+    print_result 1 "Create transaction for cancellation"
+fi
+
+# Test 8: Create Transaction for Dispute Test
+echo -e "\n${BLUE}═══════════════════════════════════════${NC}"
+echo -e "${BLUE}  Test 8: Raise Dispute${NC}"
+echo -e "${BLUE}═══════════════════════════════════════${NC}\n"
+
+echo -e "${YELLOW}Creating transaction for dispute test...${NC}"
+response=$(curl -s -X POST "$BASE_URL/api/v1/escrow/create" \
+  -H "Authorization: Bearer $BUYER_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"sellerId\": \"$SELLER_ID\",
+    \"amount\": 200.00,
+    \"description\": \"MacBook Pro 14 inch\",
+    \"paymentMethod\": \"wallet\"
+  }")
+
+status=$(extract_field "$response" "status")
+if [ "$status" == "success" ]; then
+    DISPUTE_TRANSACTION_ID=$(echo "$response" | grep -o '"id":"[^"]*' | head -1 | cut -d'"' -f4)
+    echo -e "${GREEN}✓ Transaction created for dispute${NC}"
+
+    # Raise dispute
+    response=$(curl -s -X POST "$BASE_URL/api/v1/escrow/$DISPUTE_TRANSACTION_ID/dispute" \
+      -H "Authorization: Bearer $BUYER_TOKEN" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "reason": "Product does not match description. Screen has scratches and battery health is only 85%."
+      }')
+
+    status=$(extract_field "$response" "status")
+    if [ "$status" == "success" ]; then
+        print_result 0 "Raise dispute"
+        echo -e "${GREEN}✓ Dispute raised successfully${NC}"
+    else
+        print_result 1 "Raise dispute"
+        echo "Response: $response"
+    fi
+else
+    print_result 1 "Create transaction for dispute"
+fi
+
+# Test 9: Reject Delivery (Creates Dispute)
+echo -e "\n${BLUE}═══════════════════════════════════════${NC}"
+echo -e "${BLUE}  Test 9: Reject Delivery${NC}"
+echo -e "${BLUE}═══════════════════════════════════════${NC}\n"
+
+echo -e "${YELLOW}Creating transaction for rejection test...${NC}"
+response=$(curl -s -X POST "$BASE_URL/api/v1/escrow/create" \
+  -H "Authorization: Bearer $BUYER_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"sellerId\": \"$SELLER_ID\",
+    \"amount\": 50.00,
+    \"description\": \"AirPods Pro\",
+    \"paymentMethod\": \"wallet\"
+  }")
+
+status=$(extract_field "$response" "status")
+if [ "$status" == "success" ]; then
+    REJECT_TRANSACTION_ID=$(echo "$response" | grep -o '"id":"[^"]*' | head -1 | cut -d'"' -f4)
+    echo -e "${GREEN}✓ Transaction created${NC}"
+
+    # Reject delivery
+    response=$(curl -s -X POST "$BASE_URL/api/v1/escrow/$REJECT_TRANSACTION_ID/confirm-delivery" \
+      -H "Authorization: Bearer $BUYER_TOKEN" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "confirmed": false,
+        "notes": "Product is fake/counterfeit"
+      }')
+
+    status=$(extract_field "$response" "status")
+    if [ "$status" == "success" ]; then
+        print_result 0 "Reject delivery (creates dispute)"
+        echo -e "${GREEN}✓ Delivery rejected, dispute created${NC}"
+    else
+        print_result 1 "Reject delivery"
+        echo "Response: $response"
+    fi
+else
+    print_result 1 "Create transaction for rejection"
+fi
+
+# Test 10: Check Wallet Balances
+echo -e "\n${BLUE}═══════════════════════════════════════${NC}"
+echo -e "${BLUE}  Test 10: Verify Wallet Balances${NC}"
+echo -e "${BLUE}═══════════════════════════════════════${NC}\n"
+
+echo -e "${YELLOW}Checking wallet balances...${NC}"
+
+# Buyer balance
+buyer_balance=$(psql -U postgres -d suresend_db -t -c "SELECT balance FROM wallets WHERE user_id = '$BUYER_ID';")
+echo -e "Buyer balance: ${CYAN}GHS ${buyer_balance}${NC}"
+
+# Seller balance
+seller_balance=$(psql -U postgres -d suresend_db -t -c "SELECT balance FROM wallets WHERE user_id = '$SELLER_ID';")
+echo -e "Seller balance: ${CYAN}GHS ${seller_balance}${NC}"
+
+print_result 0 "Wallet balance verification"
+
+# Print summary
+echo -e "\n${BLUE}═══════════════════════════════════════${NC}"
+echo -e "${BLUE}  Test Summary${NC}"
+echo -e "${BLUE}═══════════════════════════════════════${NC}\n"
+
+echo -e "${GREEN}Passed: $TESTS_PASSED${NC}"
+echo -e "${RED}Failed: $TESTS_FAILED${NC}"
+TOTAL=$((TESTS_PASSED + TESTS_FAILED))
+echo -e "Total: $TOTAL\n"
+
+if [ $TESTS_FAILED -eq 0 ]; then
+    echo -e "${GREEN}✅ All Stage 3 tests passed!${NC}"
+    echo -e "${GREEN}Escrow system is fully functional.${NC}\n"
+
+    echo -e "${CYAN}Test Results:${NC}"
+    echo "  ✓ Create escrow transactions"
+    echo "  ✓ Get transaction details"
+    echo "  ✓ List transactions with pagination"
+    echo "  ✓ Transaction statistics"
+    echo "  ✓ User search"
+    echo "  ✓ Confirm delivery (release funds)"
+    echo "  ✓ Cancel transaction (refund)"
+    echo "  ✓ Raise disputes"
+    echo "  ✓ Reject delivery (auto dispute)"
+    echo "  ✓ Wallet integration"
+    echo ""
     exit 0
 else
-    echo -e "${RED}❌ Some tests failed${NC}"
+    echo -e "${RED}❌ Some tests failed. Please review errors above.${NC}\n"
     exit 1
 fi

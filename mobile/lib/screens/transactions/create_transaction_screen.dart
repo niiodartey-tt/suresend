@@ -82,6 +82,7 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
     }
 
     final transactionProvider = context.read<TransactionProvider>();
+    final authProvider = context.read<AuthProvider>();
 
     final result = await transactionProvider.createEscrow(
       sellerId: _selectedSeller!.id,
@@ -94,13 +95,22 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
     if (!mounted) return;
 
     if (result['success']) {
+      // Refresh user profile to get updated wallet balance
+      await authProvider.refreshProfile();
+
+      if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Transaction created successfully!'),
           backgroundColor: Colors.green,
+          duration: Duration(seconds: 2),
         ),
       );
-      Navigator.pop(context, true);
+
+      // Navigate back to dashboard (pop twice - once for this screen, once for any intermediates)
+      Navigator.pop(context);
+      Navigator.pop(context);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -433,61 +443,90 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
 
               // Commission info
               if (_amountController.text.isNotEmpty)
-                Card(
-                  color: Colors.grey.shade50,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Builder(
+                  builder: (context) {
+                    final itemPrice = double.tryParse(_amountController.text) ?? 0;
+                    final commission = itemPrice * 0.02;
+                    final totalToPay = itemPrice + commission;
+
+                    return Card(
+                      color: Colors.grey.shade50,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
                           children: [
-                            const Text('Amount'),
-                            Text(
-                              'GHS ${_amountController.text}',
-                              style: const TextStyle(fontWeight: FontWeight.w500),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text('Item Price'),
+                                Text(
+                                  'GHS ${itemPrice.toStringAsFixed(2)}',
+                                  style: const TextStyle(fontWeight: FontWeight.w500),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text('Commission (2%)'),
-                            Text(
-                              'GHS ${(double.tryParse(_amountController.text) ?? 0) * 0.02}',
-                              style: const TextStyle(fontWeight: FontWeight.w500),
+                            const SizedBox(height: 8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text('Platform Fee (2%)'),
+                                Text(
+                                  '+ GHS ${commission.toStringAsFixed(2)}',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.orange.shade700,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        const Divider(height: 24),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              'Total to Pay',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                            const Divider(height: 24),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  'You Pay',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  'GHS ${totalToPay.toStringAsFixed(2)}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ],
                             ),
-                            Text(
-                              'GHS ${_amountController.text}',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
+                            const SizedBox(height: 12),
+                            Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: Colors.green.shade50,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: Colors.green.shade200),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.info_outline, size: 16, color: Colors.green.shade700),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      'Seller receives full GHS ${itemPrice.toStringAsFixed(2)}',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.green.shade700,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Seller receives: GHS ${(double.tryParse(_amountController.text) ?? 0) * 0.98}',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                      ),
+                    );
+                  },
                 ),
               const SizedBox(height: 32),
 

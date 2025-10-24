@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:suresend/config/theme.dart';
+import 'package:suresend/screens/placeholder_home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,18 +17,17 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _initializeApp() async {
-    // Wait for 2 seconds
+    // Wait for 2 seconds to show splash screen
     await Future.delayed(const Duration(seconds: 2));
 
-    // TODO: Check authentication status
-    // TODO: Navigate to appropriate screen (Login/Home)
+    // TODO: In Stage 2, check authentication status
+    // TODO: Navigate to Login if not authenticated, or Dashboard if authenticated
 
+    // For Stage 1, navigate to placeholder home screen
     if (mounted) {
-      // For now, just show a message
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('SureSend initialized successfully!'),
-          backgroundColor: AppTheme.successColor,
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const PlaceholderHomeScreen(),
         ),
       );
     }

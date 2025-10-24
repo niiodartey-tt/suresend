@@ -54,11 +54,14 @@ class TransactionService {
       );
 
       if (result['success']) {
-        final transaction = Transaction.fromJson(result['data']['transaction']);
-        return {
-          'success': true,
-          'data': transaction,
-        };
+        final backendData = result['data'];
+        if (backendData['status'] == 'success' && backendData['data'] != null) {
+          final transaction = Transaction.fromJson(backendData['data']['transaction']);
+          return {
+            'success': true,
+            'data': transaction,
+          };
+        }
       }
 
       return result;
@@ -166,17 +169,20 @@ class TransactionService {
       );
 
       if (result['success']) {
-        final transactions = (result['data']['transactions'] as List)
-            .map((t) => Transaction.fromJson(t))
-            .toList();
+        final backendData = result['data'];
+        if (backendData['status'] == 'success' && backendData['data'] != null) {
+          final transactions = (backendData['data']['transactions'] as List)
+              .map((t) => Transaction.fromJson(t))
+              .toList();
 
-        return {
-          'success': true,
-          'data': {
-            'transactions': transactions,
-            'pagination': result['data']['pagination'],
-          },
-        };
+          return {
+            'success': true,
+            'data': {
+              'transactions': transactions,
+              'pagination': backendData['data']['pagination'],
+            },
+          };
+        }
       }
 
       return result;
@@ -197,11 +203,14 @@ class TransactionService {
       );
 
       if (result['success']) {
-        final stats = TransactionStats.fromJson(result['data']['stats']);
-        return {
-          'success': true,
-          'data': stats,
-        };
+        final backendData = result['data'];
+        if (backendData['status'] == 'success' && backendData['data'] != null) {
+          final stats = TransactionStats.fromJson(backendData['data']['stats']);
+          return {
+            'success': true,
+            'data': stats,
+          };
+        }
       }
 
       return result;
@@ -234,18 +243,32 @@ class TransactionService {
       print('TransactionService: API response: $result');
 
       if (result['success']) {
-        final usersData = result['data']['users'] as List;
-        print('TransactionService: Users data: $usersData');
+        // ApiService wraps the response, so result['data'] contains the backend response
+        // Backend returns: { status: 'success', data: { users: [...] } }
+        // So we need to access result['data']['data']['users']
+        final backendData = result['data'];
+        print('TransactionService: Backend data: $backendData');
 
-        final users = usersData
-            .map((u) => UserSearchResult.fromJson(u))
-            .toList();
+        if (backendData['status'] == 'success' && backendData['data'] != null) {
+          final usersData = backendData['data']['users'] as List;
+          print('TransactionService: Users data: $usersData');
 
-        print('TransactionService: Parsed ${users.length} users');
-        return {
-          'success': true,
-          'data': users,
-        };
+          final users = usersData
+              .map((u) => UserSearchResult.fromJson(u))
+              .toList();
+
+          print('TransactionService: Parsed ${users.length} users');
+          return {
+            'success': true,
+            'data': users,
+          };
+        } else {
+          print('TransactionService: Invalid backend data structure');
+          return {
+            'success': false,
+            'error': 'Invalid response structure',
+          };
+        }
       }
 
       print('TransactionService: API returned error: ${result['error']}');

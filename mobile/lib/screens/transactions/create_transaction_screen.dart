@@ -57,7 +57,6 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
         });
       }
     } catch (e) {
-      print('Search error: $e');
       if (mounted) {
         setState(() {
           _searchResults = [];
@@ -116,111 +115,118 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.9,
-        minChildSize: 0.5,
-        maxChildSize: 0.95,
-        expand: false,
-        builder: (context, scrollController) => Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              const Text(
-                'Search Sellers',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: 'Search by username or name',
-                  prefixIcon: const Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+      builder: (context) => StatefulBuilder(
+        builder: (BuildContext context, StateSetter setModalState) {
+          return DraggableScrollableSheet(
+            initialChildSize: 0.9,
+            minChildSize: 0.5,
+            maxChildSize: 0.95,
+            expand: false,
+            builder: (context, scrollController) => Container(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  const Text(
+                    'Search Sellers',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  suffixIcon: _isSearching
-                      ? const Padding(
-                          padding: EdgeInsets.all(12),
-                          child: SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          ),
-                        )
-                      : null,
-                ),
-                onChanged: (value) => _searchUsers(value, 'seller'),
-              ),
-              const SizedBox(height: 16),
-              Expanded(
-                child: _searchResults.isEmpty && !_isSearching
-                    ? const Center(
-                        child: Text(
-                          'Search for sellers...',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      )
-                    : ListView.builder(
-                        controller: scrollController,
-                        itemCount: _searchResults.length,
-                        itemBuilder: (context, index) {
-                          final seller = _searchResults[index];
-                          return Card(
-                            margin: const EdgeInsets.only(bottom: 8),
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: Colors.blue.shade100,
-                                child: Text(
-                                  seller.username[0].toUpperCase(),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              title: Text(seller.fullName),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('@${seller.username}'),
-                                  if (seller.isVerified)
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.verified,
-                                          size: 14,
-                                          color: Colors.blue.shade700,
-                                        ),
-                                        const SizedBox(width: 4),
-                                        const Text(
-                                          'Verified',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.blue,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                ],
-                              ),
-                              trailing: seller.kycStatus == 'approved'
-                                  ? const Icon(Icons.check_circle, color: Colors.green)
-                                  : null,
-                              onTap: () {
-                                setState(() {
-                                  _selectedSeller = seller;
-                                  _searchController.clear();
-                                  _searchResults = [];
-                                });
-                                Navigator.pop(context);
-                              },
-                            ),
-                          );
-                        },
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Search by username or name',
+                      prefixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
+                      suffixIcon: _isSearching
+                          ? const Padding(
+                              padding: EdgeInsets.all(12),
+                              child: SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              ),
+                            )
+                          : null,
+                    ),
+                    onChanged: (value) async {
+                      await _searchUsers(value, 'seller');
+                      setModalState(() {}); // Rebuild the modal
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: _searchResults.isEmpty && !_isSearching
+                        ? const Center(
+                            child: Text(
+                              'Search for sellers...',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          )
+                        : ListView.builder(
+                            controller: scrollController,
+                            itemCount: _searchResults.length,
+                            itemBuilder: (context, index) {
+                              final seller = _searchResults[index];
+                              return Card(
+                                margin: const EdgeInsets.only(bottom: 8),
+                                child: ListTile(
+                                  leading: CircleAvatar(
+                                    backgroundColor: Colors.blue.shade100,
+                                    child: Text(
+                                      seller.username[0].toUpperCase(),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  title: Text(seller.fullName),
+                                  subtitle: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text('@${seller.username}'),
+                                      if (seller.isVerified)
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.verified,
+                                              size: 14,
+                                              color: Colors.blue.shade700,
+                                            ),
+                                            const SizedBox(width: 4),
+                                            const Text(
+                                              'Verified',
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.blue,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                    ],
+                                  ),
+                                  trailing: seller.kycStatus == 'approved'
+                                      ? const Icon(Icons.check_circle, color: Colors.green)
+                                      : null,
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedSeller = seller;
+                                      _searchController.clear();
+                                      _searchResults = [];
+                                    });
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }

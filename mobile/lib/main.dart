@@ -8,10 +8,10 @@ import 'screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  
   // Initialize storage service
   await StorageService().init();
-
+  
   runApp(const SureSendApp());
 }
 
@@ -20,15 +20,6 @@ class SureSendApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-    return MaterialApp(
-      title: 'SureSend',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.light,
-      home: const SplashScreen(),
-=======
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
@@ -44,17 +35,6 @@ class SureSendApp extends StatelessWidget {
         themeMode: ThemeMode.light,
         home: const SplashScreen(),
       ),
->>>>>>> 6619a489a8977a99db9d596b0503a8bdbbe36b8e
     );
-    
-    // TODO: Add MultiProvider back when you implement providers in Stage 2:
-    // return MultiProvider(
-    //   providers: [
-    //     ChangeNotifierProvider(create: (_) => AuthProvider()),
-    //     ChangeNotifierProvider(create: (_) => UserProvider()),
-    //     ChangeNotifierProvider(create: (_) => WalletProvider()),
-    //   ],
-    //   child: MaterialApp(...),
-    // );
   }
 }

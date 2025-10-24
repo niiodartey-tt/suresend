@@ -1,17 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import '../../config/theme.dart';
 import '../../providers/auth_provider.dart';
+import '../../providers/transaction_provider.dart';
 import '../../widgets/custom_button.dart';
 import '../auth/login_screen.dart';
+import '../transactions/create_transaction_screen.dart';
+import '../transactions/transaction_list_screen.dart';
+import '../transactions/transaction_detail_screen.dart';
 
-class BuyerDashboard extends StatelessWidget {
+class BuyerDashboard extends StatefulWidget {
   const BuyerDashboard({super.key});
+
+  @override
+  State<BuyerDashboard> createState() => _BuyerDashboardState();
+}
+
+class _BuyerDashboardState extends State<BuyerDashboard> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadData();
+    });
+  }
+
+  Future<void> _loadData() async {
+    final transactionProvider = context.read<TransactionProvider>();
+    await Future.wait([
+      transactionProvider.fetchTransactions(refresh: true),
+      transactionProvider.fetchStats(),
+    ]);
+  }
 
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
+    final transactionProvider = Provider.of<TransactionProvider>(context);
     final user = authProvider.user;
+    final stats = transactionProvider.stats;
+    final recentTransactions = transactionProvider.transactions.take(5).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -26,7 +55,9 @@ class BuyerDashboard extends StatelessWidget {
         ],
       ),
       drawer: _buildDrawer(context, authProvider),
-      body: SingleChildScrollView(
+      body: RefreshIndicator(
+        onRefresh: _loadData,
+        child: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,6 +183,78 @@ class BuyerDashboard extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
+            // Transaction Stats
+            if (stats != null) ...[
+              const Text(
+                'Transaction Overview',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: Card(
+                      color: Colors.blue.shade50,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            Text(
+                              stats.purchases.total.toString(),
+                              style: const TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            const Text('Total Purchases', style: TextStyle(fontSize: 12)),
+                            const SizedBox(height: 4),
+                            Text(
+                              '₵${stats.purchases.totalSpent.toStringAsFixed(2)}',
+                              style: const TextStyle(fontSize: 11, color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Card(
+                      color: Colors.green.shade50,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            Text(
+                              stats.purchases.active.toString(),
+                              style: const TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            const Text('Active', style: TextStyle(fontSize: 12)),
+                            const SizedBox(height: 4),
+                            Text(
+                              '${stats.purchases.completed} completed',
+                              style: const TextStyle(fontSize: 11, color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+            ],
+
             // Quick Actions
             const Text(
               'Quick Actions',
@@ -169,8 +272,14 @@ class BuyerDashboard extends StatelessWidget {
                     icon: Icons.shopping_cart,
                     label: 'New Purchase',
                     color: AppTheme.primaryColor,
-                    onTap: () {
-                      // TODO: Create escrow transaction
+                    onTap: () async {
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CreateTransactionScreen(),
+                        ),
+                      );
+                      if (result == true) _loadData();
                     },
                   ),
                 ),
@@ -178,11 +287,16 @@ class BuyerDashboard extends StatelessWidget {
                 Expanded(
                   child: _buildActionCard(
                     context,
-                    icon: Icons.send,
-                    label: 'Direct Pay',
-                    color: AppTheme.secondaryColor,
+                    icon: Icons.history,
+                    label: 'Transactions',
+                    color: AppTheme.accentColor,
                     onTap: () {
-                      // TODO: Direct payment
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const TransactionListScreen(),
+                        ),
+                      ).then((_) => _loadData());
                     },
                   ),
                 ),
@@ -194,11 +308,13 @@ class BuyerDashboard extends StatelessWidget {
                 Expanded(
                   child: _buildActionCard(
                     context,
-                    icon: Icons.history,
-                    label: 'Transactions',
-                    color: AppTheme.accentColor,
+                    icon: Icons.send,
+                    label: 'Direct Pay',
+                    color: AppTheme.secondaryColor,
                     onTap: () {
-                      // TODO: View transactions
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Coming in Stage 4')),
+                      );
                     },
                   ),
                 ),
@@ -210,7 +326,9 @@ class BuyerDashboard extends StatelessWidget {
                     label: 'KYC Verify',
                     color: AppTheme.successColor,
                     onTap: () {
-                      // TODO: KYC verification
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Coming in Stage 5')),
+                      );
                     },
                   ),
                 ),
@@ -218,40 +336,125 @@ class BuyerDashboard extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // Coming in Stage 3
-            Card(
-              color: Colors.blue.shade50,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    const Icon(
-                      Icons.construction,
-                      size: 32,
-                      color: Colors.blue,
-                    ),
-                    const SizedBox(height: 12),
-                    const Text(
-                      'Coming in Stage 3',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+            // Recent Transactions
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Recent Transactions',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                if (recentTransactions.isNotEmpty)
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const TransactionListScreen(),
+                        ),
+                      );
+                    },
+                    child: const Text('View All'),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            if (recentTransactions.isEmpty)
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(32),
+                  child: Column(
+                    children: [
+                      Icon(Icons.receipt_long, size: 48, color: Colors.grey.shade400),
+                      const SizedBox(height: 12),
+                      Text(
+                        'No transactions yet',
+                        style: TextStyle(color: Colors.grey.shade600),
+                      ),
+                      const SizedBox(height: 8),
+                      TextButton.icon(
+                        onPressed: () async {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const CreateTransactionScreen(),
+                            ),
+                          );
+                          if (result == true) _loadData();
+                        },
+                        icon: const Icon(Icons.add),
+                        label: const Text('Create your first transaction'),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            else
+              ...recentTransactions.map((transaction) {
+                final dateFormat = DateFormat('MMM dd, yyyy');
+                return Card(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: _getStatusColor(transaction.status).withOpacity(0.2),
+                      child: Icon(
+                        Icons.receipt,
+                        color: _getStatusColor(transaction.status),
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Escrow transactions, wallet management, and transaction history will be available in the next stage.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 14),
+                    title: Text(
+                      transaction.description,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ],
-                ),
-              ),
-            ),
+                    subtitle: Text(
+                      '${transaction.statusDisplay} • ${dateFormat.format(transaction.createdAt)}',
+                    ),
+                    trailing: Text(
+                      '₵${transaction.amount.toStringAsFixed(2)}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TransactionDetailScreen(
+                            transactionId: transaction.id,
+                          ),
+                        ),
+                      ).then((_) => _loadData());
+                    },
+                  ),
+                );
+              }).toList(),
           ],
+        ),
         ),
       ),
     );
+  }
+
+  Color _getStatusColor(String status) {
+    switch (status) {
+      case 'in_escrow':
+        return Colors.blue;
+      case 'completed':
+        return Colors.green;
+      case 'disputed':
+        return Colors.red;
+      case 'cancelled':
+        return Colors.grey;
+      case 'refunded':
+        return Colors.orange;
+      default:
+        return Colors.grey;
+    }
   }
 
   Widget _buildActionCard(

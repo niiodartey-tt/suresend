@@ -66,17 +66,40 @@ api_call() {
         headers+=(-H "Authorization: Bearer $token")
     fi
 
+    # Create temporary files
+    local temp_response=$(mktemp)
+    local temp_output=$(mktemp)
+
     if [ "$method" = "GET" ]; then
-        response=$(curl -s -w "\n%{http_code}" -X GET "${API_URL}${endpoint}" "${headers[@]}")
+        curl -s -w "\n%{http_code}" -X GET "${API_URL}${endpoint}" "${headers[@]}" -o "$temp_response" > "$temp_output" 2>&1
+        http_code=$(tail -n1 "$temp_response")
+        body=$(head -n-1 "$temp_response")
     else
-        response=$(curl -s -w "\n%{http_code}" -X "$method" "${API_URL}${endpoint}" "${headers[@]}" -d "$data")
+        curl -s -w "\n%{http_code}" -X "$method" "${API_URL}${endpoint}" "${headers[@]}" -d "$data" > "$temp_response" 2>&1
+        http_code=$(echo "$temp_response" | tail -n1)
+        body=$(cat "$temp_response" | head -n-1)
     fi
 
-    http_code=$(echo "$response" | tail -n1)
-    body=$(echo "$response" | sed '$d')
+    # If curl failed, try simpler approach
+    if [ -z "$http_code" ] || [ "$http_code" = "" ]; then
+        if [ "$method" = "GET" ]; then
+            full_response=$(curl -s -w "\n%{http_code}" -X GET "${API_URL}${endpoint}" "${headers[@]}")
+        else
+            full_response=$(curl -s -w "\n%{http_code}" -X "$method" "${API_URL}${endpoint}" "${headers[@]}" -d "$data")
+        fi
+
+        http_code=$(echo "$full_response" | tail -n1)
+        body=$(echo "$full_response" | sed '$d')
+    fi
+
+    # Store in global variables
+    API_RESPONSE_CODE="$http_code"
+    API_RESPONSE_BODY="$body"
+
+    # Cleanup
+    rm -f "$temp_response" "$temp_output"
 
     echo "$body"
-    return $http_code
 }
 
 # Check if backend is running

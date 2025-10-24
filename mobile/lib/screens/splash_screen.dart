@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:suresend/config/theme.dart';
-import 'package:suresend/screens/placeholder_home_screen.dart';
+import 'package:suresend/providers/auth_provider.dart';
+import 'package:suresend/screens/auth/login_screen.dart';
+import 'package:suresend/screens/dashboard/buyer_dashboard.dart';
+import 'package:suresend/screens/dashboard/seller_dashboard.dart';
+import 'package:suresend/screens/dashboard/rider_dashboard.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,18 +22,38 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _initializeApp() async {
-    // Wait for 2 seconds to show splash screen
+    // Wait for splash screen display
     await Future.delayed(const Duration(seconds: 2));
 
-    // TODO: In Stage 2, check authentication status
-    // TODO: Navigate to Login if not authenticated, or Dashboard if authenticated
+    if (!mounted) return;
 
-    // For Stage 1, navigate to placeholder home screen
-    if (mounted) {
+    // Check authentication status
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    await authProvider.initAuth();
+
+    if (!mounted) return;
+
+    // Navigate based on authentication status
+    if (authProvider.isAuthenticated && authProvider.user != null) {
+      // User is authenticated, navigate to appropriate dashboard
+      Widget dashboard;
+      if (authProvider.user!.isBuyer) {
+        dashboard = const BuyerDashboard();
+      } else if (authProvider.user!.isSeller) {
+        dashboard = const SellerDashboard();
+      } else if (authProvider.user!.isRider) {
+        dashboard = const RiderDashboard();
+      } else {
+        dashboard = const BuyerDashboard(); // Default
+      }
+
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const PlaceholderHomeScreen(),
-        ),
+        MaterialPageRoute(builder: (context) => dashboard),
+      );
+    } else {
+      // User not authenticated, navigate to login
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
       );
     }
   }

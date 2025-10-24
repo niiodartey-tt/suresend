@@ -71,6 +71,18 @@ app.get('/api', (req, res) => {
         kycStatus: 'GET /api/v1/users/kyc-status',
         submitKYC: 'POST /api/v1/users/kyc',
       },
+      escrow: {
+        create: 'POST /api/v1/escrow/create',
+        details: 'GET /api/v1/escrow/:id',
+        confirmDelivery: 'POST /api/v1/escrow/:id/confirm-delivery',
+        dispute: 'POST /api/v1/escrow/:id/dispute',
+        cancel: 'POST /api/v1/escrow/:id/cancel',
+      },
+      transactions: {
+        list: 'GET /api/v1/transactions',
+        stats: 'GET /api/v1/transactions/stats',
+        searchUsers: 'GET /api/v1/transactions/search-users',
+      },
     },
   });
 });
@@ -78,16 +90,16 @@ app.get('/api', (req, res) => {
 // Import routes
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
-// const escrowRoutes = require('./routes/escrow');  // Stage 3
+const escrowRoutes = require('./routes/escrow');
+const transactionRoutes = require('./routes/transactions');
 // const walletRoutes = require('./routes/wallet');  // Stage 4
-// const transactionRoutes = require('./routes/transactions');  // Stage 4
 
 // Use routes
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', userRoutes);
-// app.use('/api/v1/escrow', escrowRoutes);  // Stage 3
+app.use('/api/v1/escrow', escrowRoutes);
+app.use('/api/v1/transactions', transactionRoutes);
 // app.use('/api/v1/wallet', walletRoutes);  // Stage 4
-// app.use('/api/v1/transactions', transactionRoutes);  // Stage 4
 
 // 404 handler
 app.use((req, res) => {

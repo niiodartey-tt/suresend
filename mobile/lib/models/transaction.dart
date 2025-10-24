@@ -103,7 +103,8 @@ class Transaction {
   bool get isCancelled => status == 'cancelled';
   bool get isPending => status == 'pending';
 
-  double get amountAfterCommission => amount - commission;
+  // Seller receives the full amount (buyer pays amount + commission)
+  double get amountAfterCommission => amount;
 
   String get statusDisplay {
     switch (status) {

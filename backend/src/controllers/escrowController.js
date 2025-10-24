@@ -47,6 +47,7 @@ const createEscrow = async (req, res) => {
     // Calculate commission (2%)
     const commissionRate = parseFloat(process.env.PLATFORM_COMMISSION_RATE) || 0.02;
     const commission = amount * commissionRate;
+    const totalAmount = amount + commission; // Buyer pays item price + commission
 
     // Generate transaction reference
     const transactionRef = `ESC${Date.now()}${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
@@ -68,14 +69,14 @@ const createEscrow = async (req, res) => {
         }
 
         const balance = parseFloat(walletResult.rows[0].balance);
-        if (balance < amount) {
-          throw new Error(`Insufficient wallet balance. Required: ${amount}, Available: ${balance}`);
+        if (balance < totalAmount) {
+          throw new Error(`Insufficient wallet balance. Required: ${totalAmount.toFixed(2)}, Available: ${balance.toFixed(2)}`);
         }
 
-        // Deduct from buyer's wallet
+        // Deduct total amount (item price + commission) from buyer's wallet
         await client.query(
           'UPDATE wallets SET balance = balance - $1::NUMERIC WHERE user_id = $2',
-          [amount, buyerId]
+          [totalAmount, buyerId]
         );
 
         // Log wallet transaction
@@ -84,7 +85,7 @@ const createEscrow = async (req, res) => {
            (wallet_id, amount, type, description, reference, balance_before, balance_after)
            SELECT id, $1::NUMERIC, 'debit', $2, $3, $4::NUMERIC, ($4::NUMERIC - $1::NUMERIC)
            FROM wallets WHERE user_id = $5`,
-          [amount, 'Escrow payment', transactionRef, balance, buyerId]
+          [totalAmount, `Escrow payment (₵${amount.toFixed(2)} + ₵${commission.toFixed(2)} commission)`, transactionRef, balance, buyerId]
         );
       }
 
@@ -308,8 +309,8 @@ const confirmDelivery = async (req, res) => {
       }
 
       if (confirmed) {
-        // Release funds to seller
-        const amountToRelease = parseFloat(transaction.amount) - parseFloat(transaction.commission);
+        // Release full amount to seller (buyer already paid commission separately)
+        const amountToRelease = parseFloat(transaction.amount);
 
         // Credit seller's wallet
         await client.query(
@@ -331,7 +332,7 @@ const confirmDelivery = async (req, res) => {
            FROM wallets WHERE user_id = $6`,
           [
             amountToRelease,
-            'Escrow payment received',
+            'Escrow payment received (full amount)',
             transaction.transaction_ref,
             sellerBalance - amountToRelease,
             sellerBalance,
@@ -560,11 +561,13 @@ const cancelTransaction = async (req, res) => {
         throw new Error('Can only cancel transactions that are in escrow');
       }
 
-      // Refund to buyer if paid from wallet
+      // Refund to buyer if paid from wallet (refund full amount including commission)
       if (transaction.payment_method === 'wallet') {
+        const refundAmount = parseFloat(transaction.amount) + parseFloat(transaction.commission);
+
         await client.query(
           'UPDATE wallets SET balance = balance + $1::NUMERIC WHERE user_id = $2',
-          [transaction.amount, userId]
+          [refundAmount, userId]
         );
 
         // Log wallet transaction
@@ -580,10 +583,10 @@ const cancelTransaction = async (req, res) => {
            SELECT id, $1, 'credit', $2, $3, $4, $5
            FROM wallets WHERE user_id = $6`,
           [
-            transaction.amount,
-            'Refund from cancelled transaction',
+            refundAmount,
+            `Refund from cancelled transaction (₵${transaction.amount} + ₵${transaction.commission} commission)`,
             transaction.transaction_ref,
-            balance - transaction.amount,
+            balance - refundAmount,
             balance,
             userId,
           ]

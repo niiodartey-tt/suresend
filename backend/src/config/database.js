@@ -50,7 +50,7 @@ const getClient = async () => {
 
   client.release = () => {
     clearTimeout(timeout);
-    client.release();
+    release();
   };
 
   return { query, release };

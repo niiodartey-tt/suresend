@@ -45,7 +45,9 @@ const createEscrow = async (req, res) => {
     }
 
     // Calculate commission (2%)
-    const commissionRate = parseFloat(process.env.PLATFORM_COMMISSION_RATE) || 0.02;
+    const commissionRate = process.env.PLATFORM_COMMISSION_RATE !== undefined
+      ? parseFloat(process.env.PLATFORM_COMMISSION_RATE)
+      : 0.02;
     const commission = amount * commissionRate;
 
     // Generate transaction reference
@@ -165,7 +167,7 @@ const createEscrow = async (req, res) => {
       await client.query('ROLLBACK');
       throw error;
     } finally {
-      client.release();
+      await client.release();
     }
   } catch (error) {
     logger.error('Create escrow error:', error);
@@ -432,7 +434,7 @@ const confirmDelivery = async (req, res) => {
       await client.query('ROLLBACK');
       throw error;
     } finally {
-      client.release();
+      await client.release();
     }
   } catch (error) {
     logger.error('Confirm delivery error:', error);
@@ -516,7 +518,7 @@ const raiseDispute = async (req, res) => {
       await client.query('ROLLBACK');
       throw error;
     } finally {
-      client.release();
+      await client.release();
     }
   } catch (error) {
     logger.error('Raise dispute error:', error);
@@ -572,6 +574,9 @@ const cancelTransaction = async (req, res) => {
           'SELECT balance FROM wallets WHERE user_id = $1',
           [userId]
         );
+        if (walletResult.rows.length === 0) {
+          throw new Error('Wallet not found');
+        }
         const balance = parseFloat(walletResult.rows[0].balance);
 
         await client.query(
@@ -632,7 +637,7 @@ const cancelTransaction = async (req, res) => {
       await client.query('ROLLBACK');
       throw error;
     } finally {
-      client.release();
+      await client.release();
     }
   } catch (error) {
     logger.error('Cancel transaction error:', error);

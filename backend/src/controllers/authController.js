@@ -93,7 +93,7 @@ const register = async (req, res) => {
       await client.query('ROLLBACK');
       throw error;
     } finally {
-      client.release();
+      await client.release();
     }
   } catch (error) {
     logger.error('Registration error:', error);

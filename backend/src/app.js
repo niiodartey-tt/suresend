@@ -19,9 +19,20 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // Rate limiting
+const windowMs = process.env.RATE_LIMIT_WINDOW_MS
+  ? parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10)
+  : 15 * 60 * 1000; // 15 minutes
+const maxRequests = process.env.RATE_LIMIT_MAX_REQUESTS
+  ? parseInt(process.env.RATE_LIMIT_MAX_REQUESTS, 10)
+  : 100;
+
+if (isNaN(windowMs) || isNaN(maxRequests)) {
+  throw new Error('Invalid rate limiting configuration: RATE_LIMIT_WINDOW_MS and RATE_LIMIT_MAX_REQUESTS must be valid numbers');
+}
+
 const limiter = rateLimit({
-  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes
-  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
+  windowMs,
+  max: maxRequests,
   message: 'Too many requests from this IP, please try again later.',
 });
 app.use('/api', limiter);

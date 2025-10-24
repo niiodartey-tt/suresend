@@ -10,12 +10,19 @@ const getTransactions = async (req, res) => {
   try {
     const userId = req.user.userId;
     const {
-      page = 1,
-      limit = 20,
       status,
       type,
       role, // 'buyer', 'seller', 'rider'
     } = req.query;
+
+    // Parse and validate pagination parameters
+    let page = parseInt(req.query.page) || 1;
+    let limit = parseInt(req.query.limit) || 20;
+
+    // Validate ranges
+    if (page < 1) page = 1;
+    if (limit < 1) limit = 1;
+    if (limit > 100) limit = 100; // Max limit to prevent DoS
 
     const offset = (page - 1) * limit;
 
@@ -77,6 +84,9 @@ const getTransactions = async (req, res) => {
       params
     );
 
+    if (!countResult.rows || countResult.rows.length === 0) {
+      return errorResponse(res, 500, 'Failed to count transactions');
+    }
     const total = parseInt(countResult.rows[0].count);
     const totalPages = Math.ceil(total / limit);
 

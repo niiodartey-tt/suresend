@@ -220,6 +220,7 @@ class TransactionService {
     int limit = 10,
   }) async {
     try {
+      print('TransactionService: Calling API with query: $query, userType: $userType');
       final result = await _apiService.get(
         'transactions/search-users',
         requiresAuth: true,
@@ -230,19 +231,27 @@ class TransactionService {
         },
       );
 
+      print('TransactionService: API response: $result');
+
       if (result['success']) {
-        final users = (result['data']['users'] as List)
+        final usersData = result['data']['users'] as List;
+        print('TransactionService: Users data: $usersData');
+
+        final users = usersData
             .map((u) => UserSearchResult.fromJson(u))
             .toList();
 
+        print('TransactionService: Parsed ${users.length} users');
         return {
           'success': true,
           'data': users,
         };
       }
 
+      print('TransactionService: API returned error: ${result['error']}');
       return result;
     } catch (e) {
+      print('TransactionService: Exception: $e');
       return {
         'success': false,
         'error': e.toString(),

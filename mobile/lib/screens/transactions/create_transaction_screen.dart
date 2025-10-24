@@ -43,16 +43,34 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
 
     setState(() => _isSearching = true);
 
-    final transactionProvider = context.read<TransactionProvider>();
-    final results = await transactionProvider.searchUsers(
-      query: query,
-      userType: userType,
-    );
+    try {
+      final transactionProvider = context.read<TransactionProvider>();
+      final results = await transactionProvider.searchUsers(
+        query: query,
+        userType: userType,
+      );
 
-    setState(() {
-      _searchResults = results;
-      _isSearching = false;
-    });
+      if (mounted) {
+        setState(() {
+          _searchResults = results;
+          _isSearching = false;
+        });
+      }
+    } catch (e) {
+      print('Search error: $e');
+      if (mounted) {
+        setState(() {
+          _searchResults = [];
+          _isSearching = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Search failed: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
   Future<void> _createTransaction() async {

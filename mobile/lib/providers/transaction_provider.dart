@@ -252,17 +252,25 @@ class TransactionProvider with ChangeNotifier {
     String userType = 'seller',
   }) async {
     try {
+      print('TransactionProvider: Searching for users with query: $query, type: $userType');
       final result = await _transactionService.searchUsers(
         query: query,
         userType: userType,
       );
 
+      print('TransactionProvider: Search result: ${result['success']}, data: ${result['data']}');
+
       if (result['success']) {
-        return result['data'] as List<UserSearchResult>;
+        final users = result['data'] as List<UserSearchResult>;
+        print('TransactionProvider: Found ${users.length} users');
+        return users;
       }
 
+      print('TransactionProvider: Search failed: ${result['error']}');
+      _error = result['error'];
       return [];
     } catch (e) {
+      print('TransactionProvider: Search exception: $e');
       _error = e.toString();
       return [];
     }

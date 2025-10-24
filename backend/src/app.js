@@ -58,23 +58,36 @@ app.get('/api', (req, res) => {
     endpoints: {
       health: '/health',
       api: '/api',
+      auth: {
+        register: 'POST /api/v1/auth/register',
+        login: 'POST /api/v1/auth/login',
+        verifyOTP: 'POST /api/v1/auth/verify-otp',
+        resendOTP: 'POST /api/v1/auth/resend-otp',
+        logout: 'POST /api/v1/auth/logout',
+      },
+      users: {
+        profile: 'GET /api/v1/users/profile',
+        updateProfile: 'PUT /api/v1/users/profile',
+        kycStatus: 'GET /api/v1/users/kyc-status',
+        submitKYC: 'POST /api/v1/users/kyc',
+      },
     },
   });
 });
 
-// Import routes (will be created in later stages)
-// const authRoutes = require('./routes/auth');
-// const userRoutes = require('./routes/users');
-// const escrowRoutes = require('./routes/escrow');
-// const walletRoutes = require('./routes/wallet');
-// const transactionRoutes = require('./routes/transactions');
+// Import routes
+const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/users');
+// const escrowRoutes = require('./routes/escrow');  // Stage 3
+// const walletRoutes = require('./routes/wallet');  // Stage 4
+// const transactionRoutes = require('./routes/transactions');  // Stage 4
 
 // Use routes
-// app.use('/api/v1/auth', authRoutes);
-// app.use('/api/v1/users', userRoutes);
-// app.use('/api/v1/escrow', escrowRoutes);
-// app.use('/api/v1/wallet', walletRoutes);
-// app.use('/api/v1/transactions', transactionRoutes);
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/users', userRoutes);
+// app.use('/api/v1/escrow', escrowRoutes);  // Stage 3
+// app.use('/api/v1/wallet', walletRoutes);  // Stage 4
+// app.use('/api/v1/transactions', transactionRoutes);  // Stage 4
 
 // 404 handler
 app.use((req, res) => {

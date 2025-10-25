@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../models/transaction.dart';
 import '../../providers/transaction_provider.dart';
 import '../../providers/auth_provider.dart';
+import 'transaction_success_screen.dart';
 
 class CreateTransactionScreen extends StatefulWidget {
   const CreateTransactionScreen({super.key});
@@ -104,16 +105,30 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
 
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Transaction created successfully!'),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 3),
+      // Get transaction data from result
+      final transactionData = result['data']['transaction'];
+      final amount = double.parse(_amountController.text);
+      final commission = transactionData['commission'] ?? (amount * 0.02);
+
+      // Navigate to success screen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TransactionSuccessScreen(
+            title: 'Escrow Created Successfully!',
+            message: 'Your escrow payment has been secured. The funds will be released when you confirm delivery.',
+            amount: '₵ ${amount.toStringAsFixed(2)}',
+            reference: transactionData['transactionRef'] ?? transactionData['transaction_ref'],
+            details: {
+              'Description': _descriptionController.text,
+              'Seller': _selectedSeller!.fullName,
+              'Commission': '₵ ${commission.toStringAsFixed(2)}',
+              'Total Paid': '₵ ${(amount + commission).toStringAsFixed(2)}',
+              'Payment Method': _paymentMethod == 'wallet' ? 'Wallet' : 'Other',
+            },
+          ),
         ),
       );
-
-      // Navigate back to dashboard with success flag
-      Navigator.pop(context, true);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

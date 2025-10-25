@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../providers/wallet_provider.dart';
 import '../../config/theme.dart';
 import '../../services/transaction_service.dart';
+import '../transactions/transaction_success_screen.dart';
 
 class TransferMoneyScreen extends StatefulWidget {
   const TransferMoneyScreen({Key? key}) : super(key: key);
@@ -197,13 +198,26 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
 
       if (result['success']) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(result['message'] ?? 'Transfer completed successfully'),
-              backgroundColor: Colors.green,
+          final amount = double.parse(_amountController.text);
+          final description = _descriptionController.text.trim();
+
+          // Navigate to success screen
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TransactionSuccessScreen(
+                title: 'Transfer Successful!',
+                message: 'Your money has been sent successfully.',
+                amount: '₵ ${amount.toStringAsFixed(2)}',
+                reference: result['data']?['transaction']?['reference'],
+                details: {
+                  'Recipient': _recipientDetails!['fullName'],
+                  'Username': '@${_recipientDetails!['username']}',
+                  if (description.isNotEmpty) 'Description': description,
+                },
+              ),
             ),
           );
-          Navigator.pop(context);
         }
       } else {
         if (mounted) {

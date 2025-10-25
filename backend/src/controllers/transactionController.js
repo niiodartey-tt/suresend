@@ -188,13 +188,14 @@ const searchUsers = async (req, res) => {
     }
 
     // Build query based on whether to exclude riders
-    let whereClause = `is_active = true AND (username ILIKE $1 OR full_name ILIKE $1)`;
+    // Search by username, full name, or phone number
+    let whereClause = `is_active = true AND (username ILIKE $1 OR full_name ILIKE $1 OR phone_number ILIKE $1)`;
     if (excludeRiders === 'true') {
       whereClause += ` AND user_type = 'user'`;
     }
 
     const result = await query(
-      `SELECT id, username, full_name, user_type, is_verified, kyc_status
+      `SELECT id, username, full_name, phone_number, user_type, is_verified, kyc_status
        FROM users
        WHERE ${whereClause}
        LIMIT $2`,
@@ -206,6 +207,7 @@ const searchUsers = async (req, res) => {
         id: u.id,
         username: u.username,
         fullName: u.full_name,
+        phoneNumber: u.phone_number,
         userType: u.user_type,
         isVerified: u.is_verified,
         kycStatus: u.kyc_status,

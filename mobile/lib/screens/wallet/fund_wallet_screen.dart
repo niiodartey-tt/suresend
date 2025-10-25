@@ -91,6 +91,9 @@ class _FundWalletScreenState extends State<FundWalletScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final walletProvider = Provider.of<WalletProvider>(context);
+    final wallet = walletProvider.wallet;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Fund Wallet'),
@@ -103,6 +106,35 @@ class _FundWalletScreenState extends State<FundWalletScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Available Balance Card
+              Card(
+                color: AppTheme.primaryColor.withOpacity(0.1),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Available Balance',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        '₵ ${wallet?.balance.toStringAsFixed(2) ?? '0.00'}',
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.primaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+
               // Info card
               Card(
                 color: Colors.blue.shade50,
@@ -144,7 +176,12 @@ class _FundWalletScreenState extends State<FundWalletScreen> {
                 ],
                 decoration: InputDecoration(
                   hintText: '0.00',
-                  prefixIcon: const Icon(Icons.attach_money),
+                  prefixText: '₵ ',
+                  prefixStyle: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),

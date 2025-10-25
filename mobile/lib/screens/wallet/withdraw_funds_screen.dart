@@ -286,12 +286,17 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                 controller: _amountController,
                 decoration: const InputDecoration(
                   labelText: 'Amount (GHS)',
-                  hintText: 'Enter amount to withdraw',
+                  hintText: '0.00',
                   border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.money),
+                  prefixText: '₵ ',
+                  prefixStyle: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
                   helperText: 'Minimum withdrawal: GHS 50',
                 ),
-                keyboardType: TextInputType.number,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter amount';

@@ -94,6 +94,12 @@ app.get('/api', (req, res) => {
         stats: 'GET /api/v1/transactions/stats',
         searchUsers: 'GET /api/v1/transactions/search-users',
       },
+      notifications: {
+        list: 'GET /api/v1/notifications',
+        markAsRead: 'PUT /api/v1/notifications/:id/read',
+        markAllAsRead: 'PUT /api/v1/notifications/read-all',
+        delete: 'DELETE /api/v1/notifications/:id',
+      },
     },
   });
 });
@@ -103,6 +109,7 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const escrowRoutes = require('./routes/escrow');
 const transactionRoutes = require('./routes/transactions');
+const notificationRoutes = require('./routes/notifications');
 // const walletRoutes = require('./routes/wallet');  // Stage 4
 
 // Use routes
@@ -110,6 +117,7 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/escrow', escrowRoutes);
 app.use('/api/v1/transactions', transactionRoutes);
+app.use('/api/v1/notifications', notificationRoutes);
 // app.use('/api/v1/wallet', walletRoutes);  // Stage 4
 
 // 404 handler

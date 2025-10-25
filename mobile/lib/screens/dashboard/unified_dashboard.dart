@@ -4,11 +4,13 @@ import 'package:intl/intl.dart';
 import '../../config/theme.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/transaction_provider.dart';
+import '../../providers/notification_provider.dart';
 import '../../widgets/custom_button.dart';
 import '../auth/login_screen.dart';
 import '../transactions/create_transaction_screen.dart';
 import '../transactions/transaction_list_screen.dart';
 import '../transactions/transaction_detail_screen.dart';
+import '../notifications/notification_screen.dart';
 
 class UnifiedDashboard extends StatefulWidget {
   const UnifiedDashboard({super.key});
@@ -33,20 +35,35 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadData();
+      _startNotificationPolling();
     });
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _stopNotificationPolling();
     super.dispose();
+  }
+
+  void _startNotificationPolling() {
+    final notificationProvider = context.read<NotificationProvider>();
+    notificationProvider.fetchUnreadCount(); // Initial fetch
+    notificationProvider.startPolling(); // Start 30-second polling
+  }
+
+  void _stopNotificationPolling() {
+    final notificationProvider = context.read<NotificationProvider>();
+    notificationProvider.stopPolling();
   }
 
   Future<void> _loadData() async {
     final transactionProvider = context.read<TransactionProvider>();
+    final authProvider = context.read<AuthProvider>();
     await Future.wait([
       transactionProvider.fetchTransactions(refresh: true),
       transactionProvider.fetchStats(),
+      authProvider.refreshProfile(), // Update wallet balance and user info
     ]);
   }
 
@@ -62,10 +79,52 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
         title: const Text('SureSend'),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {
-              // TODO: Navigate to notifications
+          Consumer<NotificationProvider>(
+            builder: (context, notificationProvider, child) {
+              final unreadCount = notificationProvider.unreadCount;
+
+              return Stack(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.notifications_outlined),
+                    onPressed: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const NotificationScreen(),
+                        ),
+                      );
+                      // Refresh unread count after returning
+                      notificationProvider.fetchUnreadCount();
+                    },
+                  ),
+                  if (unreadCount > 0)
+                    Positioned(
+                      right: 8,
+                      top: 8,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        constraints: const BoxConstraints(
+                          minWidth: 16,
+                          minHeight: 16,
+                        ),
+                        child: Text(
+                          unreadCount > 99 ? '99+' : unreadCount.toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                ],
+              );
             },
           ),
         ],

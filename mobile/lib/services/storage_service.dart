@@ -75,4 +75,21 @@ class StorageService {
     final token = await getToken();
     return token != null && token.isNotEmpty;
   }
+
+  // Session management - set to false to require login after app restart
+  Future<void> saveRememberMe(bool remember) async {
+    await _prefs?.setBool('remember_me', remember);
+  }
+
+  bool getRememberMe() {
+    return _prefs?.getBool('remember_me') ?? false;
+  }
+
+  // Clear session (but not remember me preference)
+  Future<void> clearSession() async {
+    await deleteTokens();
+    final rememberMe = getRememberMe();
+    await _prefs?.clear();
+    await saveRememberMe(rememberMe);
+  }
 }

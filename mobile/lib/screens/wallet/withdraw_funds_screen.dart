@@ -175,9 +175,9 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                           ),
                         ),
                       ),
-              const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-              // Withdrawal Method Selection
+                // Withdrawal Method Selection
               const Text(
                 'Withdrawal Method',
                 style: TextStyle(

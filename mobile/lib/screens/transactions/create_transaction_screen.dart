@@ -128,11 +128,11 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
             amount: '₵ ${amount.toStringAsFixed(2)}',
             reference: transactionData['transactionRef'] ?? transactionData['transaction_ref'],
             details: {
-              'Description': _descriptionController.text,
-              'Seller': _selectedSeller!.fullName,
-              'Commission': '₵ ${commission.toStringAsFixed(2)}',
-              'Total Paid': '₵ ${(amount + commission).toStringAsFixed(2)}',
-              'Payment Method': _paymentMethod == 'wallet' ? 'Wallet' : 'Other',
+                'Description': _descriptionController.text,
+                'Seller': _selectedSeller!.fullName,
+                'Commission': '₵ ${commission.toStringAsFixed(2)}',
+                'Total Paid': '₵ ${(amount + commission).toStringAsFixed(2)}',
+                'Payment Method': _paymentMethod == 'wallet' ? 'Wallet' : 'Other',
             },
           ),
         ),
@@ -159,8 +159,8 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
             maxChildSize: 0.95,
             expand: false,
             builder: (context, scrollController) => Container(
-              padding: const EdgeInsets.all(16),
-              child: Column(
+                padding: const EdgeInsets.all(16),
+                child: Column(
                 children: [
                   const Text(
                     'Search Sellers',
@@ -259,7 +259,7 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
                           ),
                   ),
                 ],
-              ),
+                ),
             ),
           );
         },
@@ -284,42 +284,42 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
           child: Form(
             key: _formKey,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
                 // Info card
-              Card(
-                color: Colors.blue.shade50,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      Icon(Icons.info_outline, color: Colors.blue.shade700),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          'Create a secure escrow transaction. Funds are held safely until delivery is confirmed.',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.blue.shade700,
+                Card(
+                  color: Colors.blue.shade50,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        Icon(Icons.info_outline, color: Colors.blue.shade700),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'Create a secure escrow transaction. Funds are held safely until delivery is confirmed.',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.blue.shade700,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-              // Seller selection
-              const Text(
+                // Seller selection
+                const Text(
                 'Select Seller',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
-              ),
-              const SizedBox(height: 8),
-              InkWell(
+                ),
+                const SizedBox(height: 8),
+                InkWell(
                 onTap: _showSellerSearch,
                 child: Container(
                   padding: const EdgeInsets.all(16),
@@ -363,19 +363,19 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
                     ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 24),
+                ),
+                const SizedBox(height: 24),
 
-              // Amount
-              const Text(
+                // Amount
+                const Text(
                 'Amount (GHS)',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
-              ),
-              const SizedBox(height: 8),
-              TextFormField(
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
                 controller: _amountController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: [
@@ -402,19 +402,19 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
                   }
                   return null;
                 },
-              ),
-              const SizedBox(height: 24),
+                ),
+                const SizedBox(height: 24),
 
-              // Description
-              const Text(
+                // Description
+                const Text(
                 'Description',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
-              ),
-              const SizedBox(height: 8),
-              TextFormField(
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
                 controller: _descriptionController,
                 maxLines: 3,
                 maxLength: 500,
@@ -433,19 +433,19 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
                   }
                   return null;
                 },
-              ),
-              const SizedBox(height: 24),
+                ),
+                const SizedBox(height: 24),
 
-              // Payment Method
-              const Text(
+                // Payment Method
+                const Text(
                 'Payment Method',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
-              ),
-              const SizedBox(height: 8),
-              SegmentedButton<String>(
+                ),
+                const SizedBox(height: 8),
+                SegmentedButton<String>(
                 segments: const [
                   ButtonSegment(
                     value: 'wallet',
@@ -467,11 +467,11 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
                 onSelectionChanged: (Set<String> selection) {
                   setState(() => _paymentMethod = selection.first);
                 },
-              ),
-              const SizedBox(height: 32),
+                ),
+                const SizedBox(height: 32),
 
-              // Commission info
-              if (_amountController.text.isNotEmpty)
+                // Commission info
+                if (_amountController.text.isNotEmpty)
                 Builder(
                   builder: (context) {
                     final itemPrice = double.tryParse(_amountController.text) ?? 0;
@@ -557,10 +557,10 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
                     );
                   },
                 ),
-              const SizedBox(height: 32),
+                const SizedBox(height: 32),
 
-              // Create button
-              ElevatedButton(
+                // Create button
+                ElevatedButton(
                 onPressed: transactionProvider.isLoading ? null : _createTransaction,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
@@ -578,7 +578,7 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
                         'Create Escrow Transaction',
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
-              ),
+                ),
             ],
           ),
         ),

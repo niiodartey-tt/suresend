@@ -143,7 +143,7 @@ class _FundWalletScreenState extends State<FundWalletScreen> {
                           ),
                         ),
                       ),
-              const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
               // Info card
               Card(

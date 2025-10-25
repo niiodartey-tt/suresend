@@ -44,7 +44,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
 
     try {
       // Search for user by username or phone number
-      final result = await _transactionService.searchUsers(search: searchQuery);
+      final result = await _transactionService.searchUsers(query: searchQuery);
 
       if (result['success'] && result['data']['users'].isNotEmpty) {
         final user = result['data']['users'][0]; // Take first match

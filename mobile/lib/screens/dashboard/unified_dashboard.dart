@@ -11,6 +11,9 @@ import '../transactions/create_transaction_screen.dart';
 import '../transactions/transaction_list_screen.dart';
 import '../transactions/transaction_detail_screen.dart';
 import '../notifications/notification_screen.dart';
+import '../wallet/wallet_screen.dart';
+import '../wallet/fund_wallet_screen.dart';
+import '../wallet/withdraw_funds_screen.dart';
 
 class UnifiedDashboard extends StatefulWidget {
   const UnifiedDashboard({super.key});
@@ -242,7 +245,12 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                           Expanded(
                             child: ElevatedButton.icon(
                               onPressed: () {
-                                // TODO: Fund wallet
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const FundWalletScreen(),
+                                  ),
+                                ).then((_) => _loadData());
                               },
                               icon: const Icon(Icons.add),
                               label: const Text('Add Funds'),
@@ -252,7 +260,12 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                           Expanded(
                             child: OutlinedButton.icon(
                               onPressed: () {
-                                // TODO: Withdraw
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const WithdrawFundsScreen(),
+                                  ),
+                                ).then((_) => _loadData());
                               },
                               icon: const Icon(Icons.remove),
                               label: const Text('Withdraw'),
@@ -785,7 +798,12 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
             leading: const Icon(Icons.account_balance_wallet),
             title: const Text('Wallet'),
             onTap: () {
-              // TODO: Navigate to wallet
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const WalletScreen(),
+                ),
+              );
             },
           ),
           ListTile(

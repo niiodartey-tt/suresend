@@ -2,19 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  // SureSend Brand Colors
-  static const Color primaryColor = Color(0xFF1E88E5); // Blue
+  // SafePay Ghana Brand Colors (Figma Design)
+  static const Color primaryColor = Color(0xFF00C9A7); // Vibrant Teal/Cyan - primary actions
+  static const Color darkBlue = Color(0xFF1E1E2F); // Deep Blue - backgrounds and headers
   static const Color secondaryColor = Color(0xFF26A69A); // Teal
   static const Color accentColor = Color(0xFFFFB300); // Amber
   static const Color errorColor = Color(0xFFE53935); // Red
   static const Color successColor = Color(0xFF43A047); // Green
   static const Color warningColor = Color(0xFFFB8C00); // Orange
 
-  // Neutral Colors
-  static const Color backgroundColor = Color(0xFFF5F5F5);
-  static const Color surfaceColor = Color(0xFFFFFFFF);
+  // Neutral Colors (Figma Design)
+  static const Color backgroundColor = Color(0xFFF5F5F7); // Light Grey - cards and secondary backgrounds
+  static const Color surfaceColor = Color(0xFFFFFFFF); // White - content backgrounds
   static const Color textPrimaryColor = Color(0xFF212121);
   static const Color textSecondaryColor = Color(0xFF757575);
+
+  // Border Radius (Figma Design)
+  static const double cardBorderRadius = 20.0;
+  static const double buttonBorderRadius = 25.0;
+  static const double inputBorderRadius = 12.0;
 
   // Escrow Status Colors
   static const Color escrowHeldColor = Color(0xFFFFB300); // Amber
@@ -86,9 +92,9 @@ class AppTheme {
         backgroundColor: primaryColor,
         foregroundColor: Colors.white,
         elevation: 2,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(buttonBorderRadius),
         ),
         textStyle: const TextStyle(
           fontSize: 16,
@@ -100,9 +106,9 @@ class AppTheme {
       style: OutlinedButton.styleFrom(
         foregroundColor: primaryColor,
         side: const BorderSide(color: primaryColor, width: 2),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(buttonBorderRadius),
         ),
         textStyle: const TextStyle(
           fontSize: 16,
@@ -123,32 +129,33 @@ class AppTheme {
       filled: true,
       fillColor: surfaceColor,
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(inputBorderRadius),
         borderSide: const BorderSide(color: Colors.grey),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(inputBorderRadius),
         borderSide: BorderSide(color: Colors.grey.shade300),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(inputBorderRadius),
         borderSide: const BorderSide(color: primaryColor, width: 2),
       ),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(inputBorderRadius),
         borderSide: const BorderSide(color: errorColor),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
     ),
     cardTheme: CardTheme(
       color: surfaceColor,
-      elevation: 2,
+      elevation: 3,
+      shadowColor: Colors.black.withOpacity(0.1),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(cardBorderRadius),
       ),
     ),
     appBarTheme: AppBarTheme(
-      backgroundColor: primaryColor,
+      backgroundColor: darkBlue,
       foregroundColor: Colors.white,
       elevation: 0,
       centerTitle: true,

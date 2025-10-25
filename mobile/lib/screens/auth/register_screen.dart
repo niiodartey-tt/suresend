@@ -174,8 +174,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     if (value.trim().length < 3) {
                       return 'Username must be at least 3 characters';
                     }
-                    if (!RegExp(r'^[a-zA-Z0-9]+$').hasMatch(value)) {
-                      return 'Username can only contain letters and numbers';
+                    if (!RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(value)) {
+                      return 'Username can only contain letters, numbers, and underscores';
                     }
                     return null;
                   },

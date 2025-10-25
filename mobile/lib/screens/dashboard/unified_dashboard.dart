@@ -6,6 +6,9 @@ import '../../providers/auth_provider.dart';
 import '../../providers/transaction_provider.dart';
 import '../../providers/notification_provider.dart';
 import '../../providers/wallet_provider.dart';
+import '../../widgets/skeleton_loader.dart';
+import '../../widgets/error_retry_widget.dart';
+import '../../utils/animation_helpers.dart';
 import '../auth/login_screen.dart';
 import '../transactions/create_transaction_screen.dart';
 import '../transactions/transaction_list_screen.dart';
@@ -26,6 +29,9 @@ class UnifiedDashboard extends StatefulWidget {
 
 class _UnifiedDashboardState extends State<UnifiedDashboard> {
   int _currentIndex = 0;
+  bool _isInitialLoading = true;
+  bool _hasError = false;
+  String _errorMessage = '';
 
   @override
   void initState() {
@@ -54,16 +60,40 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
   }
 
   Future<void> _loadData() async {
-    final transactionProvider = context.read<TransactionProvider>();
-    final authProvider = context.read<AuthProvider>();
-    final walletProvider = context.read<WalletProvider>();
+    if (mounted) {
+      setState(() {
+        _hasError = false;
+        _errorMessage = '';
+      });
+    }
 
-    await Future.wait([
-      transactionProvider.fetchTransactions(refresh: true),
-      transactionProvider.fetchStats(),
-      authProvider.refreshProfile(),
-      walletProvider.fetchWallet(),
-    ]);
+    try {
+      final transactionProvider = context.read<TransactionProvider>();
+      final authProvider = context.read<AuthProvider>();
+      final walletProvider = context.read<WalletProvider>();
+
+      await Future.wait([
+        transactionProvider.fetchTransactions(refresh: true),
+        transactionProvider.fetchStats(),
+        authProvider.refreshProfile(),
+        walletProvider.fetchWallet(),
+      ]);
+
+      if (mounted) {
+        setState(() {
+          _isInitialLoading = false;
+          _hasError = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isInitialLoading = false;
+          _hasError = true;
+          _errorMessage = e.toString();
+        });
+      }
+    }
   }
 
   @override
@@ -209,100 +239,106 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
     final walletProvider = Provider.of<WalletProvider>(context);
     final wallet = walletProvider.wallet;
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppTheme.darkBlue, AppTheme.darkBlue.withOpacity(0.8)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    if (_isInitialLoading && wallet == null) {
+      return const SkeletonWalletCard();
+    }
+
+    return AnimationHelpers.fadeIn(
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [AppTheme.darkBlue, AppTheme.darkBlue.withOpacity(0.8)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
+          boxShadow: [
+            BoxShadow(
+              color: AppTheme.darkBlue.withOpacity(0.3),
+              blurRadius: 15,
+              offset: const Offset(0, 8),
+            ),
+          ],
         ),
-        borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
-        boxShadow: [
-          BoxShadow(
-            color: AppTheme.darkBlue.withOpacity(0.3),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Text(
-            'WALLET BALANCE',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: Colors.white.withOpacity(0.7),
-              letterSpacing: 1.5,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            '₵ ${wallet?.balance.toStringAsFixed(2) ?? '0.00'}',
-            style: const TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              Expanded(
-                child: _buildWalletButton(
-                  label: 'Add Money',
-                  icon: Icons.add_circle,
-                  isPrimary: true,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const FundWalletScreen(),
-                      ),
-                    ).then((_) => _loadData());
-                  },
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildWalletButton(
-                  label: 'Withdraw',
-                  icon: Icons.arrow_circle_up,
-                  isPrimary: false,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const WithdrawFundsScreen(),
-                      ),
-                    ).then((_) => _loadData());
-                  },
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const WalletTransactionsScreen(),
-                ),
-              );
-            },
-            child: Text(
-              'View Transaction History',
+        child: Column(
+          children: [
+            Text(
+              'WALLET BALANCE',
               style: TextStyle(
-                color: AppTheme.primaryColor,
-                fontSize: 13,
+                fontSize: 12,
                 fontWeight: FontWeight.w600,
+                color: Colors.white.withOpacity(0.7),
+                letterSpacing: 1.5,
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: 12),
+            Text(
+              '₵ ${wallet?.balance.toStringAsFixed(2) ?? '0.00'}',
+              style: const TextStyle(
+                fontSize: 40,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildWalletButton(
+                    label: 'Add Money',
+                    icon: Icons.add_circle,
+                    isPrimary: true,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const FundWalletScreen(),
+                        ),
+                      ).then((_) => _loadData());
+                    },
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _buildWalletButton(
+                    label: 'Withdraw',
+                    icon: Icons.arrow_circle_up,
+                    isPrimary: false,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const WithdrawFundsScreen(),
+                        ),
+                      ).then((_) => _loadData());
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const WalletTransactionsScreen(),
+                  ),
+                );
+              },
+              child: Text(
+                'View Transaction History',
+                style: TextStyle(
+                  color: AppTheme.primaryColor,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -667,17 +703,32 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
             ],
           ),
           const SizedBox(height: 12),
-          transactionProvider.transactions.isEmpty
-              ? _buildEmptyTransactions()
-              : Column(
-                  children: transactionProvider.transactions
-                      .take(5)
-                      .map((transaction) {
-                    final dateFormat = DateFormat('MMM dd, HH:mm');
-                    final isBuyer = transaction.buyer.id == userId;
-                    final isCredit = transaction.status == 'completed' && !isBuyer;
+          if (_isInitialLoading)
+            Column(
+              children: List.generate(
+                3,
+                (index) => const SkeletonTransactionCard(),
+              ),
+            )
+          else if (transactionProvider.transactions.isEmpty)
+            _buildEmptyTransactions()
+          else
+            Column(
+              children: transactionProvider.transactions
+                  .take(5)
+                  .toList()
+                  .asMap()
+                  .entries
+                  .map((entry) {
+                final index = entry.key;
+                final transaction = entry.value;
+                final dateFormat = DateFormat('MMM dd, HH:mm');
+                final isBuyer = transaction.buyer.id == userId;
+                final isCredit = transaction.status == 'completed' && !isBuyer;
 
-                    return Container(
+                return AnimatedListItem(
+                  index: index,
+                  child: Container(
                       margin: const EdgeInsets.only(bottom: 12),
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
@@ -785,7 +836,8 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                           ],
                         ),
                       ),
-                    );
+                    ),
+                  );
                   }).toList(),
                 ),
         ],

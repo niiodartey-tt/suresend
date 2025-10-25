@@ -4,6 +4,9 @@ import 'package:intl/intl.dart';
 import '../../config/theme.dart';
 import '../../providers/notification_provider.dart';
 import '../../models/notification.dart' as app_notification;
+import '../../widgets/skeleton_loader.dart';
+import '../../widgets/error_retry_widget.dart';
+import '../../utils/animation_helpers.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -14,6 +17,9 @@ class NotificationScreen extends StatefulWidget {
 
 class _NotificationScreenState extends State<NotificationScreen> {
   final ScrollController _scrollController = ScrollController();
+  bool _isInitialLoading = true;
+  bool _hasError = false;
+  String _errorMessage = '';
 
   @override
   void initState() {
@@ -39,8 +45,32 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   Future<void> _loadNotifications() async {
-    final provider = context.read<NotificationProvider>();
-    await provider.fetchNotifications(refresh: true);
+    if (mounted) {
+      setState(() {
+        _hasError = false;
+        _errorMessage = '';
+      });
+    }
+
+    try {
+      final provider = context.read<NotificationProvider>();
+      await provider.fetchNotifications(refresh: true);
+
+      if (mounted) {
+        setState(() {
+          _isInitialLoading = false;
+          _hasError = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isInitialLoading = false;
+          _hasError = true;
+          _errorMessage = e.toString();
+        });
+      }
+    }
   }
 
   Future<void> _loadMore() async {
@@ -87,32 +117,65 @@ class _NotificationScreenState extends State<NotificationScreen> {
       ),
       body: RefreshIndicator(
         onRefresh: _loadNotifications,
-        child: notifications.isEmpty && !notificationProvider.isLoading
-            ? _buildEmptyState()
-            : ListView.builder(
-                controller: _scrollController,
-                padding: const EdgeInsets.all(16),
-                itemCount: notifications.length +
-                    (notificationProvider.hasMore ? 1 : 0),
-                itemBuilder: (context, index) {
-                  if (index == notifications.length) {
-                    return const Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(16),
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  }
-
-                  final notification = notifications[index];
-                  return _NotificationCard(
-                    notification: notification,
-                    onTap: () => _handleNotificationTap(notification),
-                    onDelete: () => _deleteNotification(notification.id),
-                  );
-                },
-              ),
+        color: AppTheme.primaryColor,
+        child: _buildBody(notificationProvider, notifications),
       ),
+    );
+  }
+
+  Widget _buildBody(
+    NotificationProvider notificationProvider,
+    List<app_notification.Notification> notifications,
+  ) {
+    // Show skeleton loaders on initial load
+    if (_isInitialLoading && notifications.isEmpty) {
+      return ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: 5,
+        itemBuilder: (context, index) => const SkeletonNotificationCard(),
+      );
+    }
+
+    // Show error state with retry
+    if (_hasError && notifications.isEmpty) {
+      return ErrorRetryWidget.network(
+        message: 'Failed to load notifications. Please check your connection and try again.',
+        onRetry: _loadNotifications,
+      );
+    }
+
+    // Show empty state
+    if (notifications.isEmpty && !notificationProvider.isLoading) {
+      return const EmptyStateWidget.notifications();
+    }
+
+    // Show notification list with animations
+    return ListView.builder(
+      controller: _scrollController,
+      padding: const EdgeInsets.all(16),
+      itemCount: notifications.length + (notificationProvider.hasMore ? 1 : 0),
+      itemBuilder: (context, index) {
+        if (index == notifications.length) {
+          return const Center(
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
+              ),
+            ),
+          );
+        }
+
+        final notification = notifications[index];
+        return AnimatedListItem(
+          index: index,
+          child: _NotificationCard(
+            notification: notification,
+            onTap: () => _handleNotificationTap(notification),
+            onDelete: () => _deleteNotification(notification.id),
+          ),
+        );
+      },
     );
   }
 

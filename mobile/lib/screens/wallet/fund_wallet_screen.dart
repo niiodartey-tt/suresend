@@ -3,6 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../config/theme.dart';
 import '../../providers/wallet_provider.dart';
+import '../../widgets/skeleton_loader.dart';
+import '../../widgets/error_retry_widget.dart';
+import '../../utils/animation_helpers.dart';
 
 class FundWalletScreen extends StatefulWidget {
   const FundWalletScreen({super.key});
@@ -99,40 +102,47 @@ class _FundWalletScreenState extends State<FundWalletScreen> {
         title: const Text('Fund Wallet'),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Available Balance Card
-              Card(
-                color: AppTheme.primaryColor.withOpacity(0.1),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      const Text(
-                        'Available Balance',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
+      body: LoadingOverlay(
+        isLoading: _isLoading,
+        message: 'Processing payment...',
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Available Balance Card
+                wallet == null
+                    ? const SkeletonLoader.card(height: 100)
+                    : AnimationHelpers.fadeIn(
+                        child: Card(
+                          color: AppTheme.primaryColor.withOpacity(0.1),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              children: [
+                                const Text(
+                                  'Available Balance',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  '₵ ${wallet.balance.toStringAsFixed(2)}',
+                                  style: const TextStyle(
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppTheme.primaryColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        '₵ ${wallet?.balance.toStringAsFixed(2) ?? '0.00'}',
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: AppTheme.primaryColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
               const SizedBox(height: 24),
 
               // Info card

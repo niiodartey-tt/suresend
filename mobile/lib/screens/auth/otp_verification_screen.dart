@@ -4,8 +4,7 @@ import 'package:provider/provider.dart';
 import '../../config/theme.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/custom_button.dart';
-import '../dashboard/buyer_dashboard.dart';
-import '../dashboard/seller_dashboard.dart';
+import '../dashboard/unified_dashboard.dart';
 import '../dashboard/rider_dashboard.dart';
 
 class OTPVerificationScreen extends StatefulWidget {
@@ -59,14 +58,11 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
       final user = authProvider.user;
 
       Widget dashboard;
-      if (user?.isBuyer == true) {
-        dashboard = const BuyerDashboard();
-      } else if (user?.isSeller == true) {
-        dashboard = const SellerDashboard();
-      } else if (user?.isRider == true) {
+      if (user?.isRider == true) {
         dashboard = const RiderDashboard();
       } else {
-        dashboard = const BuyerDashboard(); // Default
+        // All users (can buy and sell) go to unified dashboard
+        dashboard = const UnifiedDashboard();
       }
 
       Navigator.of(context).pushAndRemoveUntil(

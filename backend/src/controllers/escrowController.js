@@ -30,7 +30,7 @@ const createEscrow = async (req, res) => {
       return errorResponse(res, 400, 'Cannot create transaction with yourself');
     }
 
-    // Verify seller exists and is a seller
+    // Verify seller exists and is a user (not a rider)
     const sellerCheck = await query(
       'SELECT id, user_type FROM users WHERE id = $1',
       [sellerId]
@@ -40,8 +40,8 @@ const createEscrow = async (req, res) => {
       return errorResponse(res, 404, 'Seller not found');
     }
 
-    if (sellerCheck.rows[0].user_type !== 'seller') {
-      return errorResponse(res, 400, 'User is not a seller');
+    if (sellerCheck.rows[0].user_type === 'rider') {
+      return errorResponse(res, 400, 'Cannot create transaction with a rider as seller');
     }
 
     // Calculate commission (2%)

@@ -176,25 +176,29 @@ const getTransactionStats = async (req, res) => {
 };
 
 /**
- * Search users for transaction (buyers search sellers, sellers search buyers)
+ * Search users for transaction (all users can buy or sell)
  * GET /api/v1/transactions/search-users
  */
 const searchUsers = async (req, res) => {
   try {
-    const { search, userType = 'seller', limit = 10 } = req.query;
+    const { search, excludeRiders = 'true', limit = 10 } = req.query;
 
     if (!search || search.length < 2) {
       return errorResponse(res, 400, 'Search query must be at least 2 characters');
     }
 
+    // Build query based on whether to exclude riders
+    let whereClause = `is_active = true AND (username ILIKE $1 OR full_name ILIKE $1)`;
+    if (excludeRiders === 'true') {
+      whereClause += ` AND user_type = 'user'`;
+    }
+
     const result = await query(
       `SELECT id, username, full_name, user_type, is_verified, kyc_status
        FROM users
-       WHERE user_type = $1
-         AND is_active = true
-         AND (username ILIKE $2 OR full_name ILIKE $2)
-       LIMIT $3`,
-      [userType, `%${search}%`, limit]
+       WHERE ${whereClause}
+       LIMIT $2`,
+      [`%${search}%`, limit]
     );
 
     return successResponse(res, 200, 'Users found', {

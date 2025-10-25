@@ -4,6 +4,9 @@ import 'package:provider/provider.dart';
 import '../../models/transaction.dart';
 import '../../providers/transaction_provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../widgets/skeleton_loader.dart';
+import '../../widgets/error_retry_widget.dart';
+import '../../utils/animation_helpers.dart';
 import 'transaction_success_screen.dart';
 
 class CreateTransactionScreen extends StatefulWidget {
@@ -23,6 +26,7 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
   UserSearchResult? _selectedRider;
   String _paymentMethod = 'wallet';
   bool _isSearching = false;
+  bool _isCreating = false;
   List<UserSearchResult> _searchResults = [];
 
   @override
@@ -82,6 +86,8 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
       return;
     }
 
+    setState(() => _isCreating = true);
+
     final transactionProvider = context.read<TransactionProvider>();
     final authProvider = context.read<AuthProvider>();
 
@@ -92,6 +98,8 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
       paymentMethod: _paymentMethod,
       riderId: _selectedRider?.id,
     );
+
+    if (mounted) setState(() => _isCreating = false);
 
     if (!mounted) return;
 
@@ -268,14 +276,17 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
         title: const Text('Create Escrow Transaction'),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Info card
+      body: LoadingOverlay(
+        isLoading: _isCreating,
+        message: 'Creating escrow transaction...',
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Info card
               Card(
                 color: Colors.blue.shade50,
                 child: Padding(

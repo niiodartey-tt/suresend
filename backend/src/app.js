@@ -100,6 +100,13 @@ app.get('/api', (req, res) => {
         markAllAsRead: 'PUT /api/v1/notifications/read-all',
         delete: 'DELETE /api/v1/notifications/:id',
       },
+      wallet: {
+        details: 'GET /api/v1/wallet',
+        transactions: 'GET /api/v1/wallet/transactions',
+        fund: 'POST /api/v1/wallet/fund',
+        withdraw: 'POST /api/v1/wallet/withdraw',
+        transfer: 'POST /api/v1/wallet/transfer',
+      },
     },
   });
 });
@@ -110,7 +117,7 @@ const userRoutes = require('./routes/users');
 const escrowRoutes = require('./routes/escrow');
 const transactionRoutes = require('./routes/transactions');
 const notificationRoutes = require('./routes/notifications');
-// const walletRoutes = require('./routes/wallet');  // Stage 4
+const walletRoutes = require('./routes/wallet');
 
 // Use routes
 app.use('/api/v1/auth', authRoutes);
@@ -118,7 +125,7 @@ app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/escrow', escrowRoutes);
 app.use('/api/v1/transactions', transactionRoutes);
 app.use('/api/v1/notifications', notificationRoutes);
-// app.use('/api/v1/wallet', walletRoutes);  // Stage 4
+app.use('/api/v1/wallet', walletRoutes);
 
 // 404 handler
 app.use((req, res) => {

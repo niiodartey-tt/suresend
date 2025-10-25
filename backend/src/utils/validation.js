@@ -18,10 +18,10 @@ const registerSchema = Joi.object({
       'any.required': 'Username is required',
     }),
   phoneNumber: Joi.string()
-    .pattern(/^\+233[0-9]{9}$/)
+    .pattern(/^(\+233|0)[0-9]{9}$/)
     .required()
     .messages({
-      'string.pattern.base': 'Phone number must be in format +233XXXXXXXXX',
+      'string.pattern.base': 'Phone number must be in format +233XXXXXXXXX or 0XXXXXXXXX',
       'any.required': 'Phone number is required',
     }),
   password: Joi.string()
@@ -75,10 +75,10 @@ const loginSchema = Joi.object({
 // OTP verification validation
 const verifyOTPSchema = Joi.object({
   phoneNumber: Joi.string()
-    .pattern(/^\+233[0-9]{9}$/)
+    .pattern(/^(\+233|0)[0-9]{9}$/)
     .required()
     .messages({
-      'string.pattern.base': 'Phone number must be in format +233XXXXXXXXX',
+      'string.pattern.base': 'Phone number must be in format +233XXXXXXXXX or 0XXXXXXXXX',
       'any.required': 'Phone number is required',
     }),
   otpCode: Joi.string()
@@ -102,10 +102,10 @@ const verifyOTPSchema = Joi.object({
 // Resend OTP validation
 const resendOTPSchema = Joi.object({
   phoneNumber: Joi.string()
-    .pattern(/^\+233[0-9]{9}$/)
+    .pattern(/^(\+233|0)[0-9]{9}$/)
     .required()
     .messages({
-      'string.pattern.base': 'Phone number must be in format +233XXXXXXXXX',
+      'string.pattern.base': 'Phone number must be in format +233XXXXXXXXX or 0XXXXXXXXX',
       'any.required': 'Phone number is required',
     }),
   purpose: Joi.string()

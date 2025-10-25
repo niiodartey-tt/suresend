@@ -98,19 +98,22 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
       // Refresh user profile to get updated wallet balance
       await authProvider.refreshProfile();
 
+      // Refresh transactions and stats
+      await transactionProvider.fetchTransactions(refresh: true);
+      await transactionProvider.fetchStats();
+
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Transaction created successfully!'),
           backgroundColor: Colors.green,
-          duration: Duration(seconds: 2),
+          duration: Duration(seconds: 3),
         ),
       );
 
-      // Navigate back to dashboard (pop twice - once for this screen, once for any intermediates)
-      Navigator.pop(context);
-      Navigator.pop(context);
+      // Navigate back to dashboard with success flag
+      Navigator.pop(context, true);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

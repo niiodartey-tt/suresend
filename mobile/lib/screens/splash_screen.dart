@@ -26,32 +26,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (!mounted) return;
 
-    // Check authentication status
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    await authProvider.initAuth();
-
-    if (!mounted) return;
-
-    // Navigate based on authentication status
-    if (authProvider.isAuthenticated && authProvider.user != null) {
-      // User is authenticated, navigate to appropriate dashboard
-      Widget dashboard;
-      if (authProvider.user!.isRider) {
-        dashboard = const RiderDashboard();
-      } else {
-        // All users (can buy and sell) go to unified dashboard
-        dashboard = const UnifiedDashboard();
-      }
-
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => dashboard),
-      );
-    } else {
-      // User not authenticated, navigate to login
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-      );
-    }
+    // Always navigate to login screen
+    // Users will need to login each time the app starts
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
+    );
   }
 
   @override

@@ -44,9 +44,11 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
 
   Future<void> _loadData() async {
     final transactionProvider = context.read<TransactionProvider>();
+    final authProvider = context.read<AuthProvider>();
     await Future.wait([
       transactionProvider.fetchTransactions(refresh: true),
       transactionProvider.fetchStats(),
+      authProvider.refreshProfile(), // Update wallet balance and user info
     ]);
   }
 

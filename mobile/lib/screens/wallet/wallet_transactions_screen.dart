@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../providers/wallet_provider.dart';
 import '../../models/wallet.dart';
-import '../../utils/theme.dart';
+import '../../config/theme.dart';
 
 class WalletTransactionsScreen extends StatefulWidget {
   const WalletTransactionsScreen({Key? key}) : super(key: key);

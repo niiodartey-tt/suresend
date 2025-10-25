@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/wallet_provider.dart';
-import '../../utils/theme.dart';
+import '../../config/theme.dart';
 
 class TransferMoneyScreen extends StatefulWidget {
   const TransferMoneyScreen({Key? key}) : super(key: key);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/wallet_provider.dart';
-import '../../utils/theme.dart';
+import '../../config/theme.dart';
 
 class WithdrawFundsScreen extends StatefulWidget {
   const WithdrawFundsScreen({Key? key}) : super(key: key);
@@ -68,12 +68,17 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
     try {
       final walletProvider = Provider.of<WalletProvider>(context, listen: false);
 
+      // Construct account details map
+      final accountDetails = <String, dynamic>{
+        'accountNumber': _accountNumberController.text,
+        'accountName': _accountNameController.text,
+        if (_selectedNetwork != null) 'network': _selectedNetwork,
+      };
+
       final result = await walletProvider.withdrawFunds(
         amount: double.parse(_amountController.text),
         withdrawalMethod: _selectedMethod,
-        accountNumber: _accountNumberController.text,
-        accountName: _accountNameController.text,
-        network: _selectedNetwork,
+        accountDetails: accountDetails,
       );
 
       setState(() {

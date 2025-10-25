@@ -4,6 +4,7 @@ import 'config/app_config.dart';
 import 'config/theme.dart';
 import 'providers/auth_provider.dart';
 import 'providers/transaction_provider.dart';
+import 'providers/notification_provider.dart';
 import 'services/storage_service.dart';
 import 'screens/splash_screen.dart';
 
@@ -25,6 +26,7 @@ class SureSendApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => TransactionProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
         // Additional providers will be added in Stage 4
         // ChangeNotifierProvider(create: (_) => WalletProvider()),
       ],

@@ -299,9 +299,9 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
                           ),
                         ),
                       ),
-              const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-              // Recipient Username
+                // Recipient Username
               const Text(
                 'Recipient Details',
                 style: TextStyle(

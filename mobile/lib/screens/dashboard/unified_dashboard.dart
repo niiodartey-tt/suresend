@@ -15,6 +15,7 @@ import '../wallet/wallet_screen.dart';
 import '../wallet/fund_wallet_screen.dart';
 import '../wallet/withdraw_funds_screen.dart';
 import '../wallet/transfer_money_screen.dart';
+import '../wallet/wallet_transactions_screen.dart';
 
 class UnifiedDashboard extends StatefulWidget {
   const UnifiedDashboard({super.key});
@@ -288,7 +289,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const WalletScreen(),
+                  builder: (context) => const WalletTransactionsScreen(),
                 ),
               );
             },

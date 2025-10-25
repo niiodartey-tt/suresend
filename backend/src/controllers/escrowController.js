@@ -127,13 +127,24 @@ const createEscrow = async (req, res) => {
         [transaction.id, buyerId]
       );
 
-      // Create notifications for seller (and rider if assigned)
+      // Create notifications for buyer, seller (and rider if assigned)
+      // Notification for buyer
+      await client.query(
+        `INSERT INTO notifications (user_id, title, message, type)
+         VALUES ($1, 'Escrow Created', $2, 'transaction')`,
+        [
+          buyerId,
+          `Your escrow payment of GHS ${amount.toFixed(2)} for "${description}" has been created. Ref: ${transactionRef}`,
+        ]
+      );
+
+      // Notification for seller
       await client.query(
         `INSERT INTO notifications (user_id, title, message, type)
          VALUES ($1, 'New Escrow Payment', $2, 'transaction')`,
         [
           sellerId,
-          `You have received an escrow payment of GHS ${amount} for: ${description}`,
+          `You have received an escrow payment of GHS ${amount.toFixed(2)} for: ${description}. Ref: ${transactionRef}`,
         ]
       );
 
@@ -369,6 +380,16 @@ const confirmDelivery = async (req, res) => {
           ]
         );
 
+        // Notify buyer
+        await client.query(
+          `INSERT INTO notifications (user_id, title, message, type)
+           VALUES ($1, 'Delivery Confirmed', $2, 'transaction')`,
+          [
+            buyerId,
+            `You have confirmed delivery and released GHS ${amountToRelease.toFixed(2)} to the seller. Transaction completed!`,
+          ]
+        );
+
         // Notify seller
         await client.query(
           `INSERT INTO notifications (user_id, title, message, type)
@@ -410,12 +431,28 @@ const confirmDelivery = async (req, res) => {
           [transactionId, `Delivery rejected${notes ? ': ' + notes : ''}`, buyerId]
         );
 
+        // Notify buyer
+        await client.query(
+          `INSERT INTO notifications (user_id, title, message, type)
+           VALUES ($1, 'Dispute Raised', $2, 'transaction')`,
+          [buyerId, 'You have rejected the delivery. A dispute has been created for this transaction.']
+        );
+
         // Notify seller
         await client.query(
           `INSERT INTO notifications (user_id, title, message, type)
            VALUES ($1, 'Delivery Rejected', $2, 'transaction')`,
           [transaction.seller_id, 'The buyer has rejected the delivery. A dispute has been raised.']
         );
+
+        // Notify rider if exists
+        if (transaction.rider_id) {
+          await client.query(
+            `INSERT INTO notifications (user_id, title, message, type)
+             VALUES ($1, 'Delivery Rejected', $2, 'delivery')`,
+            [transaction.rider_id, 'The buyer has rejected the delivery.']
+          );
+        }
       }
 
       await client.query('COMMIT');

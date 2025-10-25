@@ -129,9 +129,40 @@ const deleteNotification = async (req, res) => {
   }
 };
 
+/**
+ * Helper function to create a notification
+ * @param {string} userId - User ID to send notification to
+ * @param {string} title - Notification title
+ * @param {string} message - Notification message
+ * @param {string} type - Notification type (transaction, wallet, system, etc.)
+ * @returns {Promise<Object>} Created notification
+ */
+const createNotification = async (userId, title, message, type = 'transaction') => {
+  try {
+    const result = await query(
+      `INSERT INTO notifications (user_id, title, message, type, is_read, created_at)
+       VALUES ($1, $2, $3, $4, false, NOW())
+       RETURNING *`,
+      [userId, title, message, type]
+    );
+
+    return {
+      success: true,
+      notification: result.rows[0],
+    };
+  } catch (error) {
+    logger.error('Create notification error:', error);
+    return {
+      success: false,
+      error: error.message,
+    };
+  }
+};
+
 module.exports = {
   getNotifications,
   markAsRead,
   markAllAsRead,
   deleteNotification,
+  createNotification,
 };

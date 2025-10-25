@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/wallet_provider.dart';
 import '../../config/theme.dart';
+import '../../services/transaction_service.dart';
+import '../transactions/transaction_success_screen.dart';
 
 class TransferMoneyScreen extends StatefulWidget {
   const TransferMoneyScreen({Key? key}) : super(key: key);
@@ -15,6 +17,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
   final _usernameController = TextEditingController();
   final _amountController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final _transactionService = TransactionService();
 
   bool _isLoading = false;
   bool _isVerifyingUser = false;
@@ -29,8 +32,8 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
   }
 
   Future<void> _verifyUsername() async {
-    final username = _usernameController.text.trim();
-    if (username.isEmpty) {
+    final searchQuery = _usernameController.text.trim();
+    if (searchQuery.isEmpty) {
       return;
     }
 
@@ -40,19 +43,36 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
     });
 
     try {
-      // TODO: Add API call to verify username and get user details
-      // For now, simulate verification
-      await Future.delayed(const Duration(seconds: 1));
+      // Search for user by username or phone number
+      final result = await _transactionService.searchUsers(search: searchQuery);
 
-      // Simulated response - replace with actual API call
-      setState(() {
-        _recipientDetails = {
-          'username': username,
-          'fullName': 'John Doe', // This should come from API
-          'verified': true,
-        };
-        _isVerifyingUser = false;
-      });
+      if (result['success'] && result['data']['users'].isNotEmpty) {
+        final user = result['data']['users'][0]; // Take first match
+
+        setState(() {
+          _recipientDetails = {
+            'id': user['id'],
+            'username': user['username'],
+            'fullName': user['fullName'],
+            'phoneNumber': user['phoneNumber'],
+            'isVerified': user['isVerified'],
+            'verified': true,
+          };
+          _isVerifyingUser = false;
+        });
+      } else {
+        setState(() {
+          _isVerifyingUser = false;
+        });
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('User not found: $searchQuery'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
     } catch (e) {
       setState(() {
         _isVerifyingUser = false;
@@ -60,7 +80,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('User not found: $username'),
+            content: Text('Error searching for user: ${e.toString()}'),
             backgroundColor: Colors.red,
           ),
         );
@@ -178,13 +198,26 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
 
       if (result['success']) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(result['message'] ?? 'Transfer completed successfully'),
-              backgroundColor: Colors.green,
+          final amount = double.parse(_amountController.text);
+          final description = _descriptionController.text.trim();
+
+          // Navigate to success screen
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TransactionSuccessScreen(
+                title: 'Transfer Successful!',
+                message: 'Your money has been sent successfully.',
+                amount: '₵ ${amount.toStringAsFixed(2)}',
+                reference: result['data']?['transaction']?['reference'],
+                details: {
+                  'Recipient': _recipientDetails!['fullName'],
+                  'Username': '@${_recipientDetails!['username']}',
+                  if (description.isNotEmpty) 'Description': description,
+                },
+              ),
             ),
           );
-          Navigator.pop(context);
         }
       } else {
         if (mounted) {
@@ -270,8 +303,8 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
               TextFormField(
                 controller: _usernameController,
                 decoration: InputDecoration(
-                  labelText: 'Username',
-                  hintText: 'Enter recipient username',
+                  labelText: 'Username or Phone Number',
+                  hintText: 'Enter username or phone number',
                   border: const OutlineInputBorder(),
                   prefixIcon: const Icon(Icons.person_search),
                   suffixIcon: _isVerifyingUser
@@ -358,12 +391,17 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
                 controller: _amountController,
                 decoration: const InputDecoration(
                   labelText: 'Amount (GHS)',
-                  hintText: 'Enter amount to transfer',
+                  hintText: '0.00',
                   border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.money),
+                  prefixText: '₵ ',
+                  prefixStyle: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
                   helperText: 'Minimum transfer: GHS 1.00',
                 ),
-                keyboardType: TextInputType.number,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter amount';

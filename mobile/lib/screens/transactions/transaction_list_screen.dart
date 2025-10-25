@@ -8,7 +8,9 @@ import 'transaction_detail_screen.dart';
 import 'create_transaction_screen.dart';
 
 class TransactionListScreen extends StatefulWidget {
-  const TransactionListScreen({super.key});
+  final String? role; // Optional initial role filter: 'buyer', 'seller', 'rider'
+
+  const TransactionListScreen({super.key, this.role});
 
   @override
   State<TransactionListScreen> createState() => _TransactionListScreenState();
@@ -22,6 +24,7 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
   @override
   void initState() {
     super.initState();
+    _selectedRole = widget.role; // Initialize with provided role
     _loadTransactions();
     _scrollController.addListener(_onScroll);
   }

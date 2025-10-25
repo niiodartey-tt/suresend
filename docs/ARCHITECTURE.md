@@ -10,10 +10,11 @@ SureSend is built on a three-tier architecture:
 ```
 ┌─────────────────────────────────────────────────┐
 │           Flutter Mobile App (iOS/Android)       │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐      │
-│  │  Buyer   │  │  Seller  │  │  Rider   │      │
-│  │Dashboard │  │Dashboard │  │Dashboard │      │
-│  └──────────┘  └──────────┘  └──────────┘      │
+│  ┌───────────────────┐        ┌──────────┐     │
+│  │     Unified       │        │  Rider   │     │
+│  │    Dashboard      │        │Dashboard │     │
+│  │ (Buy/Sell Tabs)   │        │          │     │
+│  └───────────────────┘        └──────────┘     │
 └─────────────────────┬───────────────────────────┘
                       │ HTTPS/REST API
                       ▼
@@ -63,12 +64,15 @@ users
 ├── phone_number (VARCHAR, UNIQUE)
 ├── password_hash (VARCHAR)
 ├── full_name (VARCHAR)
-├── user_type (ENUM: 'buyer', 'seller', 'rider')
+├── user_type (ENUM: 'user', 'rider')  ← UPDATED v2.0.0
 ├── email (VARCHAR, NULLABLE)
 ├── is_verified (BOOLEAN)
 ├── kyc_status (ENUM: 'pending', 'approved', 'rejected')
 ├── created_at (TIMESTAMP)
 └── updated_at (TIMESTAMP)
+
+Note: v2.0.0 unified buyer and seller types into 'user'
+All users can now both buy and sell with a single account.
 ```
 
 ### Wallets Table

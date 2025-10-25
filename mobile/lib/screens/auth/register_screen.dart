@@ -22,7 +22,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _fullNameController = TextEditingController();
   final _emailController = TextEditingController();
 
-  String _selectedUserType = 'buyer';
+  String _selectedUserType = 'user';
 
   @override
   void dispose() {
@@ -112,7 +112,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 // User Type Selection
                 const Text(
-                  'I am a',
+                  'Account Type',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -123,17 +123,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   children: [
                     Expanded(
                       child: _buildUserTypeCard(
-                        type: 'buyer',
-                        icon: Icons.shopping_bag,
-                        label: 'Buyer',
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _buildUserTypeCard(
-                        type: 'seller',
-                        icon: Icons.store,
-                        label: 'Seller',
+                        type: 'user',
+                        icon: Icons.person,
+                        label: 'User',
+                        subtitle: 'Buy & Sell',
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -142,6 +135,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         type: 'rider',
                         icon: Icons.delivery_dining,
                         label: 'Rider',
+                        subtitle: 'Delivery',
                       ),
                     ),
                   ],
@@ -310,6 +304,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     required String type,
     required IconData icon,
     required String label,
+    String? subtitle,
   }) {
     final isSelected = _selectedUserType == type;
 
@@ -320,7 +315,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         });
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
         decoration: BoxDecoration(
           color: isSelected
               ? AppTheme.primaryColor.withOpacity(0.1)
@@ -335,18 +330,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
           children: [
             Icon(
               icon,
-              size: 32,
+              size: 40,
               color: isSelected ? AppTheme.primaryColor : Colors.grey,
             ),
             const SizedBox(height: 8),
             Text(
               label,
               style: TextStyle(
-                fontSize: 12,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                color: isSelected ? AppTheme.primaryColor : Colors.grey,
+                fontSize: 14,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                color: isSelected ? AppTheme.primaryColor : Colors.grey.shade700,
               ),
             ),
+            if (subtitle != null) ...[
+              const SizedBox(height: 4),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  fontSize: 11,
+                  color: isSelected ? AppTheme.primaryColor.withOpacity(0.7) : Colors.grey.shade500,
+                ),
+              ),
+            ],
           ],
         ),
       ),

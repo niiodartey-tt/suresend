@@ -20,8 +20,8 @@ router.use(authenticate);
 
 // @route   POST /api/v1/escrow/create
 // @desc    Create a new escrow transaction
-// @access  Private (Buyer only)
-router.post('/create', authorize('buyer'), createEscrow);
+// @access  Private (User only - acts as buyer)
+router.post('/create', authorize('user'), createEscrow);
 
 // @route   GET /api/v1/escrow/:id
 // @desc    Get escrow transaction details
@@ -30,17 +30,17 @@ router.get('/:id', getEscrowDetails);
 
 // @route   POST /api/v1/escrow/:id/confirm-delivery
 // @desc    Confirm or reject delivery
-// @access  Private (Buyer only)
-router.post('/:id/confirm-delivery', authorize('buyer'), confirmDelivery);
+// @access  Private (User only - must be the buyer of this transaction)
+router.post('/:id/confirm-delivery', authorize('user'), confirmDelivery);
 
 // @route   POST /api/v1/escrow/:id/dispute
 // @desc    Raise a dispute
-// @access  Private (Buyer, Seller)
-router.post('/:id/dispute', authorize('buyer', 'seller'), raiseDispute);
+// @access  Private (User only - buyer or seller of this transaction)
+router.post('/:id/dispute', authorize('user'), raiseDispute);
 
 // @route   POST /api/v1/escrow/:id/cancel
 // @desc    Cancel escrow transaction
-// @access  Private (Buyer only)
-router.post('/:id/cancel', authorize('buyer'), cancelTransaction);
+// @access  Private (User only - must be the buyer of this transaction)
+router.post('/:id/cancel', authorize('user'), cancelTransaction);
 
 module.exports = router;

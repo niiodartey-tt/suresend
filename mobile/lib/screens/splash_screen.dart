@@ -3,8 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:suresend/config/theme.dart';
 import 'package:suresend/providers/auth_provider.dart';
 import 'package:suresend/screens/auth/login_screen.dart';
-import 'package:suresend/screens/dashboard/buyer_dashboard.dart';
-import 'package:suresend/screens/dashboard/seller_dashboard.dart';
+import 'package:suresend/screens/dashboard/unified_dashboard.dart';
 import 'package:suresend/screens/dashboard/rider_dashboard.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -37,14 +36,11 @@ class _SplashScreenState extends State<SplashScreen> {
     if (authProvider.isAuthenticated && authProvider.user != null) {
       // User is authenticated, navigate to appropriate dashboard
       Widget dashboard;
-      if (authProvider.user!.isBuyer) {
-        dashboard = const BuyerDashboard();
-      } else if (authProvider.user!.isSeller) {
-        dashboard = const SellerDashboard();
-      } else if (authProvider.user!.isRider) {
+      if (authProvider.user!.isRider) {
         dashboard = const RiderDashboard();
       } else {
-        dashboard = const BuyerDashboard(); // Default
+        // All users (can buy and sell) go to unified dashboard
+        dashboard = const UnifiedDashboard();
       }
 
       Navigator.of(context).pushReplacement(

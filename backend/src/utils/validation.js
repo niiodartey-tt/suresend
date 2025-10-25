@@ -43,10 +43,10 @@ const registerSchema = Joi.object({
       'any.required': 'Full name is required',
     }),
   userType: Joi.string()
-    .valid('buyer', 'seller', 'rider')
+    .valid('user', 'rider')
     .required()
     .messages({
-      'any.only': 'User type must be either buyer, seller, or rider',
+      'any.only': 'User type must be either user or rider',
       'any.required': 'User type is required',
     }),
   email: Joi.string()

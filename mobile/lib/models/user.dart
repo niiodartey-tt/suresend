@@ -3,7 +3,7 @@ class User {
   final String username;
   final String phoneNumber;
   final String fullName;
-  final String userType; // 'buyer', 'seller', 'rider'
+  final String userType; // 'user', 'rider'
   final String? email;
   final bool isVerified;
   final String kycStatus; // 'pending', 'approved', 'rejected'
@@ -33,7 +33,7 @@ class User {
       username: json['username'] ?? '',
       phoneNumber: json['phoneNumber'] ?? '',
       fullName: json['fullName'] ?? '',
-      userType: json['userType'] ?? 'buyer',
+      userType: json['userType'] ?? 'user',
       email: json['email'],
       isVerified: json['isVerified'] ?? false,
       kycStatus: json['kycStatus'] ?? 'pending',
@@ -98,9 +98,11 @@ class User {
   }
 
   // Helper methods
-  bool get isBuyer => userType == 'buyer';
-  bool get isSeller => userType == 'seller';
+  bool get isUser => userType == 'user';
   bool get isRider => userType == 'rider';
+  // Legacy support - users can both buy and sell
+  bool get isBuyer => userType == 'user';
+  bool get isSeller => userType == 'user';
   bool get isKYCApproved => kycStatus == 'approved';
   bool get isKYCPending => kycStatus == 'pending';
   bool get isKYCRejected => kycStatus == 'rejected';

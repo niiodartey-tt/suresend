@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/wallet_provider.dart';
 import '../../config/theme.dart';
+import '../../widgets/skeleton_loader.dart';
+import '../../widgets/error_retry_widget.dart';
+import '../../utils/animation_helpers.dart';
 
 class WithdrawFundsScreen extends StatefulWidget {
   const WithdrawFundsScreen({Key? key}) : super(key: key);
@@ -131,40 +134,47 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
         backgroundColor: AppTheme.primaryColor,
         foregroundColor: Colors.white,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Available Balance Card
-              Card(
-                color: AppTheme.primaryColor.withOpacity(0.1),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      const Text(
-                        'Available Balance',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
+      body: LoadingOverlay(
+        isLoading: _isLoading,
+        message: 'Processing withdrawal...',
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Available Balance Card
+                wallet == null
+                    ? const SkeletonLoader.card(height: 100)
+                    : AnimationHelpers.fadeIn(
+                        child: Card(
+                          color: AppTheme.primaryColor.withOpacity(0.1),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              children: [
+                                const Text(
+                                  'Available Balance',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  '₵ ${wallet.balance.toStringAsFixed(2)}',
+                                  style: const TextStyle(
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppTheme.primaryColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        '₵ ${wallet?.balance.toStringAsFixed(2) ?? '0.00'}',
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: AppTheme.primaryColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
               const SizedBox(height: 24),
 
               // Withdrawal Method Selection

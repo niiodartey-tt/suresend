@@ -5,6 +5,9 @@ import 'package:intl/intl.dart';
 import '../../models/transaction.dart';
 import '../../providers/transaction_provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../widgets/skeleton_loader.dart';
+import '../../widgets/error_retry_widget.dart';
+import '../../utils/animation_helpers.dart';
 
 class TransactionDetailScreen extends StatefulWidget {
   final String transactionId;
@@ -76,14 +79,28 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
     if (isLoading && transaction == null) {
       return Scaffold(
         appBar: AppBar(title: const Text('Transaction Details')),
-        body: const Center(child: CircularProgressIndicator()),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: List.generate(
+              4,
+              (index) => const Padding(
+                padding: EdgeInsets.only(bottom: 16),
+                child: SkeletonLoader.card(height: 120),
+              ),
+            ),
+          ),
+        ),
       );
     }
 
     if (transaction == null) {
       return Scaffold(
         appBar: AppBar(title: const Text('Transaction Details')),
-        body: const Center(child: Text('Transaction not found')),
+        body: ErrorRetryWidget.notFound(
+          message: 'Transaction not found. It may have been deleted or you don\'t have access.',
+          onRetry: _loadTransactionDetails,
+        ),
       );
     }
 

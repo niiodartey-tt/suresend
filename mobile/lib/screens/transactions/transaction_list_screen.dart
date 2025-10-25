@@ -4,6 +4,9 @@ import 'package:intl/intl.dart';
 import '../../models/transaction.dart';
 import '../../providers/transaction_provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../widgets/skeleton_loader.dart';
+import '../../widgets/error_retry_widget.dart';
+import '../../utils/animation_helpers.dart';
 import 'transaction_detail_screen.dart';
 import 'create_transaction_screen.dart';
 
@@ -20,6 +23,7 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
   String? _selectedStatus;
   String? _selectedRole;
   final ScrollController _scrollController = ScrollController();
+  bool _isInitialLoading = true;
 
   @override
   void initState() {
@@ -53,6 +57,10 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
       role: _selectedRole,
     );
     await provider.fetchStats();
+
+    if (mounted) {
+      setState(() => _isInitialLoading = false);
+    }
   }
 
   Future<void> _loadMore() async {
@@ -274,76 +282,49 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
 
             // Transaction list
             Expanded(
-              child: transactions.isEmpty && !transactionProvider.isLoading
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.receipt_long,
-                            size: 64,
-                            color: Colors.grey.shade400,
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            'No transactions yet',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.grey.shade600,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          if (authProvider.user?.isBuyer == true)
-                            TextButton.icon(
-                              onPressed: () async {
-                                final result = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const CreateTransactionScreen(),
-                                  ),
-                                );
-                                if (result == true) {
-                                  _loadTransactions();
-                                }
-                              },
-                              icon: const Icon(Icons.add),
-                              label: const Text('Create your first transaction'),
-                            ),
-                        ],
-                      ),
-                    )
-                  : ListView.builder(
-                      controller: _scrollController,
+              child: _isInitialLoading && transactions.isEmpty
+                  ? ListView.builder(
                       padding: const EdgeInsets.all(16),
-                      itemCount: transactions.length + (transactionProvider.hasMore ? 1 : 0),
-                      itemBuilder: (context, index) {
-                        if (index == transactions.length) {
-                          return const Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(16),
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-                        }
-
-                        final transaction = transactions[index];
-                        return _TransactionCard(
-                          transaction: transaction,
-                          currentUserId: authProvider.user!.id,
-                          onTap: () async {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => TransactionDetailScreen(
-                                  transactionId: transaction.id,
+                      itemCount: 5,
+                      itemBuilder: (context, index) => const SkeletonTransactionCard(),
+                    )
+                  : transactions.isEmpty && !transactionProvider.isLoading
+                      ? const EmptyStateWidget.transactions()
+                      : ListView.builder(
+                          controller: _scrollController,
+                          padding: const EdgeInsets.all(16),
+                          itemCount: transactions.length + (transactionProvider.hasMore ? 1 : 0),
+                          itemBuilder: (context, index) {
+                            if (index == transactions.length) {
+                              return const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.all(16),
+                                  child: CircularProgressIndicator(),
                                 ),
+                              );
+                            }
+
+                            final transaction = transactions[index];
+                            return AnimatedListItem(
+                              index: index,
+                              child: _TransactionCard(
+                                transaction: transaction,
+                                currentUserId: authProvider.user!.id,
+                                onTap: () async {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => TransactionDetailScreen(
+                                        transactionId: transaction.id,
+                                      ),
+                                    ),
+                                  );
+                                  _loadTransactions();
+                                },
                               ),
                             );
-                            _loadTransactions();
                           },
-                        );
-                      },
-                    ),
+                        ),
             ),
           ],
         ),

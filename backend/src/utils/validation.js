@@ -7,12 +7,12 @@ const Joi = require('joi');
 // Registration validation
 const registerSchema = Joi.object({
   username: Joi.string()
-    .alphanum()
+    .pattern(/^[a-zA-Z0-9_]+$/)
     .min(3)
     .max(30)
     .required()
     .messages({
-      'string.alphanum': 'Username must only contain alphanumeric characters',
+      'string.pattern.base': 'Username must only contain letters, numbers, and underscores',
       'string.min': 'Username must be at least 3 characters long',
       'string.max': 'Username must not exceed 30 characters',
       'any.required': 'Username is required',

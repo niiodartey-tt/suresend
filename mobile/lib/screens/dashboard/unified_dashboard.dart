@@ -100,9 +100,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
-      body: _currentIndex == 0
-          ? _buildHomeScreen()
-          : _buildPlaceholderScreen(),
+      body: _currentIndex == 0 ? _buildHomeScreen() : _buildPlaceholderScreen(),
       bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
@@ -729,117 +727,120 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                 return AnimatedListItem(
                   index: index,
                   child: Container(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: AppTheme.surfaceColor,
-                        borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
+                    margin: const EdgeInsets.only(bottom: 12),
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: AppTheme.surfaceColor,
+                      borderRadius:
+                          BorderRadius.circular(AppTheme.cardBorderRadius),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TransactionDetailScreen(
+                              transactionId: transaction.id,
+                            ),
                           ),
-                        ],
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => TransactionDetailScreen(
-                                transactionId: transaction.id,
-                              ),
+                        ).then((_) => _loadData());
+                      },
+                      child: Row(
+                        children: [
+                          // Icon
+                          Container(
+                            width: 45,
+                            height: 45,
+                            decoration: BoxDecoration(
+                              color: isCredit
+                                  ? Colors.green.withOpacity(0.15)
+                                  : Colors.blue.withOpacity(0.15),
+                              shape: BoxShape.circle,
                             ),
-                          ).then((_) => _loadData());
-                        },
-                        child: Row(
-                          children: [
-                            // Icon
-                            Container(
-                              width: 45,
-                              height: 45,
-                              decoration: BoxDecoration(
-                                color: isCredit
-                                    ? Colors.green.withOpacity(0.15)
-                                    : Colors.blue.withOpacity(0.15),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                isCredit ? Icons.arrow_downward : Icons.arrow_upward,
-                                color: isCredit ? Colors.green : Colors.blue,
-                                size: 22,
-                              ),
+                            child: Icon(
+                              isCredit
+                                  ? Icons.arrow_downward
+                                  : Icons.arrow_upward,
+                              color: isCredit ? Colors.green : Colors.blue,
+                              size: 22,
                             ),
-                            const SizedBox(width: 12),
-                            // Details
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    transaction.description,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppTheme.textPrimaryColor,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    '${transaction.statusDisplay} • ${dateFormat.format(transaction.createdAt)}',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: AppTheme.textSecondaryColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            // Amount
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
+                          ),
+                          const SizedBox(width: 12),
+                          // Details
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '₵${transaction.amount.toStringAsFixed(2)}',
+                                  transaction.description,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
                                     color: AppTheme.textPrimaryColor,
                                   ),
                                 ),
                                 const SizedBox(height: 4),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 2,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: isBuyer
-                                        ? Colors.blue.shade50
-                                        : Colors.green.shade50,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Text(
-                                    isBuyer ? 'Buyer' : 'Seller',
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      color: isBuyer ? Colors.blue : Colors.green,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                Text(
+                                  '${transaction.statusDisplay} • ${dateFormat.format(transaction.createdAt)}',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: AppTheme.textSecondaryColor,
                                   ),
                                 ),
                               ],
                             ),
-                          ],
-                        ),
+                          ),
+                          // Amount
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                '₵${transaction.amount.toStringAsFixed(2)}',
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppTheme.textPrimaryColor,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: isBuyer
+                                      ? Colors.blue.shade50
+                                      : Colors.green.shade50,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  isBuyer ? 'Buyer' : 'Seller',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: isBuyer ? Colors.blue : Colors.green,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                  );
-                  }).toList(),
-                ),
+                  ),
+                );
+              }).toList(),
+            ),
         ],
       ),
     );

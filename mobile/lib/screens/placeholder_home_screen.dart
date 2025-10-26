@@ -155,7 +155,9 @@ class _PlaceholderHomeScreenState extends State<PlaceholderHomeScreen> {
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton.icon(
-                        onPressed: _isTestingConnection ? null : _testBackendConnection,
+                        onPressed: _isTestingConnection
+                            ? null
+                            : _testBackendConnection,
                         icon: _isTestingConnection
                             ? const SizedBox(
                                 width: 20,
@@ -167,7 +169,9 @@ class _PlaceholderHomeScreenState extends State<PlaceholderHomeScreen> {
                               )
                             : const Icon(Icons.wifi),
                         label: Text(
-                          _isTestingConnection ? 'Testing...' : 'Test Backend Connection',
+                          _isTestingConnection
+                              ? 'Testing...'
+                              : 'Test Backend Connection',
                         ),
                       ),
                       const SizedBox(height: 8),

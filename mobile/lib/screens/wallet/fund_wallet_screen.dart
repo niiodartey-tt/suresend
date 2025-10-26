@@ -145,128 +145,134 @@ class _FundWalletScreenState extends State<FundWalletScreen> {
                       ),
                 const SizedBox(height: 24),
 
-              // Info card
-              Card(
-                color: Colors.blue.shade50,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      Icon(Icons.info_outline, color: Colors.blue.shade700),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          'Add money to your wallet to make payments and transfers.',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.blue.shade700,
+                // Info card
+                Card(
+                  color: Colors.blue.shade50,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        Icon(Icons.info_outline, color: Colors.blue.shade700),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'Add money to your wallet to make payments and transfers.',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.blue.shade700,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-              // Amount input
-              const Text(
-                'Amount (GHS)',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 8),
-              TextFormField(
-                controller: _amountController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                ],
-                decoration: InputDecoration(
-                  hintText: '0.00',
-                  prefixText: '₵ ',
-                  prefixStyle: const TextStyle(
+                // Amount input
+                const Text(
+                  'Amount (GHS)',
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  helperText: 'Min: GHS 10.00 • Max: GHS 10,000.00',
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter amount';
-                  }
-                  final amount = double.tryParse(value);
-                  if (amount == null || amount <= 0) {
-                    return 'Please enter a valid amount';
-                  }
-                  if (amount < 10) {
-                    return 'Minimum amount is GHS 10.00';
-                  }
-                  if (amount > 10000) {
-                    return 'Maximum amount is GHS 10,000.00';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 24),
+                const SizedBox(height: 8),
+                TextFormField(
+                  controller: _amountController,
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d+\.?\d{0,2}')),
+                  ],
+                  decoration: InputDecoration(
+                    hintText: '0.00',
+                    prefixText: '₵ ',
+                    prefixStyle: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    helperText: 'Min: GHS 10.00 • Max: GHS 10,000.00',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter amount';
+                    }
+                    final amount = double.tryParse(value);
+                    if (amount == null || amount <= 0) {
+                      return 'Please enter a valid amount';
+                    }
+                    if (amount < 10) {
+                      return 'Minimum amount is GHS 10.00';
+                    }
+                    if (amount > 10000) {
+                      return 'Maximum amount is GHS 10,000.00';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 24),
 
-              // Payment method
-              const Text(
-                'Payment Method',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
-              _PaymentMethodCard(
-                icon: Icons.credit_card,
-                title: 'Paystack',
-                subtitle: 'Pay with card or bank transfer',
-                isSelected: _selectedPaymentMethod == 'paystack',
-                onTap: () {
-                  setState(() => _selectedPaymentMethod = 'paystack');
-                },
-              ),
-              const SizedBox(height: 12),
-              _PaymentMethodCard(
-                icon: Icons.phone_android,
-                title: 'Mobile Money',
-                subtitle: 'MTN, Vodafone, AirtelTigo',
-                isSelected: _selectedPaymentMethod == 'mobile_money',
-                onTap: () {
-                  setState(() => _selectedPaymentMethod = 'mobile_money');
-                },
-              ),
-              const SizedBox(height: 32),
-
-              // Fund button
-              ElevatedButton(
-                onPressed: _isLoading ? null : _handleFundWallet,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                // Payment method
+                const Text(
+                  'Payment Method',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                child: _isLoading
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Text(
-                        'Proceed to Payment',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-              ),
-            ],
+                const SizedBox(height: 12),
+                _PaymentMethodCard(
+                  icon: Icons.credit_card,
+                  title: 'Paystack',
+                  subtitle: 'Pay with card or bank transfer',
+                  isSelected: _selectedPaymentMethod == 'paystack',
+                  onTap: () {
+                    setState(() => _selectedPaymentMethod = 'paystack');
+                  },
+                ),
+                const SizedBox(height: 12),
+                _PaymentMethodCard(
+                  icon: Icons.phone_android,
+                  title: 'Mobile Money',
+                  subtitle: 'MTN, Vodafone, AirtelTigo',
+                  isSelected: _selectedPaymentMethod == 'mobile_money',
+                  onTap: () {
+                    setState(() => _selectedPaymentMethod = 'mobile_money');
+                  },
+                ),
+                const SizedBox(height: 32),
+
+                // Fund button
+                ElevatedButton(
+                  onPressed: _isLoading ? null : _handleFundWallet,
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: _isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Text(
+                          'Proceed to Payment',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -305,9 +311,8 @@ class _PaymentMethodCard extends StatelessWidget {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? AppTheme.primaryColor
-                      : Colors.grey.shade200,
+                  color:
+                      isSelected ? AppTheme.primaryColor : Colors.grey.shade200,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(

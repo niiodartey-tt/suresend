@@ -9,7 +9,8 @@ class WalletTransactionsScreen extends StatefulWidget {
   const WalletTransactionsScreen({Key? key}) : super(key: key);
 
   @override
-  State<WalletTransactionsScreen> createState() => _WalletTransactionsScreenState();
+  State<WalletTransactionsScreen> createState() =>
+      _WalletTransactionsScreenState();
 }
 
 class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
@@ -30,7 +31,8 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
     await _loadTransactions();
   }
 
-  List<WalletTransaction> _getFilteredTransactions(List<WalletTransaction> transactions) {
+  List<WalletTransaction> _getFilteredTransactions(
+      List<WalletTransaction> transactions) {
     if (_filterType == 'all') {
       return transactions;
     } else if (_filterType == 'credit') {
@@ -54,7 +56,8 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (walletProvider.error != null && walletProvider.transactions.isEmpty) {
+          if (walletProvider.error != null &&
+              walletProvider.transactions.isEmpty) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -80,7 +83,8 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
             );
           }
 
-          final filteredTransactions = _getFilteredTransactions(walletProvider.transactions);
+          final filteredTransactions =
+              _getFilteredTransactions(walletProvider.transactions);
 
           return Column(
             children: [
@@ -394,7 +398,8 @@ class _TransactionCard extends StatelessWidget {
             const Divider(height: 24),
             _DetailRow(label: 'Type', value: transaction.type.toUpperCase()),
             const Divider(height: 24),
-            _DetailRow(label: 'Date', value: dateFormat.format(transaction.createdAt)),
+            _DetailRow(
+                label: 'Date', value: dateFormat.format(transaction.createdAt)),
             if (transaction.reference.isNotEmpty) ...[
               const Divider(height: 24),
               _DetailRow(label: 'Reference', value: transaction.reference),

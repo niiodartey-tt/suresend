@@ -39,7 +39,8 @@ class ApiService {
     try {
       final response = await _client
           .get(
-            Uri.parse('${AppConfig.apiBaseUrl.replaceAll('/api/v1', '')}/health'),
+            Uri.parse(
+                '${AppConfig.apiBaseUrl.replaceAll('/api/v1', '')}/health'),
             headers: _getHeaders(),
           )
           .timeout(AppConfig.connectionTimeout);

@@ -11,7 +11,8 @@ import 'transaction_detail_screen.dart';
 import 'create_transaction_screen.dart';
 
 class TransactionListScreen extends StatefulWidget {
-  final String? role; // Optional initial role filter: 'buyer', 'seller', 'rider'
+  final String?
+      role; // Optional initial role filter: 'buyer', 'seller', 'rider'
 
   const TransactionListScreen({super.key, this.role});
 
@@ -221,7 +222,8 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
                       child: _StatCard(
                         title: 'Purchases',
                         value: stats.purchases.total.toString(),
-                        subtitle: 'GHS ${stats.purchases.totalSpent.toStringAsFixed(2)}',
+                        subtitle:
+                            'GHS ${stats.purchases.totalSpent.toStringAsFixed(2)}',
                         icon: Icons.shopping_bag,
                         color: Colors.blue,
                       ),
@@ -231,7 +233,8 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
                       child: _StatCard(
                         title: 'Sales',
                         value: stats.sales.total.toString(),
-                        subtitle: 'GHS ${stats.sales.totalEarned.toStringAsFixed(2)}',
+                        subtitle:
+                            'GHS ${stats.sales.totalEarned.toStringAsFixed(2)}',
                         icon: Icons.sell,
                         color: Colors.green,
                       ),
@@ -253,10 +256,12 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
             // Active filters
             if (_selectedStatus != null || _selectedRole != null)
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Row(
                   children: [
-                    const Text('Filters: ', style: TextStyle(fontWeight: FontWeight.w500)),
+                    const Text('Filters: ',
+                        style: TextStyle(fontWeight: FontWeight.w500)),
                     if (_selectedStatus != null)
                       Padding(
                         padding: const EdgeInsets.only(right: 8),
@@ -286,14 +291,16 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
                   ? ListView.builder(
                       padding: const EdgeInsets.all(16),
                       itemCount: 5,
-                      itemBuilder: (context, index) => const SkeletonTransactionCard(),
+                      itemBuilder: (context, index) =>
+                          const SkeletonTransactionCard(),
                     )
                   : transactions.isEmpty && !transactionProvider.isLoading
                       ? const EmptyStateWidget.transactions()
                       : ListView.builder(
                           controller: _scrollController,
                           padding: const EdgeInsets.all(16),
-                          itemCount: transactions.length + (transactionProvider.hasMore ? 1 : 0),
+                          itemCount: transactions.length +
+                              (transactionProvider.hasMore ? 1 : 0),
                           itemBuilder: (context, index) {
                             if (index == transactions.length) {
                               return const Center(
@@ -314,7 +321,8 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
                                   await Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => TransactionDetailScreen(
+                                      builder: (context) =>
+                                          TransactionDetailScreen(
                                         transactionId: transaction.id,
                                       ),
                                     ),
@@ -455,7 +463,8 @@ class _TransactionCard extends StatelessWidget {
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: _getStatusColor().withOpacity(0.1),
                       borderRadius: BorderRadius.circular(4),
@@ -471,7 +480,8 @@ class _TransactionCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: Colors.grey.shade200,
                       borderRadius: BorderRadius.circular(4),
@@ -538,7 +548,8 @@ class _TransactionCard extends StatelessWidget {
               const SizedBox(height: 8),
               Row(
                 children: [
-                  Icon(Icons.access_time, size: 14, color: Colors.grey.shade600),
+                  Icon(Icons.access_time,
+                      size: 14, color: Colors.grey.shade600),
                   const SizedBox(width: 4),
                   Text(
                     dateFormat.format(transaction.createdAt),

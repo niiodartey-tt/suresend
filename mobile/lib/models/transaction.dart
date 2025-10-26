@@ -3,7 +3,8 @@ class Transaction {
   final String transactionRef;
   final double amount;
   final double commission;
-  final String status; // 'pending', 'in_escrow', 'completed', 'refunded', 'disputed', 'cancelled'
+  final String
+      status; // 'pending', 'in_escrow', 'completed', 'refunded', 'disputed', 'cancelled'
   final String type; // 'escrow', 'direct'
   final String description;
   final String paymentMethod;

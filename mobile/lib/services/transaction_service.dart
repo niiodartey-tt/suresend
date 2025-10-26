@@ -46,7 +46,8 @@ class TransactionService {
   }
 
   /// Get transaction details
-  Future<Map<String, dynamic>> getTransactionDetails(String transactionId) async {
+  Future<Map<String, dynamic>> getTransactionDetails(
+      String transactionId) async {
     try {
       final result = await _apiService.get(
         'escrow/$transactionId',
@@ -56,7 +57,8 @@ class TransactionService {
       if (result['success']) {
         final backendData = result['data'];
         if (backendData['status'] == 'success' && backendData['data'] != null) {
-          final transaction = Transaction.fromJson(backendData['data']['transaction']);
+          final transaction =
+              Transaction.fromJson(backendData['data']['transaction']);
           return {
             'success': true,
             'data': transaction,
@@ -247,9 +249,8 @@ class TransactionService {
 
         if (backendData['status'] == 'success' && backendData['data'] != null) {
           final usersData = backendData['data']['users'] as List;
-          final users = usersData
-              .map((u) => UserSearchResult.fromJson(u))
-              .toList();
+          final users =
+              usersData.map((u) => UserSearchResult.fromJson(u)).toList();
 
           return {
             'success': true,

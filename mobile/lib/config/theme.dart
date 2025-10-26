@@ -3,8 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   // SafePay Ghana Brand Colors (Figma Design)
-  static const Color primaryColor = Color(0xFF00C9A7); // Vibrant Teal/Cyan - primary actions
-  static const Color darkBlue = Color(0xFF1E1E2F); // Deep Blue - backgrounds and headers
+  static const Color primaryColor =
+      Color(0xFF00C9A7); // Vibrant Teal/Cyan - primary actions
+  static const Color darkBlue =
+      Color(0xFF1E1E2F); // Deep Blue - backgrounds and headers
   static const Color secondaryColor = Color(0xFF26A69A); // Teal
   static const Color accentColor = Color(0xFFFFB300); // Amber
   static const Color errorColor = Color(0xFFE53935); // Red
@@ -12,8 +14,10 @@ class AppTheme {
   static const Color warningColor = Color(0xFFFB8C00); // Orange
 
   // Neutral Colors (Figma Design)
-  static const Color backgroundColor = Color(0xFFF5F5F7); // Light Grey - cards and secondary backgrounds
-  static const Color surfaceColor = Color(0xFFFFFFFF); // White - content backgrounds
+  static const Color backgroundColor =
+      Color(0xFFF5F5F7); // Light Grey - cards and secondary backgrounds
+  static const Color surfaceColor =
+      Color(0xFFFFFFFF); // White - content backgrounds
   static const Color textPrimaryColor = Color(0xFF212121);
   static const Color textSecondaryColor = Color(0xFF757575);
 

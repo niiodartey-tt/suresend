@@ -72,8 +72,8 @@ class _SkeletonLoaderState extends State<SkeletonLoader>
   @override
   Widget build(BuildContext context) {
     final bool isCircular = widget.borderRadius == null &&
-                            widget.width != null &&
-                            widget.width == widget.height;
+        widget.width != null &&
+        widget.width == widget.height;
 
     return Container(
       margin: widget.margin,
@@ -133,7 +133,8 @@ class SkeletonListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding:
+          padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         children: [
           if (hasLeading) ...[

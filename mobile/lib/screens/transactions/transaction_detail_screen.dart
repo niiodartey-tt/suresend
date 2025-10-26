@@ -18,7 +18,8 @@ class TransactionDetailScreen extends StatefulWidget {
   });
 
   @override
-  State<TransactionDetailScreen> createState() => _TransactionDetailScreenState();
+  State<TransactionDetailScreen> createState() =>
+      _TransactionDetailScreenState();
 }
 
 class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
@@ -98,7 +99,8 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
       return Scaffold(
         appBar: AppBar(title: const Text('Transaction Details')),
         body: ErrorRetryWidget.notFound(
-          message: 'Transaction not found. It may have been deleted or you don\'t have access.',
+          message:
+              'Transaction not found. It may have been deleted or you don\'t have access.',
           onRetry: _loadTransactionDetails,
         ),
       );
@@ -309,7 +311,8 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                           icon: Icons.delivery_dining,
                           role: 'Rider',
                           participant: transaction.rider!,
-                          isCurrentUser: transaction.rider!.id == authProvider.user!.id,
+                          isCurrentUser:
+                              transaction.rider!.id == authProvider.user!.id,
                         ),
                       ],
                     ],
@@ -516,7 +519,8 @@ class _ParticipantTile extends StatelessWidget {
                     if (isCurrentUser) ...[
                       const SizedBox(width: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
                           color: Colors.blue,
                           borderRadius: BorderRadius.circular(4),
@@ -554,7 +558,8 @@ class _ParticipantTile extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.phone),
               onPressed: () {
-                Clipboard.setData(ClipboardData(text: participant.phoneNumber!));
+                Clipboard.setData(
+                    ClipboardData(text: participant.phoneNumber!));
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Phone number copied')),
                 );
@@ -800,7 +805,8 @@ class _RaiseDisputeDialogState extends State<_RaiseDisputeDialog> {
     if (result['success']) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Dispute raised successfully. Our team will review it.'),
+          content:
+              Text('Dispute raised successfully. Our team will review it.'),
           backgroundColor: Colors.orange,
         ),
       );
@@ -902,7 +908,8 @@ class _CancelTransactionDialog extends StatefulWidget {
   });
 
   @override
-  State<_CancelTransactionDialog> createState() => _CancelTransactionDialogState();
+  State<_CancelTransactionDialog> createState() =>
+      _CancelTransactionDialogState();
 }
 
 class _CancelTransactionDialogState extends State<_CancelTransactionDialog> {

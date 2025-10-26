@@ -179,7 +179,8 @@ class _WalletScreenState extends State<WalletScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const WalletTransactionsScreen(),
+                            builder: (context) =>
+                                const WalletTransactionsScreen(),
                           ),
                         );
                       },
@@ -206,7 +207,8 @@ class _WalletScreenState extends State<WalletScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const WalletTransactionsScreen(),
+                            builder: (context) =>
+                                const WalletTransactionsScreen(),
                           ),
                         );
                       },
@@ -260,7 +262,9 @@ class _WalletScreenState extends State<WalletScreen> {
                             : AppTheme.errorColor.withOpacity(0.1),
                         child: Icon(
                           isCredit ? Icons.arrow_downward : Icons.arrow_upward,
-                          color: isCredit ? AppTheme.successColor : AppTheme.errorColor,
+                          color: isCredit
+                              ? AppTheme.successColor
+                              : AppTheme.errorColor,
                         ),
                       ),
                       title: Text(
@@ -274,7 +278,9 @@ class _WalletScreenState extends State<WalletScreen> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: isCredit ? AppTheme.successColor : AppTheme.errorColor,
+                          color: isCredit
+                              ? AppTheme.successColor
+                              : AppTheme.errorColor,
                         ),
                       ),
                     ),

@@ -41,9 +41,8 @@ class User {
       walletBalance: (json['walletBalance'] is String)
           ? double.parse(json['walletBalance'])
           : (json['walletBalance'] ?? 0.0).toDouble(),
-      createdAt: json['createdAt'] != null
-          ? DateTime.parse(json['createdAt'])
-          : null,
+      createdAt:
+          json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
       lastLoginAt: json['lastLoginAt'] != null
           ? DateTime.parse(json['lastLoginAt'])
           : null,

@@ -11,10 +11,10 @@ import 'screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Initialize storage service
   await StorageService().init();
-  
+
   runApp(const SureSendApp());
 }
 

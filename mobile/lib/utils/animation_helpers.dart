@@ -186,8 +186,8 @@ class AnimatedListItem extends StatelessWidget {
       duration: (duration ?? AnimationHelpers.standardDuration) + itemDelay,
       curve: AnimationHelpers.standardCurve,
       builder: (context, value, child) {
-        final adjustedValue = (value * (1 + (itemDelay.inMilliseconds / 300)))
-            .clamp(0.0, 1.0);
+        final adjustedValue =
+            (value * (1 + (itemDelay.inMilliseconds / 300))).clamp(0.0, 1.0);
 
         return Transform.translate(
           offset: Offset(0, 20 * (1 - adjustedValue)),

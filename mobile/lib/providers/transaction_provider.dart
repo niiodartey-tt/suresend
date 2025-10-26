@@ -70,7 +70,8 @@ class TransactionProvider with ChangeNotifier {
     _clearError();
 
     try {
-      final result = await _transactionService.getTransactionDetails(transactionId);
+      final result =
+          await _transactionService.getTransactionDetails(transactionId);
 
       if (result['success']) {
         _currentTransaction = result['data'];
@@ -111,7 +112,8 @@ class TransactionProvider with ChangeNotifier {
       );
 
       if (result['success']) {
-        final newTransactions = result['data']['transactions'] as List<Transaction>;
+        final newTransactions =
+            result['data']['transactions'] as List<Transaction>;
 
         if (refresh) {
           _transactions = newTransactions;

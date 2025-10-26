@@ -185,7 +185,8 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
     });
 
     try {
-      final walletProvider = Provider.of<WalletProvider>(context, listen: false);
+      final walletProvider =
+          Provider.of<WalletProvider>(context, listen: false);
 
       final result = await walletProvider.transferFunds(
         recipientUsername: _usernameController.text.trim(),
@@ -302,212 +303,217 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
                 const SizedBox(height: 24),
 
                 // Recipient Username
-              const Text(
-                'Recipient Details',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                const Text(
+                  'Recipient Details',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _usernameController,
-                decoration: InputDecoration(
-                  labelText: 'Username or Phone Number',
-                  hintText: 'Enter username or phone number',
-                  border: const OutlineInputBorder(),
-                  prefixIcon: const Icon(Icons.person_search),
-                  suffixIcon: _isVerifyingUser
-                      ? const Padding(
-                          padding: EdgeInsets.all(12.0),
-                          child: SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          ),
-                        )
-                      : _recipientDetails != null
-                          ? const Icon(Icons.check_circle, color: Colors.green)
-                          : IconButton(
-                              icon: const Icon(Icons.search),
-                              onPressed: _verifyUsername,
-                            ),
-                ),
-                onChanged: (value) {
-                  // Reset recipient details when username changes
-                  if (_recipientDetails != null) {
-                    setState(() {
-                      _recipientDetails = null;
-                    });
-                  }
-                },
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter recipient username';
-                  }
-                  return null;
-                },
-              ),
-
-              // Recipient Details Display
-              if (_recipientDetails != null) ...[
                 const SizedBox(height: 12),
-                AnimationHelpers.slideInFromBottom(
-                  child: Card(
-                    color: Colors.green.shade50,
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Row(
-                        children: [
-                          Icon(Icons.check_circle, color: Colors.green.shade700),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _recipientDetails!['fullName'] ?? 'Unknown',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                Text(
-                                  '@${_recipientDetails!['username']}',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.grey.shade600,
-                                  ),
-                                ),
-                              ],
+                TextFormField(
+                  controller: _usernameController,
+                  decoration: InputDecoration(
+                    labelText: 'Username or Phone Number',
+                    hintText: 'Enter username or phone number',
+                    border: const OutlineInputBorder(),
+                    prefixIcon: const Icon(Icons.person_search),
+                    suffixIcon: _isVerifyingUser
+                        ? const Padding(
+                            padding: EdgeInsets.all(12.0),
+                            child: SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
                             ),
-                          ),
-                        ],
+                          )
+                        : _recipientDetails != null
+                            ? const Icon(Icons.check_circle,
+                                color: Colors.green)
+                            : IconButton(
+                                icon: const Icon(Icons.search),
+                                onPressed: _verifyUsername,
+                              ),
+                  ),
+                  onChanged: (value) {
+                    // Reset recipient details when username changes
+                    if (_recipientDetails != null) {
+                      setState(() {
+                        _recipientDetails = null;
+                      });
+                    }
+                  },
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter recipient username';
+                    }
+                    return null;
+                  },
+                ),
+
+                // Recipient Details Display
+                if (_recipientDetails != null) ...[
+                  const SizedBox(height: 12),
+                  AnimationHelpers.slideInFromBottom(
+                    child: Card(
+                      color: Colors.green.shade50,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Row(
+                          children: [
+                            Icon(Icons.check_circle,
+                                color: Colors.green.shade700),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    _recipientDetails!['fullName'] ?? 'Unknown',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  Text(
+                                    '@${_recipientDetails!['username']}',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-              const SizedBox(height: 24),
+                ],
+                const SizedBox(height: 24),
 
-              // Amount
-              const Text(
-                'Transfer Amount',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _amountController,
-                decoration: const InputDecoration(
-                  labelText: 'Amount (GHS)',
-                  hintText: '0.00',
-                  border: OutlineInputBorder(),
-                  prefixText: '₵ ',
-                  prefixStyle: TextStyle(
+                // Amount
+                const Text(
+                  'Transfer Amount',
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
                   ),
-                  helperText: 'Minimum transfer: GHS 1.00',
                 ),
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter amount';
-                  }
-                  final amount = double.tryParse(value);
-                  if (amount == null) {
-                    return 'Please enter a valid amount';
-                  }
-                  if (amount < 1) {
-                    return 'Minimum transfer amount is GHS 1.00';
-                  }
-                  if (wallet != null && amount > wallet.balance) {
-                    return 'Insufficient balance';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: _amountController,
+                  decoration: const InputDecoration(
+                    labelText: 'Amount (GHS)',
+                    hintText: '0.00',
+                    border: OutlineInputBorder(),
+                    prefixText: '₵ ',
+                    prefixStyle: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                    helperText: 'Minimum transfer: GHS 1.00',
+                  ),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter amount';
+                    }
+                    final amount = double.tryParse(value);
+                    if (amount == null) {
+                      return 'Please enter a valid amount';
+                    }
+                    if (amount < 1) {
+                      return 'Minimum transfer amount is GHS 1.00';
+                    }
+                    if (wallet != null && amount > wallet.balance) {
+                      return 'Insufficient balance';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
 
-              // Description (Optional)
-              const Text(
-                'Description (Optional)',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                // Description (Optional)
+                const Text(
+                  'Description (Optional)',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _descriptionController,
-                decoration: const InputDecoration(
-                  labelText: 'Description',
-                  hintText: 'Add a note for this transfer',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.note),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: _descriptionController,
+                  decoration: const InputDecoration(
+                    labelText: 'Description',
+                    hintText: 'Add a note for this transfer',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.note),
+                  ),
+                  maxLines: 3,
+                  maxLength: 200,
                 ),
-                maxLines: 3,
-                maxLength: 200,
-              ),
-              const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-              // Information Card
-              Card(
-                color: Colors.blue.shade50,
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Row(
-                    children: [
-                      Icon(Icons.info_outline, color: Colors.blue.shade700),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          'Transfers are instant and cannot be reversed. Please verify the recipient details carefully.',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.blue.shade700,
+                // Information Card
+                Card(
+                  color: Colors.blue.shade50,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Row(
+                      children: [
+                        Icon(Icons.info_outline, color: Colors.blue.shade700),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'Transfers are instant and cannot be reversed. Please verify the recipient details carefully.',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.blue.shade700,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-              // Transfer Button
-              ElevatedButton(
-                onPressed: _isLoading ? null : _showConfirmationDialog,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primaryColor,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                // Transfer Button
+                ElevatedButton(
+                  onPressed: _isLoading ? null : _showConfirmationDialog,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.primaryColor,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
+                  child: _isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        )
+                      : const Text(
+                          'Transfer Money',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                 ),
-                child: _isLoading
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                        ),
-                      )
-                    : const Text(
-                        'Transfer Money',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -132,11 +132,13 @@ class NotificationProvider with ChangeNotifier {
   /// Delete notification
   Future<bool> deleteNotification(String notificationId) async {
     try {
-      final result = await _notificationService.deleteNotification(notificationId);
+      final result =
+          await _notificationService.deleteNotification(notificationId);
 
       if (result['success']) {
         // Remove from local list
-        final notification = _notifications.firstWhere((n) => n.id == notificationId);
+        final notification =
+            _notifications.firstWhere((n) => n.id == notificationId);
         _notifications.removeWhere((n) => n.id == notificationId);
 
         if (!notification.isRead) {

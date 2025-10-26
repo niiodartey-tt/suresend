@@ -28,7 +28,8 @@ class ErrorRetryWidget extends StatelessWidget {
   }) : this(
           key: key,
           title: title ?? 'Connection Error',
-          message: message ?? 'Please check your internet connection and try again.',
+          message:
+              message ?? 'Please check your internet connection and try again.',
           onRetry: onRetry,
           icon: Icons.wifi_off,
           compact: compact,
@@ -44,7 +45,8 @@ class ErrorRetryWidget extends StatelessWidget {
   }) : this(
           key: key,
           title: title ?? 'Server Error',
-          message: message ?? 'Something went wrong on our end. Please try again.',
+          message:
+              message ?? 'Something went wrong on our end. Please try again.',
           onRetry: onRetry,
           icon: Icons.cloud_off,
           compact: compact,
@@ -223,7 +225,8 @@ class EmptyStateWidget extends StatelessWidget {
   }) : this(
           key: key,
           title: 'No Notifications',
-          message: 'You\'re all caught up! Check back later for new notifications.',
+          message:
+              'You\'re all caught up! Check back later for new notifications.',
           icon: Icons.notifications_none,
           onAction: onAction,
           actionLabel: 'Refresh',
@@ -236,7 +239,8 @@ class EmptyStateWidget extends StatelessWidget {
   }) : this(
           key: key,
           title: 'No Transactions',
-          message: 'You haven\'t made any transactions yet. Start by creating an escrow or transferring money.',
+          message:
+              'You haven\'t made any transactions yet. Start by creating an escrow or transferring money.',
           icon: Icons.receipt_long_outlined,
           onAction: onAction,
           actionLabel: 'Create Transaction',

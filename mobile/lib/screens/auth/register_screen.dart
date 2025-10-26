@@ -193,7 +193,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     if (value == null || value.trim().isEmpty) {
                       return 'Please enter your phone number';
                     }
-                    if (!RegExp(r'^(\+233|0)[0-9]{9}$').hasMatch(value.trim())) {
+                    if (!RegExp(r'^(\+233|0)[0-9]{9}$')
+                        .hasMatch(value.trim())) {
                       return 'Phone must be in format +233XXXXXXXXX or 0XXXXXXXXX';
                     }
                     return null;
@@ -339,7 +340,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                color: isSelected ? AppTheme.primaryColor : Colors.grey.shade700,
+                color:
+                    isSelected ? AppTheme.primaryColor : Colors.grey.shade700,
               ),
             ),
             if (subtitle != null) ...[
@@ -348,7 +350,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 subtitle,
                 style: TextStyle(
                   fontSize: 11,
-                  color: isSelected ? AppTheme.primaryColor.withOpacity(0.7) : Colors.grey.shade500,
+                  color: isSelected
+                      ? AppTheme.primaryColor.withOpacity(0.7)
+                      : Colors.grey.shade500,
                 ),
               ),
             ],

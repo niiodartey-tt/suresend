@@ -69,7 +69,8 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
     });
 
     try {
-      final walletProvider = Provider.of<WalletProvider>(context, listen: false);
+      final walletProvider =
+          Provider.of<WalletProvider>(context, listen: false);
 
       // Construct account details map
       final accountDetails = <String, dynamic>{
@@ -92,7 +93,8 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(result['message'] ?? 'Withdrawal request submitted successfully'),
+              content: Text(result['message'] ??
+                  'Withdrawal request submitted successfully'),
               backgroundColor: Colors.green,
             ),
           );
@@ -102,7 +104,8 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(result['message'] ?? 'Failed to submit withdrawal request'),
+              content: Text(
+                  result['message'] ?? 'Failed to submit withdrawal request'),
               backgroundColor: Colors.red,
             ),
           );
@@ -178,207 +181,211 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                 const SizedBox(height: 24),
 
                 // Withdrawal Method Selection
-              const Text(
-                'Withdrawal Method',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
-              ..._withdrawalMethods.map((method) {
-                return _WithdrawalMethodCard(
-                  icon: method['icon'] as IconData,
-                  title: method['title'] as String,
-                  subtitle: method['subtitle'] as String,
-                  isSelected: _selectedMethod == method['id'],
-                  onTap: () {
-                    setState(() {
-                      _selectedMethod = method['id'] as String;
-                      if (_selectedMethod == 'bank_transfer') {
-                        _selectedNetwork = null;
-                      }
-                    });
-                  },
-                );
-              }).toList(),
-              const SizedBox(height: 24),
-
-              // Mobile Money Network Selection (only if mobile_money is selected)
-              if (_selectedMethod == 'mobile_money') ...[
                 const Text(
-                  'Select Network',
+                  'Withdrawal Method',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 12),
-                DropdownButtonFormField<String>(
-                  value: _selectedNetwork,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Choose mobile money network',
+                ..._withdrawalMethods.map((method) {
+                  return _WithdrawalMethodCard(
+                    icon: method['icon'] as IconData,
+                    title: method['title'] as String,
+                    subtitle: method['subtitle'] as String,
+                    isSelected: _selectedMethod == method['id'],
+                    onTap: () {
+                      setState(() {
+                        _selectedMethod = method['id'] as String;
+                        if (_selectedMethod == 'bank_transfer') {
+                          _selectedNetwork = null;
+                        }
+                      });
+                    },
+                  );
+                }).toList(),
+                const SizedBox(height: 24),
+
+                // Mobile Money Network Selection (only if mobile_money is selected)
+                if (_selectedMethod == 'mobile_money') ...[
+                  const Text(
+                    'Select Network',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  items: _mobileMoneyNetworks.map((network) {
-                    return DropdownMenuItem<String>(
-                      value: network['id'],
-                      child: Text(network['name']!),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedNetwork = value;
-                    });
-                  },
+                  const SizedBox(height: 12),
+                  DropdownButtonFormField<String>(
+                    value: _selectedNetwork,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Choose mobile money network',
+                    ),
+                    items: _mobileMoneyNetworks.map((network) {
+                      return DropdownMenuItem<String>(
+                        value: network['id'],
+                        child: Text(network['name']!),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedNetwork = value;
+                      });
+                    },
+                    validator: (value) {
+                      if (_selectedMethod == 'mobile_money' && value == null) {
+                        return 'Please select a network';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                ],
+
+                // Account Number
+                TextFormField(
+                  controller: _accountNumberController,
+                  decoration: InputDecoration(
+                    labelText: _selectedMethod == 'bank_transfer'
+                        ? 'Account Number'
+                        : 'Mobile Money Number',
+                    hintText: _selectedMethod == 'bank_transfer'
+                        ? 'Enter your account number'
+                        : 'Enter your mobile money number',
+                    border: const OutlineInputBorder(),
+                    prefixIcon: Icon(
+                      _selectedMethod == 'bank_transfer'
+                          ? Icons.account_balance
+                          : Icons.phone_android,
+                    ),
+                  ),
+                  keyboardType: TextInputType.number,
                   validator: (value) {
-                    if (_selectedMethod == 'mobile_money' && value == null) {
-                      return 'Please select a network';
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter account number';
+                    }
+                    if (_selectedMethod == 'mobile_money' &&
+                        value.length != 10) {
+                      return 'Mobile money number must be 10 digits';
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 16),
-              ],
 
-              // Account Number
-              TextFormField(
-                controller: _accountNumberController,
-                decoration: InputDecoration(
-                  labelText: _selectedMethod == 'bank_transfer'
-                      ? 'Account Number'
-                      : 'Mobile Money Number',
-                  hintText: _selectedMethod == 'bank_transfer'
-                      ? 'Enter your account number'
-                      : 'Enter your mobile money number',
-                  border: const OutlineInputBorder(),
-                  prefixIcon: Icon(
-                    _selectedMethod == 'bank_transfer'
-                        ? Icons.account_balance
-                        : Icons.phone_android,
+                // Account Name
+                TextFormField(
+                  controller: _accountNameController,
+                  decoration: InputDecoration(
+                    labelText: 'Account Name',
+                    hintText: _selectedMethod == 'bank_transfer'
+                        ? 'Enter account holder name'
+                        : 'Enter registered name',
+                    border: const OutlineInputBorder(),
+                    prefixIcon: const Icon(Icons.person),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter account name';
+                    }
+                    return null;
+                  },
                 ),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter account number';
-                  }
-                  if (_selectedMethod == 'mobile_money' && value.length != 10) {
-                    return 'Mobile money number must be 10 digits';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
+                const SizedBox(height: 16),
 
-              // Account Name
-              TextFormField(
-                controller: _accountNameController,
-                decoration: InputDecoration(
-                  labelText: 'Account Name',
-                  hintText: _selectedMethod == 'bank_transfer'
-                      ? 'Enter account holder name'
-                      : 'Enter registered name',
-                  border: const OutlineInputBorder(),
-                  prefixIcon: const Icon(Icons.person),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter account name';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // Amount
-              TextFormField(
-                controller: _amountController,
-                decoration: const InputDecoration(
-                  labelText: 'Amount (GHS)',
-                  hintText: '0.00',
-                  border: OutlineInputBorder(),
-                  prefixText: '₵ ',
-                  prefixStyle: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                // Amount
+                TextFormField(
+                  controller: _amountController,
+                  decoration: const InputDecoration(
+                    labelText: 'Amount (GHS)',
+                    hintText: '0.00',
+                    border: OutlineInputBorder(),
+                    prefixText: '₵ ',
+                    prefixStyle: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                    helperText: 'Minimum withdrawal: GHS 50',
                   ),
-                  helperText: 'Minimum withdrawal: GHS 50',
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter amount';
+                    }
+                    final amount = double.tryParse(value);
+                    if (amount == null) {
+                      return 'Please enter a valid amount';
+                    }
+                    if (amount < 50) {
+                      return 'Minimum withdrawal amount is GHS 50';
+                    }
+                    if (wallet != null && amount > wallet.balance) {
+                      return 'Insufficient balance';
+                    }
+                    return null;
+                  },
                 ),
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter amount';
-                  }
-                  final amount = double.tryParse(value);
-                  if (amount == null) {
-                    return 'Please enter a valid amount';
-                  }
-                  if (amount < 50) {
-                    return 'Minimum withdrawal amount is GHS 50';
-                  }
-                  if (wallet != null && amount > wallet.balance) {
-                    return 'Insufficient balance';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-              // Information Card
-              Card(
-                color: Colors.blue.shade50,
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Row(
-                    children: [
-                      Icon(Icons.info_outline, color: Colors.blue.shade700),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          'Withdrawals are processed within 1-3 business days. A processing fee may apply.',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.blue.shade700,
+                // Information Card
+                Card(
+                  color: Colors.blue.shade50,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Row(
+                      children: [
+                        Icon(Icons.info_outline, color: Colors.blue.shade700),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'Withdrawals are processed within 1-3 business days. A processing fee may apply.',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.blue.shade700,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-              // Submit Button
-              ElevatedButton(
-                onPressed: _isLoading ? null : _handleWithdrawal,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primaryColor,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                // Submit Button
+                ElevatedButton(
+                  onPressed: _isLoading ? null : _handleWithdrawal,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.primaryColor,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
+                  child: _isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        )
+                      : const Text(
+                          'Submit Withdrawal Request',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                 ),
-                child: _isLoading
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                        ),
-                      )
-                    : const Text(
-                        'Submit Withdrawal Request',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -417,9 +424,8 @@ class _WithdrawalMethodCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? AppTheme.primaryColor
-                      : Colors.grey.shade200,
+                  color:
+                      isSelected ? AppTheme.primaryColor : Colors.grey.shade200,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(

@@ -139,7 +139,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
     // Show error state with retry
     if (_hasError && notifications.isEmpty) {
       return ErrorRetryWidget.network(
-        message: 'Failed to load notifications. Please check your connection and try again.',
+        message:
+            'Failed to load notifications. Please check your connection and try again.',
         onRetry: _loadNotifications,
       );
     }
@@ -160,7 +161,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
             child: Padding(
               padding: EdgeInsets.all(16),
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
+                valueColor:
+                    AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
               ),
             ),
           );
@@ -234,9 +236,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          success
-              ? 'Notification deleted'
-              : 'Failed to delete notification',
+          success ? 'Notification deleted' : 'Failed to delete notification',
         ),
         backgroundColor: success ? AppTheme.successColor : AppTheme.errorColor,
         duration: const Duration(seconds: 2),
@@ -319,7 +319,8 @@ class _NotificationCard extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () => Navigator.pop(context, true),
-                child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                child:
+                    const Text('Delete', style: TextStyle(color: Colors.red)),
               ),
             ],
           ),

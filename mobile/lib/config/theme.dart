@@ -150,7 +150,7 @@ class AppTheme {
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: surfaceColor,
       elevation: 3,
       shadowColor: Colors.black.withOpacity(0.1),
@@ -158,7 +158,7 @@ class AppTheme {
         borderRadius: BorderRadius.circular(cardBorderRadius),
       ),
     ),
-    appBarTheme: AppBarTheme(
+    appBarTheme: AppBarThemeData(
       backgroundColor: darkBlue,
       foregroundColor: Colors.white,
       elevation: 0,

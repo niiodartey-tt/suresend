@@ -99,7 +99,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
+      backgroundColor: AppTheme.surfaceColor,
       body: _currentIndex == 0 ? _buildHomeScreen() : _buildPlaceholderScreen(),
       bottomNavigationBar: _buildBottomNavigationBar(),
     );

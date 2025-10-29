@@ -2,24 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  // SafePay Ghana Brand Colors (Figma Design)
-  static const Color primaryColor =
-      Color(0xFF00C9A7); // Vibrant Teal/Cyan - primary actions
-  static const Color darkBlue =
-      Color(0xFF1E1E2F); // Deep Blue - backgrounds and headers
-  static const Color secondaryColor = Color(0xFF26A69A); // Teal
-  static const Color accentColor = Color(0xFFFFB300); // Amber
-  static const Color errorColor = Color(0xFFE53935); // Red
-  static const Color successColor = Color(0xFF43A047); // Green
-  static const Color warningColor = Color(0xFFFB8C00); // Orange
+  // Brand Colors
+  static const Color primaryColor = Color(0xFF00C9A7);
+  static const Color darkBlue = Color(0xFF1E1E2F);
+  static const Color secondaryColor = Color(0xFF26A69A);
+  static const Color accentColor = Color(0xFFFFB300);
+  static const Color errorColor = Color(0xFFE53935);
+  static const Color successColor = Color(0xFF43A047);
+  static const Color warningColor = Color(0xFFFB8C00);
 
-  // Neutral Colors (Figma Design)
-  static const Color backgroundColor =
-      Color(0xFFF5F5F7); // Light Grey - cards and secondary backgrounds
-  static const Color surfaceColor =
-      Color(0xFFFFFFFF); // White - content backgrounds
+  // Neutral Colors
+  static const Color surfaceColor = Color(0xFFFFFFFF);
   static const Color textPrimaryColor = Color(0xFF212121);
   static const Color textSecondaryColor = Color(0xFF757575);
+  
+  // Helper method to replace withOpacity without using deprecated Color getters
+  static Color withAlpha(Color color, double opacity) {
+    final a = (opacity * 255).round() & 0xff;
+    // preserve original RGB from color.value (0xAARRGGBB)
+    final rgb = color.value & 0x00ffffff;
+    return Color((a << 24) | rgb);
+  }
 
   // Border Radius (Figma Design)
   static const double cardBorderRadius = 20.0;
@@ -32,16 +35,19 @@ class AppTheme {
   static const Color escrowRefundedColor = Color(0xFFE53935); // Red
 
   // Light Theme
-  static ThemeData lightTheme = ThemeData(
+  static final ThemeData lightTheme = ThemeData(
     useMaterial3: true,
-    colorScheme: ColorScheme.light(
+    colorScheme: const ColorScheme.light(
       primary: primaryColor,
       secondary: secondaryColor,
       error: errorColor,
-      background: backgroundColor,
       surface: surfaceColor,
+      onSurface: textPrimaryColor,
+      onPrimary: Colors.white,
+      onSecondary: Colors.white,
+      onError: Colors.white,
     ),
-    scaffoldBackgroundColor: backgroundColor,
+    scaffoldBackgroundColor: surfaceColor,
     textTheme: GoogleFonts.interTextTheme(
       const TextTheme(
         displayLarge: TextStyle(
@@ -153,7 +159,7 @@ class AppTheme {
     cardTheme: CardThemeData(
       color: surfaceColor,
       elevation: 3,
-      shadowColor: Colors.black.withOpacity(0.1),
+      shadowColor: withAlpha(Colors.black, 0.1),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(cardBorderRadius),
       ),
@@ -172,16 +178,18 @@ class AppTheme {
   );
 
   // Dark Theme
-  static ThemeData darkTheme = ThemeData(
+  static final ThemeData darkTheme = ThemeData(
     useMaterial3: true,
-    colorScheme: ColorScheme.dark(
+    colorScheme: const ColorScheme.dark(
       primary: primaryColor,
       secondary: secondaryColor,
       error: errorColor,
-      background: const Color(0xFF121212),
-      surface: const Color(0xFF1E1E1E),
+      surface: Color(0xFF1E1E1E),
+      onSurface: Colors.white,
+      onPrimary: Colors.black,
+      onSecondary: Colors.black,
+      onError: Colors.white,
     ),
-    scaffoldBackgroundColor: const Color(0xFF121212),
-    // Add more dark theme customization here
+    scaffoldBackgroundColor: const Color(0xFF1E1E1E),
   );
 }

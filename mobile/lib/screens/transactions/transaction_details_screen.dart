@@ -5,7 +5,7 @@ class TransactionDetailsScreen extends StatelessWidget {
   final Map<String, dynamic> transaction;
 
   const TransactionDetailsScreen({
-    super.key,
+    super.key, // Add super.key
     required this.transaction,
   });
 
@@ -248,9 +248,8 @@ class _ProgressTracker extends StatelessWidget {
           return Expanded(
             child: Container(
               height: 2,
-              color: index < currentStep * 2
-                  ? AppTheme.primary
-                  : Colors.grey[300],
+              color:
+                  index < currentStep * 2 ? AppTheme.primary : Colors.grey[300],
             ),
           );
         }

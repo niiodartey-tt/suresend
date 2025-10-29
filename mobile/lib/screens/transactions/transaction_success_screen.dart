@@ -21,7 +21,7 @@ class TransactionSuccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
+      backgroundColor: AppTheme.surfaceColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),

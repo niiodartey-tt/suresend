@@ -96,14 +96,14 @@ class _TransactionTypeCardState extends State<_TransactionTypeCard> {
             width: 2,
           ),
           boxShadow: _isPressed
-            ? [
-                BoxShadow(
-                  color: AppTheme.primary.withOpacity(0.2),
-                  blurRadius: 8,
-                  spreadRadius: 2,
-                )
-              ]
-            : [],
+              ? [
+                  BoxShadow(
+                    color: AppTheme.primary.withOpacity(0.2),
+                    blurRadius: 8,
+                    spreadRadius: 2,
+                  )
+                ]
+              : [],
         ),
         child: Padding(
           padding: const EdgeInsets.all(AppTheme.spacingL),

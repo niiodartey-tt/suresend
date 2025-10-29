@@ -67,7 +67,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           // Action Buttons
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingM),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: AppTheme.spacingM),
               child: Row(
                 children: [
                   Expanded(

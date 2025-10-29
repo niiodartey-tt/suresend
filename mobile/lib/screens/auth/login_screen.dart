@@ -126,11 +126,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 48),
 
                 // Username or Phone
-                CustomTextField(
-                  label: 'Username or Phone',
-                  hint: 'Enter username or +233XXXXXXXXX',
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Username or Phone',
+                    border: OutlineInputBorder(),
+                  ),
                   controller: _identifierController,
-                  prefixIcon: Icons.person,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
                       return 'Please enter your username or phone number';
@@ -203,7 +204,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 // Info Card
                 Card(
-                  color: AppTheme.primaryColor.withOpacity(0.1),
+                  color: AppTheme.withAlpha(AppTheme.primaryColor, 0.1),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(

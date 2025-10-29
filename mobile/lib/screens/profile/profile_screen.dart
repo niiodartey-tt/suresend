@@ -24,7 +24,8 @@ class ProfileScreen extends StatelessWidget {
               child: CircleAvatar(
                 radius: 52,
                 backgroundColor: Colors.grey[200],
-                backgroundImage: const AssetImage('assets/images/avatar_placeholder.png'),
+                backgroundImage:
+                    const AssetImage('assets/images/avatar_placeholder.png'),
               ),
             ),
             const SizedBox(height: AppTheme.spacingM),
@@ -38,7 +39,6 @@ class ProfileScreen extends StatelessWidget {
             const SizedBox(height: AppTheme.spacingXs),
             _KycChip(status: 'Verified'),
             const SizedBox(height: AppTheme.spacingL),
-
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(AppTheme.spacingM),
@@ -55,9 +55,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
             ),
-
             const SizedBox(height: AppTheme.spacingL),
-
             Row(
               children: [
                 Expanded(
@@ -131,7 +129,9 @@ class _KycChip extends StatelessWidget {
         vertical: AppTheme.spacingXs,
       ),
       decoration: BoxDecoration(
-        color: isVerified ? Colors.green.withOpacity(0.12) : Colors.orange.withOpacity(0.12),
+        color: isVerified
+            ? Colors.green.withOpacity(0.12)
+            : Colors.orange.withOpacity(0.12),
         borderRadius: BorderRadius.circular(AppTheme.radiusM),
       ),
       child: Row(

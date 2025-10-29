@@ -26,20 +26,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ListTile(
                   leading: const Icon(Icons.person_rounded),
                   title: const Text('Manage Account'),
-                  trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                  trailing:
+                      const Icon(Icons.arrow_forward_ios_rounded, size: 16),
                   onTap: () {},
                 ),
                 const Divider(height: 1),
                 ListTile(
                   leading: const Icon(Icons.lock_rounded),
                   title: const Text('Change Password'),
-                  trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                  trailing:
+                      const Icon(Icons.arrow_forward_ios_rounded, size: 16),
                   onTap: () {},
                 ),
               ],
             ),
           ),
-
           const SizedBox(height: AppTheme.spacingL),
           _buildSectionTitle('Payments'),
           Card(
@@ -48,29 +49,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ListTile(
                   leading: const Icon(Icons.payment_rounded),
                   title: const Text('Payment Methods'),
-                  trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                  trailing:
+                      const Icon(Icons.arrow_forward_ios_rounded, size: 16),
                   onTap: () {},
                 ),
                 const Divider(height: 1),
                 ListTile(
                   leading: const Icon(Icons.history_rounded),
                   title: const Text('Transaction Limits'),
-                  trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                  trailing:
+                      const Icon(Icons.arrow_forward_ios_rounded, size: 16),
                   onTap: () {},
                 ),
               ],
             ),
           ),
-
           const SizedBox(height: AppTheme.spacingL),
           _buildSectionTitle('App Preferences'),
           Card(
             child: Column(
               children: [
-                SwitchListTile(
-                  title: const Text('Dark Mode'),
+                Switch(
+                  activeThumbColor: AppTheme.primary, // Instead of activeColor
                   value: _darkMode,
-                  onChanged: (v) => setState(() => _darkMode = v),
+                  onChanged: (value) => setState(() => _darkMode = value),
                 ),
                 SwitchListTile(
                   title: const Text('Notifications'),
@@ -80,7 +82,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ListTile(
                   leading: const Icon(Icons.language_rounded),
                   title: const Text('Language'),
-                  trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                  trailing:
+                      const Icon(Icons.arrow_forward_ios_rounded, size: 16),
                   onTap: () {},
                 ),
               ],

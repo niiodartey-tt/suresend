@@ -10,7 +10,8 @@ class StatsCard extends StatefulWidget {
   State<StatsCard> createState() => _StatsCardState();
 }
 
-class _StatsCardState extends State<StatsCard> with SingleTickerProviderStateMixin {
+class _StatsCardState extends State<StatsCard>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
 

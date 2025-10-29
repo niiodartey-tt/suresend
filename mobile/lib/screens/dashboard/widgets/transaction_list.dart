@@ -70,7 +70,7 @@ class _TransactionsListState extends State<TransactionsList>
           if (transactionIndex >= _transactions.length) return null;
 
           final transaction = _transactions[transactionIndex];
-          
+
           return SlideTransition(
             position: Tween<Offset>(
               begin: const Offset(0, 0.5),
@@ -131,12 +131,14 @@ class _TransactionsListState extends State<TransactionsList>
                                 children: [
                                   Text(
                                     transaction['name'],
-                                    style: Theme.of(context).textTheme.titleMedium,
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
                                   ),
                                   const SizedBox(height: AppTheme.spacingXs),
                                   Text(
                                     transaction['type'],
-                                    style: Theme.of(context).textTheme.bodyMedium,
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
                                   ),
                                 ],
                               ),

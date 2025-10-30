@@ -6,6 +6,7 @@ import '../../providers/transaction_provider.dart';
 import '../../providers/notification_provider.dart';
 import '../../providers/wallet_provider.dart';
 import '../../models/transaction.dart';
+import '../../utils/currency_formatter.dart';
 import '../notifications/notification_screen.dart';
 import '../wallet/fund_wallet_screen.dart';
 import '../wallet/withdraw_funds_screen.dart';
@@ -233,7 +234,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    '\$${wallet?.balance.toStringAsFixed(2) ?? '4,500.00'}',
+                                    CurrencyFormatter.formatGHS(wallet?.balance ?? 4500.00),
                                     style: const TextStyle(
                                       color: AppColors.primaryForeground,
                                       fontSize: 28,
@@ -257,7 +258,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    '\$${escrowBalance.toStringAsFixed(2)}',
+                                    CurrencyFormatter.formatGHS(escrowBalance),
                                     style: const TextStyle(
                                       color: AppColors.primaryForeground,
                                       fontSize: 28,
@@ -660,7 +661,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
               const SizedBox(height: 16),
               // Amount
               Text(
-                '\$${transaction.amount.toStringAsFixed(2)}',
+                CurrencyFormatter.formatGHS(transaction.amount),
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w600,

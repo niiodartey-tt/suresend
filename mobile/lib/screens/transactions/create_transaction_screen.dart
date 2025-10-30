@@ -48,24 +48,24 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
     }
 
     // Show PIN confirmation dialog
-    final confirmed = await showDialog<bool>(
+    await PinConfirmationDialog.show(
       context: context,
-      builder: (context) => PinConfirmationDialog(
-        title: 'Confirm Transaction',
-        message: 'Create Escrow Transaction',
-        amount: double.tryParse(_amountController.text) ?? 0.0,
-        transactionId: 'ESC-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}',
-      ),
+      action: 'create-escrow',
+      transactionData: {
+        'amount': _amountController.text,
+        'id': 'ESC-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}',
+      },
+      onConfirm: (pin) {
+        // Navigate to success screen
+        if (mounted) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => const TransactionSuccessScreen(),
+            ),
+          );
+        }
+      },
     );
-
-    if (confirmed == true && mounted) {
-      // Navigate to success screen
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const TransactionSuccessScreen(),
-        ),
-      );
-    }
   }
 
   @override

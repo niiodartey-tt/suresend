@@ -346,7 +346,9 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
                 final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const CreateTransactionScreen(),
+                    builder: (context) => const CreateTransactionScreen(
+                      transactionType: 'buy',
+                    ),
                   ),
                 );
                 if (result == true) {

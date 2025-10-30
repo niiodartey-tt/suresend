@@ -319,7 +319,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppTheme.primaryColor.withOpacity(0.1)
+              ? AppTheme.primaryColor.withValues(alpha: 0.1)
               : Colors.grey.shade100,
           border: Border.all(
             color: isSelected ? AppTheme.primaryColor : Colors.grey.shade300,
@@ -351,7 +351,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 style: TextStyle(
                   fontSize: 11,
                   color: isSelected
-                      ? AppTheme.primaryColor.withOpacity(0.7)
+                      ? AppTheme.primaryColor.withValues(alpha: 0.7)
                       : Colors.grey.shade500,
                 ),
               ),

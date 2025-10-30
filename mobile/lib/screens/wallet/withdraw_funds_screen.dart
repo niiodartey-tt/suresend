@@ -152,7 +152,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                     ? const SkeletonLoader.card(height: 100)
                     : AnimationHelpers.fadeIn(
                         child: Card(
-                          color: AppTheme.primaryColor.withOpacity(0.1),
+                          color: AppTheme.primaryColor.withValues(alpha: 0.1),
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Column(
@@ -412,7 +412,7 @@ class _WithdrawalMethodCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: isSelected ? 4 : 1,
-      color: isSelected ? AppTheme.primaryColor.withOpacity(0.1) : null,
+      color: isSelected ? AppTheme.primaryColor.withValues(alpha: 0.1) : null,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(8),

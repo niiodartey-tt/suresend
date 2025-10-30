@@ -30,7 +30,7 @@ class PinConfirmationDialog extends StatefulWidget {
     return showDialog(
       context: context,
       barrierDismissible: false,
-      barrierColor: AppColors.overlay.withOpacity(0.6),
+      barrierColor: AppColors.overlay.withValues(alpha: 0.6),
       builder: (context) => PinConfirmationDialog(
         action: action,
         transactionData: transactionData,
@@ -181,7 +181,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog>
                       width: 48,
                       height: 48,
                       decoration: BoxDecoration(
-                        color: AppColors.primaryForeground.withOpacity(0.2),
+                        color: AppColors.primaryForeground.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                       ),
                       child: const Icon(
@@ -211,7 +211,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog>
                             style:
                                 Theme.of(context).textTheme.bodySmall?.copyWith(
                                       color: AppColors.primaryForeground
-                                          .withOpacity(0.8),
+                                          .withValues(alpha: 0.8),
                                     ),
                           ),
                         ],

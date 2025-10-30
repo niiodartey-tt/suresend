@@ -258,8 +258,8 @@ class _WalletScreenState extends State<WalletScreen> {
                     child: ListTile(
                       leading: CircleAvatar(
                         backgroundColor: isCredit
-                            ? AppTheme.successColor.withOpacity(0.1)
-                            : AppTheme.errorColor.withOpacity(0.1),
+                            ? AppTheme.successColor.withValues(alpha: 0.1)
+                            : AppTheme.errorColor.withValues(alpha: 0.1),
                         child: Icon(
                           isCredit ? Icons.arrow_downward : Icons.arrow_upward,
                           color: isCredit
@@ -321,7 +321,7 @@ class _QuickActionCard extends StatelessWidget {
                 width: 56,
                 height: 56,
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(

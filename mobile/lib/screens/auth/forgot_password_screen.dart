@@ -96,7 +96,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         'No worries, we\'ll send you reset instructions',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               color:
-                                  AppColors.primaryForeground.withOpacity(0.8),
+                                  AppColors.primaryForeground.withValues(alpha: 0.8),
                             ),
                       ),
                     ],

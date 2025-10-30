@@ -274,7 +274,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
                     ? const SkeletonLoader.card(height: 100)
                     : AnimationHelpers.fadeIn(
                         child: Card(
-                          color: AppTheme.primaryColor.withOpacity(0.1),
+                          color: AppTheme.primaryColor.withValues(alpha: 0.1),
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Column(

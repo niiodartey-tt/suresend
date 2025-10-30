@@ -165,7 +165,7 @@ class AuthService {
   /// Logout user
   Future<Map<String, dynamic>> logout() async {
     try {
-      final result = await _apiService.post(
+      /_unused_/ await _apiService.post(
         'auth/logout',
         requiresAuth: true,
       );

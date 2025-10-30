@@ -12,7 +12,7 @@ enum AuthStatus {
 
 class AuthProvider with ChangeNotifier {
   final AuthService _authService = AuthService();
-  final StorageService _storageService = StorageService();
+  // Unused: final StorageService _storageService = StorageService();
 
   AuthStatus _status = AuthStatus.initial;
   User? _user;

@@ -29,7 +29,7 @@ class UnifiedDashboard extends StatefulWidget {
 class _UnifiedDashboardState extends State<UnifiedDashboard> {
   int _currentIndex = 0;
   bool _isInitialLoading = true;
-  bool _hasError = false;
+  // TODO: Use for error handling - bool _hasError = false;
   String _errorMessage = '';
 
   @override
@@ -61,7 +61,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
   Future<void> _loadData() async {
     if (mounted) {
       setState(() {
-        _hasError = false;
+        // _hasError = false;
         _errorMessage = '';
       });
     }
@@ -81,15 +81,15 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
       if (mounted) {
         setState(() {
           _isInitialLoading = false;
-          _hasError = false;
+          // _hasError = false;
         });
       }
     } catch (e) {
       if (mounted) {
         setState(() {
           _isInitialLoading = false;
-          _hasError = true;
-          _errorMessage = e.toString();
+          // _hasError = true;
+          // _errorMessage = e.toString();
         });
       }
     }
@@ -246,14 +246,14 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppTheme.darkBlue, AppTheme.darkBlue.withOpacity(0.8)],
+            colors: [AppTheme.darkBlue, AppTheme.darkBlue.withValues(alpha: 0.8)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
           borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
           boxShadow: [
             BoxShadow(
-              color: AppTheme.darkBlue.withOpacity(0.3),
+              color: AppTheme.darkBlue.withValues(alpha: 0.3),
               blurRadius: 15,
               offset: const Offset(0, 8),
             ),
@@ -266,7 +266,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: Colors.white.withOpacity(0.7),
+                color: Colors.white.withValues(alpha: 0.7),
                 letterSpacing: 1.5,
               ),
             ),
@@ -347,7 +347,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
     required VoidCallback onTap,
   }) {
     return Material(
-      color: isPrimary ? AppTheme.primaryColor : Colors.white.withOpacity(0.2),
+      color: isPrimary ? AppTheme.primaryColor : Colors.white.withValues(alpha: 0.2),
       borderRadius: BorderRadius.circular(AppTheme.buttonBorderRadius),
       child: InkWell(
         onTap: onTap,
@@ -500,7 +500,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
       color: AppTheme.surfaceColor,
       borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
       elevation: 2,
-      shadowColor: Colors.black.withOpacity(0.05),
+      shadowColor: Colors.black.withValues(alpha: 0.05),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
@@ -513,7 +513,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                 width: 50,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.15),
+                  color: color.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: Icon(
@@ -589,7 +589,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
               borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -734,7 +734,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                           BorderRadius.circular(AppTheme.cardBorderRadius),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
+                          color: Colors.black.withValues(alpha: 0.05),
                           blurRadius: 10,
                           offset: const Offset(0, 4),
                         ),
@@ -759,8 +759,8 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                             height: 45,
                             decoration: BoxDecoration(
                               color: isCredit
-                                  ? Colors.green.withOpacity(0.15)
-                                  : Colors.blue.withOpacity(0.15),
+                                  ? Colors.green.withValues(alpha: 0.15)
+                                  : Colors.blue.withValues(alpha: 0.15),
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
@@ -853,7 +853,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
         borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -903,15 +903,15 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppTheme.primaryColor.withOpacity(0.1),
-            AppTheme.primaryColor.withOpacity(0.05),
+            AppTheme.primaryColor.withValues(alpha: 0.1),
+            AppTheme.primaryColor.withValues(alpha: 0.05),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
         border: Border.all(
-          color: AppTheme.primaryColor.withOpacity(0.3),
+          color: AppTheme.primaryColor.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -972,7 +972,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
         borderRadius: BorderRadius.circular(AppTheme.buttonBorderRadius),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.darkBlue.withOpacity(0.4),
+            color: AppTheme.darkBlue.withValues(alpha: 0.4),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -990,7 +990,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.transparent,
           selectedItemColor: AppTheme.primaryColor,
-          unselectedItemColor: Colors.white.withOpacity(0.5),
+          unselectedItemColor: Colors.white.withValues(alpha: 0.5),
           selectedFontSize: 11,
           unselectedFontSize: 11,
           elevation: 0,

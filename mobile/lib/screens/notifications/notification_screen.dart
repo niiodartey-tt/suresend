@@ -181,7 +181,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
 
-  Widget _buildEmptyState() {
+  // Unused method - can be removed or used later
+  // Widget _buildEmptyState() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -343,7 +344,7 @@ class _NotificationCard extends StatelessWidget {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: _getTypeColor().withOpacity(0.1),
+                    color: _getTypeColor().withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(

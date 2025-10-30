@@ -162,9 +162,9 @@ class _DealsScreenState extends State<DealsScreen>
                                               decoration: BoxDecoration(
                                                 color: roleIsBuyer
                                                     ? AppTheme.primary
-                                                        .withOpacity(0.08)
+                                                        .withValues(alpha: 0.08)
                                                     : Colors.green
-                                                        .withOpacity(0.08),
+                                                        .withValues(alpha: 0.08),
                                                 borderRadius:
                                                     BorderRadius.circular(8),
                                               ),
@@ -221,7 +221,7 @@ class _DealsScreenState extends State<DealsScreen>
                                             horizontal: 8, vertical: 6),
                                         decoration: BoxDecoration(
                                           color: _getStatusColor(deal['status'])
-                                              .withOpacity(0.1),
+                                              .withValues(alpha: 0.1),
                                           borderRadius:
                                               BorderRadius.circular(8),
                                         ),

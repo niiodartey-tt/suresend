@@ -212,10 +212,10 @@ class AppTheme {
     ),
 
     // Card
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: AppColors.card,
       elevation: elevationSm,
-      shadowColor: Colors.black.withOpacity(0.1),
+      shadowColor: Colors.black.withValues(alpha: 0.1),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(cardBorderRadius),
       ),
@@ -231,7 +231,7 @@ class AppTheme {
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.primaryForeground,
         elevation: elevationMd,
-        shadowColor: Colors.black.withOpacity(0.2),
+        shadowColor: Colors.black.withValues(alpha: 0.2),
         padding: const EdgeInsets.symmetric(
           horizontal: spacing16,
           vertical: spacing12,
@@ -313,7 +313,7 @@ class AppTheme {
       ),
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(inputBorderRadius),
-        borderSide: BorderSide(color: AppColors.border.withOpacity(0.5)),
+        borderSide: BorderSide(color: AppColors.border.withValues(alpha: 0.5)),
       ),
       hintStyle: const TextStyle(
         color: AppColors.textMuted,
@@ -360,7 +360,7 @@ class AppTheme {
     chipTheme: ChipThemeData(
       backgroundColor: AppColors.background,
       deleteIconColor: AppColors.textSecondary,
-      disabledColor: AppColors.background.withOpacity(0.5),
+      disabledColor: AppColors.background.withValues(alpha: 0.5),
       labelStyle: GoogleFonts.lexendDeca(
         fontSize: 14,
         fontWeight: FontWeight.w400,
@@ -377,7 +377,7 @@ class AppTheme {
     ),
 
     // Dialog
-    dialogTheme: DialogTheme(
+    dialogTheme: DialogThemeData(
       backgroundColor: AppColors.card,
       elevation: elevationXl,
       shape: RoundedRectangleBorder(
@@ -539,10 +539,10 @@ class AppTheme {
     ),
 
     // Card
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: AppColors.darkCard,
       elevation: elevationSm,
-      shadowColor: Colors.black.withOpacity(0.3),
+      shadowColor: Colors.black.withValues(alpha: 0.3),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(cardBorderRadius),
       ),
@@ -564,4 +564,45 @@ class AppTheme {
     // (Rest of dark theme configuration follows light theme pattern)
     // Input, buttons, etc. inherit from light theme with dark color adjustments
   );
+
+  // ============================================
+  // BACKWARDS COMPATIBILITY GETTERS
+  // For legacy code that references AppTheme.colorName
+  // ============================================
+
+  /// @deprecated Use AppColors.primary instead
+  static Color get primaryColor => AppColors.primary;
+
+  /// @deprecated Use AppColors.secondary instead
+  static Color get secondaryColor => AppColors.secondary;
+
+  /// @deprecated Use AppColors.accentBackground instead
+  static Color get accentColor => AppColors.accentBackground;
+
+  /// @deprecated Use AppColors.error instead
+  static Color get errorColor => AppColors.error;
+
+  /// @deprecated Use AppColors.success instead
+  static Color get successColor => AppColors.success;
+
+  /// @deprecated Use AppColors.warning instead
+  static Color get warningColor => AppColors.warning;
+
+  /// @deprecated Use AppColors.card instead
+  static Color get surfaceColor => AppColors.card;
+
+  /// @deprecated Use AppColors.textPrimary instead
+  static Color get textPrimaryColor => AppColors.textPrimary;
+
+  /// @deprecated Use AppColors.textSecondary instead
+  static Color get textSecondaryColor => AppColors.textSecondary;
+
+  /// @deprecated Use AppColors.primaryDark instead
+  static Color get darkBlue => AppColors.primaryDark;
+
+  /// Helper method for backwards compatibility with withOpacity
+  /// @deprecated Use color.withValues(alpha: opacity) instead
+  static Color withAlpha(Color color, double opacity) {
+    return color.withValues(alpha: opacity);
+  }
 }

@@ -106,7 +106,7 @@ class RiderDashboard extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: const BoxDecoration(color: AppTheme.accentColor),
+            decoration: BoxDecoration(color: AppTheme.accentColor),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

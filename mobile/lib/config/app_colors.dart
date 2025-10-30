@@ -201,35 +201,35 @@ class AppColors {
   static StatusColors getStatusColors(String status) {
     switch (status.toLowerCase()) {
       case 'completed':
-        return StatusColors(
+        return const StatusColors(
           background: statusCompletedBg,
           text: statusCompletedText,
           border: statusCompletedBorder,
         );
       case 'in escrow':
       case 'escrow':
-        return StatusColors(
+        return const StatusColors(
           background: statusEscrowBg,
           text: statusEscrowText,
           border: statusEscrowBorder,
         );
       case 'in progress':
       case 'progress':
-        return StatusColors(
+        return const StatusColors(
           background: statusProgressBg,
           text: statusProgressText,
           border: statusProgressBorder,
         );
       case 'disputed':
       case 'dispute':
-        return StatusColors(
+        return const StatusColors(
           background: statusDisputedBg,
           text: statusDisputedText,
           border: statusDisputedBorder,
         );
       case 'pending':
       default:
-        return StatusColors(
+        return const StatusColors(
           background: statusPendingBg,
           text: statusPendingText,
           border: statusPendingBorder,

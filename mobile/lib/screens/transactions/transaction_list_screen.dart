@@ -218,7 +218,7 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
             if (stats != null)
               Container(
                 padding: const EdgeInsets.all(16),
-                color: Theme.of(context).primaryColor.withOpacity(0.1),
+                color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
                 child: Row(
                   children: [
                     Expanded(
@@ -469,7 +469,7 @@ class _TransactionCard extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: _getStatusColor().withOpacity(0.1),
+                      color: _getStatusColor().withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(

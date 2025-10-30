@@ -130,8 +130,8 @@ class _KycChip extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: isVerified
-            ? Colors.green.withOpacity(0.12)
-            : Colors.orange.withOpacity(0.12),
+            ? Colors.green.withValues(alpha: 0.12)
+            : Colors.orange.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(AppTheme.radiusM),
       ),
       child: Row(

@@ -98,7 +98,7 @@ class _TransactionTypeCardState extends State<_TransactionTypeCard> {
           boxShadow: _isPressed
               ? [
                   BoxShadow(
-                    color: AppTheme.primary.withOpacity(0.2),
+                    color: AppTheme.primary.withValues(alpha: 0.2),
                     blurRadius: 8,
                     spreadRadius: 2,
                   )
@@ -112,7 +112,7 @@ class _TransactionTypeCardState extends State<_TransactionTypeCard> {
               Container(
                 padding: const EdgeInsets.all(AppTheme.spacingM),
                 decoration: BoxDecoration(
-                  color: AppTheme.primary.withOpacity(0.1),
+                  color: AppTheme.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(AppTheme.radiusM),
                 ),
                 child: Icon(

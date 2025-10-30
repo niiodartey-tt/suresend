@@ -138,7 +138,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                         decoration: BoxDecoration(
                           color: _currentPage == index
                               ? AppColors.primary
-                              : AppColors.textMuted.withOpacity(0.3),
+                              : AppColors.textMuted.withValues(alpha: 0.3),
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
@@ -195,7 +195,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 width: 96,
                 height: 96,
                 decoration: BoxDecoration(
-                  color: slide.color.withOpacity(0.1),
+                  color: slide.color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(AppTheme.radiusLg),
                 ),
                 child: Icon(

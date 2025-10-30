@@ -70,10 +70,6 @@ flutter:
     - assets/icons/
     - assets/logos/
 
-  # Fonts (if custom fonts are needed)
-  # fonts:
-  #   - family: CustomFont
-  #     fonts:
-  #       - asset: assets/fonts/CustomFont-Regular.ttf
-  #       - asset: assets/fonts/CustomFont-Bold.ttf
-  #         weight: 700
+  # Fonts - Using Lexend Deca from Google Fonts
+  # Lexend Deca is loaded via google_fonts package
+  # No local font files needed

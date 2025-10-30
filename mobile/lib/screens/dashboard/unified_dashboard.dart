@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../config/app_colors.dart';
-import '../../config/theme.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/transaction_provider.dart';
 import '../../providers/notification_provider.dart';
@@ -458,7 +457,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Column(
+                          const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
@@ -470,7 +469,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                                   letterSpacing: 0.5,
                                 ),
                               ),
-                              const SizedBox(height: 2),
+                              SizedBox(height: 2),
                               Text(
                                 'October',
                                 style: TextStyle(
@@ -513,7 +512,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                                   tapTargetSize:
                                       MaterialTapTargetSize.shrinkWrap,
                                 ),
-                                child: Text(
+                                child: const Text(
                                   'See all',
                                   style: TextStyle(
                                     color: AppColors.primary,
@@ -611,7 +610,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                           color: AppColors.textMuted.withValues(alpha: 0.5),
                         ),
                         const SizedBox(height: 16),
-                        Text(
+                        const Text(
                           'No transactions found',
                           style: TextStyle(
                             color: AppColors.textMuted,
@@ -687,7 +686,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
               children: [
                 Text(
                   label,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 12,
                     color: AppColors.textMuted,
                   ),
@@ -695,7 +694,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                 const SizedBox(height: 2),
                 Text(
                   value,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
@@ -772,16 +771,14 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                   children: [
                     Text(
                       transaction.id,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 11,
                         color: AppColors.textMuted,
                       ),
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      transaction.createdAt != null
-                          ? _formatDate(transaction.createdAt!)
-                          : 'N/A',
+                      _formatDate(transaction.createdAt),
                       style: TextStyle(
                         fontSize: 10,
                         color:
@@ -804,7 +801,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                     children: [
                       Text(
                         '\$${transaction.amount.toStringAsFixed(2)}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
                           color: AppColors.textPrimary,
@@ -813,7 +810,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                       const SizedBox(height: 4),
                       Text(
                         transaction.description ?? 'Transaction',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 14,
                           color: AppColors.textSecondary,
                         ),
@@ -824,7 +821,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                         const SizedBox(height: 2),
                         Text(
                           '${transaction.buyerUsername == context.read<AuthProvider>().user?.username ? 'Seller: ' : 'Buyer: '}${transaction.counterpartyName}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 11,
                             color: AppColors.textMuted,
                           ),

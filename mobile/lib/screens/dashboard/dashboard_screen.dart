@@ -421,8 +421,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               const SizedBox(height: 16),
 
-              // Filter Tabs
-              if (_showFilter)
+              // Filter Section with Search
+              if (_showFilter) ...[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacing16),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Search transactions...',
+                      prefixIcon: const Icon(Icons.search, size: 20),
+                      filled: true,
+                      fillColor: AppColors.background,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: AppColors.border),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: AppColors.border),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: AppColors.primary, width: 2),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacing16),
                   child: SingleChildScrollView(
@@ -442,7 +467,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
                 ),
-              if (_showFilter) const SizedBox(height: 12),
+                const SizedBox(height: 12),
+              ],
 
               // Transaction List
               ListView.builder(
@@ -522,19 +548,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
         });
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : AppColors.card,
-          borderRadius: BorderRadius.circular(20),
+          color: isSelected ? const Color(0xFF1E3A5F) : AppColors.card,
+          borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.border,
+            color: isSelected ? const Color(0xFF1E3A5F) : AppColors.border,
+            width: 1,
           ),
         ),
         child: Text(
           label,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: isSelected ? AppColors.primaryForeground : AppColors.textPrimary,
-                fontWeight: isSelected ? FontWeight.w500 : FontWeight.w400,
+                fontWeight: FontWeight.w500,
               ),
         ),
       ),

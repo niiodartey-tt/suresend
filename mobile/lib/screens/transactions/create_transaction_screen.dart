@@ -148,7 +148,7 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
                     ),
                     const SizedBox(height: 8),
                     DropdownButtonFormField<String>(
-                      value: _selectedCategory,
+                      initialValue: _selectedCategory,
                       decoration: const InputDecoration(
                         contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                       ),

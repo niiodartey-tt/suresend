@@ -21,8 +21,9 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   int _currentIndex = 0;
   bool _showFilter = false;
+  String _selectedFilter = 'All';
 
-  final List<Map<String, dynamic>> _transactions = [
+  final List<Map<String, dynamic>> _allTransactions = [
     {
       'id': 'ESC-45823',
       'date': 'Oct 28, 2025',
@@ -39,7 +40,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
       'seller': 'Mike Davis',
       'status': 'Completed',
     },
+    {
+      'id': 'ESC-45821',
+      'date': 'Oct 26, 2025',
+      'amount': 1200.00,
+      'description': 'Gaming Console Bundle',
+      'seller': 'Emma Wilson',
+      'status': 'In Progress',
+    },
+    {
+      'id': 'ESC-45820',
+      'date': 'Oct 25, 2025',
+      'amount': 2500.00,
+      'description': 'Graphic Design Package',
+      'seller': 'Mike Davis',
+      'status': 'Disputed',
+    },
   ];
+
+  List<Map<String, dynamic>> get _filteredTransactions {
+    if (_selectedFilter == 'All') {
+      return _allTransactions;
+    }
+    return _allTransactions.where((t) => t['status'] == _selectedFilter).toList();
+  }
 
   void _onTabTapped(int index) {
     if (index == 2) {
@@ -395,16 +419,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 16),
+
+              // Filter Tabs
+              if (_showFilter)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacing16),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        _buildFilterChip('All'),
+                        const SizedBox(width: 8),
+                        _buildFilterChip('In Escrow'),
+                        const SizedBox(width: 8),
+                        _buildFilterChip('Completed'),
+                        const SizedBox(width: 8),
+                        _buildFilterChip('In Progress'),
+                        const SizedBox(width: 8),
+                        _buildFilterChip('Disputed'),
+                      ],
+                    ),
+                  ),
+                ),
+              if (_showFilter) const SizedBox(height: 12),
 
               // Transaction List
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacing16),
-                itemCount: _transactions.length,
+                itemCount: _filteredTransactions.length,
                 itemBuilder: (context, index) {
-                  final transaction = _transactions[index];
+                  final transaction = _filteredTransactions[index];
                   return _buildTransactionCard(transaction);
                 },
               ),
@@ -466,12 +513,60 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  Widget _buildFilterChip(String label) {
+    final isSelected = _selectedFilter == label;
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedFilter = label;
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primary : AppColors.card,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected ? AppColors.primary : AppColors.border,
+          ),
+        ),
+        child: Text(
+          label,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: isSelected ? AppColors.primaryForeground : AppColors.textPrimary,
+                fontWeight: isSelected ? FontWeight.w500 : FontWeight.w400,
+              ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildTransactionCard(Map<String, dynamic> transaction) {
-    final isCompleted = transaction['status'] == 'Completed';
-    final statusColor = isCompleted ? AppColors.success : AppColors.primary;
-    final statusBgColor = isCompleted
-        ? AppColors.successLight
-        : AppColors.primary.withValues(alpha: 0.1);
+    final status = transaction['status'];
+    Color statusColor;
+    Color statusBgColor;
+
+    switch (status) {
+      case 'Completed':
+        statusColor = AppColors.success;
+        statusBgColor = AppColors.successLight;
+        break;
+      case 'In Escrow':
+        statusColor = AppColors.primary;
+        statusBgColor = AppColors.primary.withValues(alpha: 0.1);
+        break;
+      case 'In Progress':
+        statusColor = const Color(0xFFF59E0B);
+        statusBgColor = const Color(0xFFFEF3C7);
+        break;
+      case 'Disputed':
+        statusColor = AppColors.error;
+        statusBgColor = AppColors.errorLight;
+        break;
+      default:
+        statusColor = AppColors.textMuted;
+        statusBgColor = AppColors.background;
+    }
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),

@@ -154,9 +154,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
       itemCount: notifications.length + (notificationProvider.hasMore ? 1 : 0),
       itemBuilder: (context, index) {
         if (index == notifications.length) {
-          return const Center(
+          return Center(
             child: Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: CircularProgressIndicator(
                 valueColor:
                     AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),

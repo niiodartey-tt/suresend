@@ -167,7 +167,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                 const SizedBox(height: 8),
                                 Text(
                                   '₵ ${wallet.balance.toStringAsFixed(2)}',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 32,
                                     fontWeight: FontWeight.bold,
                                     color: AppTheme.primaryColor,
@@ -458,7 +458,7 @@ class _WithdrawalMethodCard extends StatelessWidget {
                 ),
               ),
               if (isSelected)
-                const Icon(
+                Icon(
                   Icons.check_circle,
                   color: AppTheme.primaryColor,
                 ),

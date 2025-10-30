@@ -48,7 +48,7 @@ class TransactionSuccessScreen extends StatelessWidget {
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: AppTheme.textPrimaryColor,
@@ -60,7 +60,7 @@ class TransactionSuccessScreen extends StatelessWidget {
               Text(
                 message,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   color: AppTheme.textSecondaryColor,
                 ),
@@ -175,7 +175,7 @@ class _DetailRow extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 14,
             color: AppTheme.textSecondaryColor,
           ),

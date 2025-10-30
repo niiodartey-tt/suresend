@@ -35,8 +35,8 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
   Future<void> _handleVerifyOTP() async {
     if (_otpController.text.length != 6) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter a 6-digit OTP'),
+        SnackBar(
+          content: const Text('Please enter a 6-digit OTP'),
           backgroundColor: AppTheme.errorColor,
         ),
       );
@@ -71,8 +71,8 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
       );
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Authentication successful!'),
+        SnackBar(
+          content: const Text('Authentication successful!'),
           backgroundColor: AppTheme.successColor,
         ),
       );
@@ -108,8 +108,8 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
 
     if (result['success']) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('OTP sent successfully'),
+        SnackBar(
+          content: const Text('OTP sent successfully'),
           backgroundColor: AppTheme.successColor,
         ),
       );
@@ -186,7 +186,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                   color: AppTheme.primaryColor.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.sms_outlined,
                   size: 40,
                   color: AppTheme.primaryColor,

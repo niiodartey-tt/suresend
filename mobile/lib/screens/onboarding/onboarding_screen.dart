@@ -28,21 +28,24 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       title: 'Secure Escrow',
       description:
           'Your funds are protected in secure escrow until both parties confirm the transaction',
-      color: AppColors.primary,
+      color: const Color(0xFF043B69),
+      backgroundColor: const Color(0xFFCED9E5),
     ),
     OnboardingSlide(
       icon: Icons.lock_outline,
       title: 'Safe & Encrypted',
       description:
           'Bank-level encryption and security measures to keep your money and data safe',
-      color: AppColors.success,
+      color: const Color(0xFF10B981),
+      backgroundColor: const Color(0xFFD1FAE5),
     ),
     OnboardingSlide(
-      icon: Icons.flash_on_outlined,
+      icon: Icons.bolt,
       title: 'Fast Transactions',
       description:
           'Quick and easy transactions with real-time updates and instant notifications',
-      color: AppColors.warning,
+      color: const Color(0xFFF59E0B),
+      backgroundColor: const Color(0xFFFEF3C7),
     ),
   ];
 
@@ -195,8 +198,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 width: 96,
                 height: 96,
                 decoration: BoxDecoration(
-                  color: slide.color.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+                  color: slide.backgroundColor,
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
                   slide.icon,
@@ -237,11 +240,13 @@ class OnboardingSlide {
   final String title;
   final String description;
   final Color color;
+  final Color backgroundColor;
 
   OnboardingSlide({
     required this.icon,
     required this.title,
     required this.description,
     required this.color,
+    required this.backgroundColor,
   });
 }

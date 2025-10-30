@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:suresend/theme/app_theme.dart';
+import 'package:suresend/config/app_colors.dart';
+import 'package:suresend/config/theme.dart';
 import 'package:suresend/shared/components/custom_bottom_nav.dart';
-import 'widgets/wallet_balance_widget.dart';
-import 'widgets/stats_card.dart';
-import 'widgets/transaction_list.dart';
+import '../deals/deals_screen.dart';
+import '../profile/profile_screen.dart';
+import '../settings/settings_screen.dart';
+import '../transactions/transaction_type_modal.dart';
+import '../notifications/notification_screen.dart';
+import '../wallet/fund_wallet_screen.dart';
+import '../wallet/withdraw_funds_screen.dart';
+import '../transactions/transaction_details_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -14,104 +20,556 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int _currentIndex = 0;
+  bool _showFilter = false;
+
+  final List<Map<String, dynamic>> _transactions = [
+    {
+      'id': 'ESC-45823',
+      'date': 'Oct 28, 2025',
+      'amount': 850.00,
+      'description': 'MacBook Pro M3',
+      'seller': 'Sarah Johnson',
+      'status': 'In Escrow',
+    },
+    {
+      'id': 'ESC-45822',
+      'date': 'Oct 27, 2025',
+      'amount': 450.00,
+      'description': 'iPhone 14 Pro',
+      'seller': 'Mike Davis',
+      'status': 'Completed',
+    },
+  ];
+
+  void _onTabTapped(int index) {
+    if (index == 2) {
+      // Show transaction modal for center FAB
+      _showTransactionModal();
+      return;
+    }
+
+    setState(() {
+      _currentIndex = index;
+    });
+
+    // Navigate to different screens based on index
+    switch (index) {
+      case 0:
+        // Already on dashboard, do nothing
+        break;
+      case 1:
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const DealsScreen()),
+        );
+        break;
+      case 3:
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const SettingsScreen()),
+        );
+        break;
+      case 4:
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const ProfileScreen()),
+        );
+        break;
+    }
+  }
+
+  void _showTransactionModal() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) => const TransactionTypeModal(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          // Blue Header Section
-          SliverAppBar(
-            expandedHeight: MediaQuery.of(context).size.height * 0.3,
-            floating: false,
-            pinned: true,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
+      backgroundColor: AppColors.background,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header with gradient background
+              Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Color(0xFF0A57E6), Color(0xFF003EB5)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [AppColors.primary, AppColors.primaryDark],
                   ),
                 ),
-                child: const WalletBalanceWidget(),
+                padding: const EdgeInsets.all(AppTheme.spacing24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Welcome text and notification bell
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Welcome back,',
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: AppColors.primaryForeground.withValues(alpha: 0.9),
+                                  ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'John Doe',
+                              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                    color: AppColors.primaryForeground,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                            ),
+                          ],
+                        ),
+                        Stack(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => const NotificationScreen(),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(
+                                Icons.notifications_outlined,
+                                color: AppColors.primaryForeground,
+                                size: 28,
+                              ),
+                            ),
+                            Positioned(
+                              right: 8,
+                              top: 8,
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: const BoxDecoration(
+                                  color: AppColors.error,
+                                  shape: BoxShape.circle,
+                                ),
+                                constraints: const BoxConstraints(
+                                  minWidth: 18,
+                                  minHeight: 18,
+                                ),
+                                child: const Text(
+                                  '3',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Balance Cards Row
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Wallet Balance',
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: AppColors.primaryForeground.withValues(alpha: 0.8),
+                                    ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                '\$4,500.00',
+                                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                                      color: AppColors.primaryForeground,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 32),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Escrow Balance',
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: AppColors.primaryForeground.withValues(alpha: 0.8),
+                                    ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                '\$200.00',
+                                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                                      color: AppColors.primaryForeground,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.notifications_rounded),
-                onPressed: () {
-                  // Navigate to notifications
+
+              // Stats Card (White card with 4 stats)
+              Padding(
+                padding: const EdgeInsets.all(AppTheme.spacing16),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.card,
+                    borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  padding: const EdgeInsets.all(AppTheme.spacing16),
+                  child: Column(
+                    children: [
+                      // First row: Active and Completed
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _buildStatItem(
+                              icon: Icons.layers_outlined,
+                              iconColor: const Color(0xFF3B82F6),
+                              iconBg: const Color(0xFFDBeafe),
+                              label: 'Active',
+                              value: '2',
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: _buildStatItem(
+                              icon: Icons.check_circle_outline,
+                              iconColor: const Color(0xFF10B981),
+                              iconBg: const Color(0xFFD1FAE5),
+                              label: 'Completed',
+                              value: '0',
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      // Second row: Dispute and Total
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _buildStatItem(
+                              icon: Icons.warning_amber_outlined,
+                              iconColor: const Color(0xFFF59E0B),
+                              iconBg: const Color(0xFFFEF3C7),
+                              label: 'Dispute',
+                              value: '1',
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: _buildStatItem(
+                              icon: Icons.person_outline,
+                              iconColor: const Color(0xFF8B5CF6),
+                              iconBg: const Color(0xFFEDE9FE),
+                              label: 'Total',
+                              value: '2',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Action Buttons
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacing16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => const FundWalletScreen()),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: AppColors.primaryForeground,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                        icon: const Icon(Icons.add, size: 18),
+                        label: const Text('Top up wallet'),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => const WithdrawFundsScreen()),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF1F2937),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                        child: const Text('Withdraw'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // Recent Transactions Header
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacing16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'RECENT TRANSACTIONS',
+                              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                                    color: AppColors.textPrimary,
+                                    fontWeight: FontWeight.w600,
+                                    letterSpacing: 0.5,
+                                  ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'October',
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: AppColors.textMuted,
+                                  ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _showFilter = !_showFilter;
+                                });
+                              },
+                              icon: const Icon(Icons.filter_list),
+                              color: AppColors.primary,
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                // Navigate to all transactions
+                              },
+                              child: const Text('See all'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              // Transaction List
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacing16),
+                itemCount: _transactions.length,
+                itemBuilder: (context, index) {
+                  final transaction = _transactions[index];
+                  return _buildTransactionCard(transaction);
                 },
               ),
+              const SizedBox(height: 80), // Space for bottom nav
             ],
           ),
+        ),
+      ),
+      bottomNavigationBar: CustomBottomNav(
+        currentIndex: _currentIndex,
+        onTap: _onTabTapped,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showTransactionModal,
+        backgroundColor: AppColors.primary,
+        child: const Icon(Icons.add, color: AppColors.primaryForeground),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
+  }
 
-          // Stats Grid
-          SliverPadding(
-            padding: const EdgeInsets.all(AppTheme.spacingM),
-            sliver: SliverGrid(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) => StatsCard(index: index),
-                childCount: 4,
-              ),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: AppTheme.spacingM,
-                crossAxisSpacing: AppTheme.spacingM,
-                childAspectRatio: 1.5,
+  Widget _buildStatItem({
+    required IconData icon,
+    required Color iconColor,
+    required Color iconBg,
+    required String label,
+    required String value,
+  }) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: iconBg,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(icon, color: iconColor, size: 20),
+        ),
+        const SizedBox(width: 12),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              value,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTransactionCard(Map<String, dynamic> transaction) {
+    final isCompleted = transaction['status'] == 'Completed';
+    final statusColor = isCompleted ? AppColors.success : AppColors.primary;
+    final statusBgColor = isCompleted
+        ? AppColors.successLight
+        : AppColors.primary.withValues(alpha: 0.1);
+
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => TransactionDetailsScreen(
+                transactionId: transaction['id'],
               ),
             ),
-          ),
-
-          // Action Buttons
-          SliverToBoxAdapter(
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: AppTheme.spacingM),
-              child: Row(
+          );
+        },
+        borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // ID and Status row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Navigate to top up wallet
-                      },
-                      child: const Text('Top Up Wallet'),
-                    ),
+                  Text(
+                    transaction['id'],
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
                   ),
-                  const SizedBox(width: AppTheme.spacingM),
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () {
-                        // Navigate to withdraw
-                      },
-                      child: const Text('Withdraw'),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: statusBgColor,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      transaction['status'],
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: statusColor,
+                            fontWeight: FontWeight.w500,
+                          ),
                     ),
                   ),
                 ],
               ),
-            ),
+              const SizedBox(height: 4),
+              Text(
+                transaction['date'],
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: AppColors.textMuted,
+                    ),
+              ),
+              const SizedBox(height: 12),
+              // Amount
+              Text(
+                '\$${transaction['amount'].toStringAsFixed(2)}',
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
+              const SizedBox(height: 8),
+              // Description and Seller
+              Text(
+                transaction['description'],
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Seller: ${transaction['seller']}',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+              ),
+              const SizedBox(height: 12),
+              // Details button
+              Align(
+                alignment: Alignment.centerRight,
+                child: OutlinedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => TransactionDetailsScreen(
+                          transactionId: transaction['id'],
+                        ),
+                      ),
+                    );
+                  },
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    side: const BorderSide(color: AppColors.primary),
+                  ),
+                  child: const Text('Details'),
+                ),
+              ),
+            ],
           ),
-
-          // Recent Transactions
-          const SliverPadding(
-            padding: EdgeInsets.all(AppTheme.spacingM),
-            sliver: TransactionsList(),
-          ),
-        ],
+        ),
       ),
-      bottomNavigationBar: CustomBottomNav(
-        currentIndex: _currentIndex,
-        onTap: (index) => setState(() => _currentIndex = index),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Show transaction type modal
-        },
-        backgroundColor: AppTheme.primary,
-        child: const Icon(Icons.add_rounded),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

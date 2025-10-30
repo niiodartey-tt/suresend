@@ -8,14 +8,14 @@ class AppTheme {
   static const surface = Color(0xFFF9FAFB);
   static const textPrimary = Color(0xFF1E1E1E);
   static const textSecondary = Color(0xFF6B7280);
-  
+
   // Spacing
   static const double spacingXs = 4.0;
   static const double spacingS = 8.0;
   static const double spacingM = 16.0;
   static const double spacingL = 24.0;
   static const double spacingXl = 32.0;
-  
+
   // Border Radius
   static const double radiusS = 4.0;
   static const double radiusM = 8.0;
@@ -30,20 +30,20 @@ class AppTheme {
   // Helper method to replace withOpacity
   static Color withAlpha(Color color, double opacity) =>
       color.withAlpha((opacity * 255).round());
-    
+
   static ColorScheme get colorScheme => const ColorScheme.light(
-    primary: primary,
-    secondary: secondary,
-    surface: surface,
-    onPrimary: Colors.white,
-    onSecondary: Colors.white,
-    onSurface: textPrimary,
-  );
+        primary: primary,
+        secondary: secondary,
+        surface: surface,
+        onPrimary: Colors.white,
+        onSecondary: Colors.white,
+        onSurface: textPrimary,
+      );
 
   static ThemeData get lightTheme => ThemeData(
-    useMaterial3: true,
-    colorScheme: colorScheme,
-    textTheme: GoogleFonts.lexendDecaTextTheme(),
-    scaffoldBackgroundColor: surface,
-  );
+        useMaterial3: true,
+        colorScheme: colorScheme,
+        textTheme: GoogleFonts.lexendDecaTextTheme(),
+        scaffoldBackgroundColor: surface,
+      );
 }

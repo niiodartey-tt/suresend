@@ -109,7 +109,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     Text(
                       'Sign in to continue',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.primaryForeground.withValues(alpha: 0.8),
+                            color: AppColors.primaryForeground
+                                .withValues(alpha: 0.8),
                           ),
                     ),
                   ],
@@ -125,7 +126,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 margin: const EdgeInsets.symmetric(horizontal: 24),
                 decoration: BoxDecoration(
                   color: AppColors.card,
-                  borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
+                  borderRadius:
+                      BorderRadius.circular(AppTheme.cardBorderRadius),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.1),
@@ -151,7 +153,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           hintText: 'email or username',
-                          prefixIcon: const Icon(Icons.person_outline, size: 20),
+                          prefixIcon:
+                              const Icon(Icons.person_outline, size: 20),
                           filled: true,
                           fillColor: AppColors.inputBackground,
                           contentPadding: const EdgeInsets.symmetric(
@@ -159,16 +162,22 @@ class _LoginScreenState extends State<LoginScreen> {
                             vertical: 12,
                           ),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
-                            borderSide: const BorderSide(color: AppColors.border),
+                            borderRadius: BorderRadius.circular(
+                                AppTheme.inputBorderRadius),
+                            borderSide:
+                                const BorderSide(color: AppColors.border),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
-                            borderSide: const BorderSide(color: AppColors.border),
+                            borderRadius: BorderRadius.circular(
+                                AppTheme.inputBorderRadius),
+                            borderSide:
+                                const BorderSide(color: AppColors.border),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
-                            borderSide: const BorderSide(color: AppColors.ring, width: 2),
+                            borderRadius: BorderRadius.circular(
+                                AppTheme.inputBorderRadius),
+                            borderSide: const BorderSide(
+                                color: AppColors.ring, width: 2),
                           ),
                         ),
                         validator: (value) {
@@ -194,7 +203,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           prefixIcon: const Icon(Icons.lock_outline, size: 20),
                           suffixIcon: IconButton(
                             icon: Icon(
-                              _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                              _obscurePassword
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility_outlined,
                               size: 20,
                               color: AppColors.textMuted,
                             ),
@@ -211,16 +222,22 @@ class _LoginScreenState extends State<LoginScreen> {
                             vertical: 12,
                           ),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
-                            borderSide: const BorderSide(color: AppColors.border),
+                            borderRadius: BorderRadius.circular(
+                                AppTheme.inputBorderRadius),
+                            borderSide:
+                                const BorderSide(color: AppColors.border),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
-                            borderSide: const BorderSide(color: AppColors.border),
+                            borderRadius: BorderRadius.circular(
+                                AppTheme.inputBorderRadius),
+                            borderSide:
+                                const BorderSide(color: AppColors.border),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
-                            borderSide: const BorderSide(color: AppColors.ring, width: 2),
+                            borderRadius: BorderRadius.circular(
+                                AppTheme.inputBorderRadius),
+                            borderSide: const BorderSide(
+                                color: AppColors.ring, width: 2),
                           ),
                         ),
                         validator: (value) {
@@ -248,13 +265,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                       _rememberMe = value ?? false;
                                     });
                                   },
-                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                  materialTapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
                                 ),
                               ),
                               const SizedBox(width: 8),
                               Text(
                                 'Remember me',
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
                                       color: AppColors.textSecondary,
                                     ),
                               ),
@@ -264,7 +285,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => const ForgotPasswordScreen(),
+                                  builder: (context) =>
+                                      const ForgotPasswordScreen(),
                                 ),
                               );
                             },
@@ -275,7 +297,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             child: Text(
                               'Forgot Password?',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
                                     color: AppColors.primary,
                                     decoration: TextDecoration.underline,
                                   ),
@@ -289,12 +314,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(
                         height: 48,
                         child: ElevatedButton(
-                          onPressed: authProvider.isLoading ? null : _handleLogin,
+                          onPressed:
+                              authProvider.isLoading ? null : _handleLogin,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary,
                             foregroundColor: AppColors.primaryForeground,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(AppTheme.buttonBorderRadius),
+                              borderRadius: BorderRadius.circular(
+                                  AppTheme.buttonBorderRadius),
                             ),
                           ),
                           child: authProvider.isLoading
@@ -303,7 +330,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   height: 20,
                                   child: CircularProgressIndicator(
                                     strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryForeground),
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        AppColors.primaryForeground),
                                   ),
                                 )
                               : const Text('Sign In'),

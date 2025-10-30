@@ -129,7 +129,8 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
             children: [
               // Status header
               Card(
-                color: _getStatusColor(transaction.status).withValues(alpha: 0.1),
+                color:
+                    _getStatusColor(transaction.status).withValues(alpha: 0.1),
                 child: Padding(
                   padding: const EdgeInsets.all(20),
                   child: Column(

@@ -81,13 +81,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       // Title
                       Text(
                         'Forgot Password?',
-                        style: Theme.of(context)
-                            .textTheme
-                            .displaySmall
-                            ?.copyWith(
-                              color: AppColors.primaryForeground,
-                              fontWeight: FontWeight.w500,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.displaySmall?.copyWith(
+                                  color: AppColors.primaryForeground,
+                                  fontWeight: FontWeight.w500,
+                                ),
                       ),
                       const SizedBox(height: AppTheme.spacing8),
 
@@ -95,8 +93,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       Text(
                         'No worries, we\'ll send you reset instructions',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color:
-                                  AppColors.primaryForeground.withValues(alpha: 0.8),
+                              color: AppColors.primaryForeground
+                                  .withValues(alpha: 0.8),
                             ),
                       ),
                     ],
@@ -108,8 +106,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               Transform.translate(
                 offset: const Offset(0, -32),
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: AppTheme.spacing24),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: AppTheme.spacing24),
                   child: Card(
                     elevation: AppTheme.elevationLg,
                     child: Padding(

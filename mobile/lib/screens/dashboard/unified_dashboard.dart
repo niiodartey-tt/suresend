@@ -244,7 +244,10 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppTheme.darkBlue, AppTheme.darkBlue.withValues(alpha: 0.8)],
+            colors: [
+              AppTheme.darkBlue,
+              AppTheme.darkBlue.withValues(alpha: 0.8)
+            ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -345,7 +348,9 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
     required VoidCallback onTap,
   }) {
     return Material(
-      color: isPrimary ? AppTheme.primaryColor : Colors.white.withValues(alpha: 0.2),
+      color: isPrimary
+          ? AppTheme.primaryColor
+          : Colors.white.withValues(alpha: 0.2),
       borderRadius: BorderRadius.circular(AppTheme.buttonBorderRadius),
       child: InkWell(
         onTap: onTap,

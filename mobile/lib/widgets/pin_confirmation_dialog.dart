@@ -181,7 +181,8 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog>
                       width: 48,
                       height: 48,
                       decoration: BoxDecoration(
-                        color: AppColors.primaryForeground.withValues(alpha: 0.2),
+                        color:
+                            AppColors.primaryForeground.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                       ),
                       child: const Icon(
@@ -220,9 +221,8 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog>
                     IconButton(
                       icon: const Icon(Icons.close),
                       color: AppColors.primaryForeground,
-                      onPressed: _isLoading
-                          ? null
-                          : () => Navigator.of(context).pop(),
+                      onPressed:
+                          _isLoading ? null : () => Navigator.of(context).pop(),
                     ),
                   ],
                 ),
@@ -238,8 +238,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog>
                       padding: const EdgeInsets.all(AppTheme.spacing16),
                       decoration: BoxDecoration(
                         color: AppColors.background,
-                        borderRadius:
-                            BorderRadius.circular(AppTheme.radiusMd),
+                        borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                         border: Border.all(color: AppColors.border),
                       ),
                       child: Column(
@@ -400,10 +399,10 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog>
                         const SizedBox(width: AppTheme.spacing12),
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: _isLoading ||
-                                    _pinController.text.length != 4
-                                ? null
-                                : () => _handleConfirm(_pinController.text),
+                            onPressed:
+                                _isLoading || _pinController.text.length != 4
+                                    ? null
+                                    : () => _handleConfirm(_pinController.text),
                             style: ElevatedButton.styleFrom(
                               minimumSize: const Size.fromHeight(48),
                             ),

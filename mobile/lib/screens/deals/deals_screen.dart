@@ -163,8 +163,8 @@ class _DealsScreenState extends State<DealsScreen>
                                                 color: roleIsBuyer
                                                     ? AppTheme.primary
                                                         .withValues(alpha: 0.08)
-                                                    : Colors.green
-                                                        .withValues(alpha: 0.08),
+                                                    : Colors.green.withValues(
+                                                        alpha: 0.08),
                                                 borderRadius:
                                                     BorderRadius.circular(8),
                                               ),

@@ -172,22 +172,17 @@ class AppTheme {
       onPrimary: AppColors.primaryForeground,
       primaryContainer: AppColors.accentBackground,
       onPrimaryContainer: AppColors.accentForeground,
-
       secondary: AppColors.secondary,
       onSecondary: AppColors.secondaryForeground,
-
       error: AppColors.error,
       onError: AppColors.primaryForeground,
       errorContainer: AppColors.errorLight,
       onErrorContainer: AppColors.errorDark,
-
       surface: AppColors.card,
       onSurface: AppColors.textPrimary,
       surfaceContainerHighest: AppColors.background,
-
       outline: AppColors.border,
       outlineVariant: AppColors.border,
-
       shadow: Colors.black12,
       scrim: AppColors.overlay,
     ),
@@ -499,22 +494,17 @@ class AppTheme {
       onPrimary: AppColors.primaryForeground,
       primaryContainer: AppColors.accentBackground,
       onPrimaryContainer: AppColors.accentForeground,
-
       secondary: AppColors.secondary,
       onSecondary: AppColors.secondaryForeground,
-
       error: AppColors.error,
       onError: AppColors.primaryForeground,
       errorContainer: AppColors.errorDark,
       onErrorContainer: AppColors.errorLight,
-
       surface: AppColors.darkCard,
       onSurface: AppColors.darkTextPrimary,
       surfaceContainerHighest: AppColors.darkBackground,
-
       outline: AppColors.darkBorder,
       outlineVariant: AppColors.darkBorder,
-
       shadow: Colors.black26,
       scrim: AppColors.overlay,
     ),
@@ -554,7 +544,8 @@ class AppTheme {
     ),
 
     // Text theme
-    textTheme: _buildTextTheme(AppColors.darkTextPrimary, AppColors.darkTextSecondary),
+    textTheme:
+        _buildTextTheme(AppColors.darkTextPrimary, AppColors.darkTextSecondary),
 
     // Icon theme
     iconTheme: const IconThemeData(

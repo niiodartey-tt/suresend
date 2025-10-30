@@ -138,11 +138,11 @@ class AppColors {
   // CHART/ANALYTICS COLORS
   // ============================================
 
-  static const Color chart1 = Color(0xFF043b69);  // Primary blue
-  static const Color chart2 = Color(0xFF10B981);  // Green
-  static const Color chart3 = Color(0xFFF59E0B);  // Orange
-  static const Color chart4 = Color(0xFFEF4444);  // Red
-  static const Color chart5 = Color(0xFF8B5CF6);  // Purple
+  static const Color chart1 = Color(0xFF043b69); // Primary blue
+  static const Color chart2 = Color(0xFF10B981); // Green
+  static const Color chart3 = Color(0xFFF59E0B); // Orange
+  static const Color chart4 = Color(0xFFEF4444); // Red
+  static const Color chart5 = Color(0xFF8B5CF6); // Purple
 
   // ============================================
   // STATS CARD COLORS
@@ -188,7 +188,7 @@ class AppColors {
   static const Color switchBackground = Color(0xFFCBCED4);
 
   /// Overlay/modal backdrop
-  static const Color overlay = Color(0x80000000);  // Black 50% opacity
+  static const Color overlay = Color(0x80000000); // Black 50% opacity
 
   /// Transparent
   static const Color transparent = Color(0x00000000);

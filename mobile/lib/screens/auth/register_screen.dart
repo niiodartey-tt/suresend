@@ -112,7 +112,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   children: [
                     IconButton(
                       onPressed: () => Navigator.of(context).pop(),
-                      icon: const Icon(Icons.arrow_back, color: AppColors.primaryForeground),
+                      icon: const Icon(Icons.arrow_back,
+                          color: AppColors.primaryForeground),
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
                     ),
@@ -128,7 +129,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Text(
                       'Join us today',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.primaryForeground.withValues(alpha: 0.8),
+                            color: AppColors.primaryForeground
+                                .withValues(alpha: 0.8),
                           ),
                     ),
                   ],
@@ -176,16 +178,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           vertical: 12,
                         ),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
+                          borderRadius:
+                              BorderRadius.circular(AppTheme.inputBorderRadius),
                           borderSide: const BorderSide(color: AppColors.border),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
+                          borderRadius:
+                              BorderRadius.circular(AppTheme.inputBorderRadius),
                           borderSide: const BorderSide(color: AppColors.border),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
-                          borderSide: const BorderSide(color: AppColors.ring, width: 2),
+                          borderRadius:
+                              BorderRadius.circular(AppTheme.inputBorderRadius),
+                          borderSide:
+                              const BorderSide(color: AppColors.ring, width: 2),
                         ),
                       ),
                       validator: (value) {
@@ -215,16 +221,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           vertical: 12,
                         ),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
+                          borderRadius:
+                              BorderRadius.circular(AppTheme.inputBorderRadius),
                           borderSide: const BorderSide(color: AppColors.border),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
+                          borderRadius:
+                              BorderRadius.circular(AppTheme.inputBorderRadius),
                           borderSide: const BorderSide(color: AppColors.border),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
-                          borderSide: const BorderSide(color: AppColors.ring, width: 2),
+                          borderRadius:
+                              BorderRadius.circular(AppTheme.inputBorderRadius),
+                          borderSide:
+                              const BorderSide(color: AppColors.ring, width: 2),
                         ),
                       ),
                       validator: (value) {
@@ -264,16 +274,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           vertical: 12,
                         ),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
+                          borderRadius:
+                              BorderRadius.circular(AppTheme.inputBorderRadius),
                           borderSide: const BorderSide(color: AppColors.border),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
+                          borderRadius:
+                              BorderRadius.circular(AppTheme.inputBorderRadius),
                           borderSide: const BorderSide(color: AppColors.border),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
-                          borderSide: const BorderSide(color: AppColors.ring, width: 2),
+                          borderRadius:
+                              BorderRadius.circular(AppTheme.inputBorderRadius),
+                          borderSide:
+                              const BorderSide(color: AppColors.ring, width: 2),
                         ),
                       ),
                       validator: (value) {
@@ -307,16 +321,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           vertical: 12,
                         ),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
+                          borderRadius:
+                              BorderRadius.circular(AppTheme.inputBorderRadius),
                           borderSide: const BorderSide(color: AppColors.border),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
+                          borderRadius:
+                              BorderRadius.circular(AppTheme.inputBorderRadius),
                           borderSide: const BorderSide(color: AppColors.border),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
-                          borderSide: const BorderSide(color: AppColors.ring, width: 2),
+                          borderRadius:
+                              BorderRadius.circular(AppTheme.inputBorderRadius),
+                          borderSide:
+                              const BorderSide(color: AppColors.ring, width: 2),
                         ),
                       ),
                       validator: (value) {
@@ -348,7 +366,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         prefixIcon: const Icon(Icons.lock_outline, size: 20),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                            _obscurePassword
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined,
                             size: 20,
                             color: AppColors.textMuted,
                           ),
@@ -365,16 +385,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           vertical: 12,
                         ),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
+                          borderRadius:
+                              BorderRadius.circular(AppTheme.inputBorderRadius),
                           borderSide: const BorderSide(color: AppColors.border),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
+                          borderRadius:
+                              BorderRadius.circular(AppTheme.inputBorderRadius),
                           borderSide: const BorderSide(color: AppColors.border),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
-                          borderSide: const BorderSide(color: AppColors.ring, width: 2),
+                          borderRadius:
+                              BorderRadius.circular(AppTheme.inputBorderRadius),
+                          borderSide:
+                              const BorderSide(color: AppColors.ring, width: 2),
                         ),
                       ),
                       validator: (value) {
@@ -403,13 +427,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         prefixIcon: const Icon(Icons.lock_outline, size: 20),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                            _obscureConfirmPassword
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined,
                             size: 20,
                             color: AppColors.textMuted,
                           ),
                           onPressed: () {
                             setState(() {
-                              _obscureConfirmPassword = !_obscureConfirmPassword;
+                              _obscureConfirmPassword =
+                                  !_obscureConfirmPassword;
                             });
                           },
                         ),
@@ -420,16 +447,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           vertical: 12,
                         ),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
+                          borderRadius:
+                              BorderRadius.circular(AppTheme.inputBorderRadius),
                           borderSide: const BorderSide(color: AppColors.border),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
+                          borderRadius:
+                              BorderRadius.circular(AppTheme.inputBorderRadius),
                           borderSide: const BorderSide(color: AppColors.border),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
-                          borderSide: const BorderSide(color: AppColors.ring, width: 2),
+                          borderRadius:
+                              BorderRadius.circular(AppTheme.inputBorderRadius),
+                          borderSide:
+                              const BorderSide(color: AppColors.ring, width: 2),
                         ),
                       ),
                       validator: (value) {
@@ -458,7 +489,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 _agreeToTerms = value ?? false;
                               });
                             },
-                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -466,7 +498,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           child: Text.rich(
                             TextSpan(
                               text: 'I agree to the ',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
                                     color: AppColors.textSecondary,
                                   ),
                               children: const [
@@ -497,12 +532,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     SizedBox(
                       height: 48,
                       child: ElevatedButton(
-                        onPressed: authProvider.isLoading ? null : _handleRegister,
+                        onPressed:
+                            authProvider.isLoading ? null : _handleRegister,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
                           foregroundColor: AppColors.primaryForeground,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(AppTheme.buttonBorderRadius),
+                            borderRadius: BorderRadius.circular(
+                                AppTheme.buttonBorderRadius),
                           ),
                         ),
                         child: authProvider.isLoading
@@ -511,7 +548,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 height: 20,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryForeground),
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      AppColors.primaryForeground),
                                 ),
                               )
                             : const Text('Create Account'),

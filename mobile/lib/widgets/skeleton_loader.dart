@@ -21,7 +21,7 @@ class SkeletonLoader extends StatefulWidget {
     this.width,
     this.height = 16,
     this.margin,
-  })  : borderRadius = const BorderRadius.all(Radius.circular(4));
+  }) : borderRadius = const BorderRadius.all(Radius.circular(4));
 
   const SkeletonLoader.circular({
     super.key,
@@ -36,7 +36,7 @@ class SkeletonLoader extends StatefulWidget {
     this.width = double.infinity,
     this.height = 100,
     this.margin,
-  })  : borderRadius = const BorderRadius.all(Radius.circular(20));
+  }) : borderRadius = const BorderRadius.all(Radius.circular(20));
 
   @override
   State<SkeletonLoader> createState() => _SkeletonLoaderState();

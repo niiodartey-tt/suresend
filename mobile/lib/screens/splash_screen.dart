@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../config/theme.dart';
 import '../config/app_colors.dart';
 import 'auth/login_screen.dart';
 
@@ -52,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen>
     // Always navigate to login screen
     // Users will need to login each time the app starts
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => LoginScreen()),
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
     );
   }
 

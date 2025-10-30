@@ -106,7 +106,7 @@ class RiderDashboard extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: const BoxDecoration(color: AppTheme.accentColor),
+            decoration: BoxDecoration(color: AppTheme.accentColor),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -115,7 +115,7 @@ class RiderDashboard extends StatelessWidget {
                   backgroundColor: Colors.white,
                   child: Text(
                     user?.fullName.substring(0, 1).toUpperCase() ?? 'R',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: AppTheme.accentColor,

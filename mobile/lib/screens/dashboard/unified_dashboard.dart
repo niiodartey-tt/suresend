@@ -817,7 +817,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                       const SizedBox(height: 4),
                       Text(
                         transaction.description,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 14,
                           color: AppColors.textSecondary,
                         ),
@@ -835,7 +835,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                               isBuyer ? transaction.seller : transaction.buyer;
                           return Text(
                             '${isBuyer ? 'Seller: ' : 'Buyer: '}${counterparty.fullName}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 11,
                               color: AppColors.textMuted,
                             ),

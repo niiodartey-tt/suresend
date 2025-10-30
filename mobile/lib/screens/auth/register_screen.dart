@@ -61,6 +61,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       email: _emailController.text.trim(),
       phoneNumber: _phoneController.text.trim(),
       password: _passwordController.text,
+      userType: 'user', // Regular user registration
     );
 
     if (!mounted) return;

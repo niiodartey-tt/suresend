@@ -339,7 +339,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: const Icon(
-                                  Icons.package_outlined,
+                                  Icons.receipt_long_outlined,
                                   color: Color(0xFF3B82F6),
                                   size: 24,
                                 ),

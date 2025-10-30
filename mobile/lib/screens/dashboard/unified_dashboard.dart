@@ -93,8 +93,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
     }
   }
 
-  List<Transaction> _getFilteredTransactions(
-      List<Transaction> transactions) {
+  List<Transaction> _getFilteredTransactions(List<Transaction> transactions) {
     return transactions.where((transaction) {
       // Search filter
       final matchesSearch = _searchQuery.isEmpty ||
@@ -168,8 +167,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                 child: SafeArea(
                   bottom: false,
                   child: Padding(
-                    padding:
-                        const EdgeInsets.fromLTRB(24, 16, 24, 96),
+                    padding: const EdgeInsets.fromLTRB(24, 16, 24, 96),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -235,8 +233,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                                             ? '99+'
                                             : unreadCount.toString(),
                                         style: const TextStyle(
-                                          color:
-                                              AppColors.primaryForeground,
+                                          color: AppColors.primaryForeground,
                                           fontSize: 10,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -394,8 +391,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    const FundWalletScreen(),
+                                builder: (context) => const FundWalletScreen(),
                               ),
                             );
                           },
@@ -736,7 +732,9 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
           label,
           style: TextStyle(
             fontSize: 12,
-            color: isSelected ? AppColors.primaryForeground : AppColors.textPrimary,
+            color: isSelected
+                ? AppColors.primaryForeground
+                : AppColors.textPrimary,
             fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
           ),
         ),
@@ -788,8 +786,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                       _formatDate(transaction.createdAt),
                       style: TextStyle(
                         fontSize: 10,
-                        color:
-                            AppColors.textMuted.withValues(alpha: 0.7),
+                        color: AppColors.textMuted.withValues(alpha: 0.7),
                       ),
                     ),
                   ],

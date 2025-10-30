@@ -142,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       // Email or Username
                       Text(
-                        'Email Address',
+                        'Email or Username',
                         style: Theme.of(context).textTheme.labelMedium,
                       ),
                       const SizedBox(height: 8),
@@ -150,8 +150,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         controller: _emailController,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
-                          hintText: 'your@email.com',
-                          prefixIcon: const Icon(Icons.email_outlined, size: 20),
+                          hintText: 'email or username',
+                          prefixIcon: const Icon(Icons.person_outline, size: 20),
                           filled: true,
                           fillColor: AppColors.inputBackground,
                           contentPadding: const EdgeInsets.symmetric(
@@ -173,7 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return 'Please enter your email';
+                            return 'Please enter your email or username';
                           }
                           return null;
                         },

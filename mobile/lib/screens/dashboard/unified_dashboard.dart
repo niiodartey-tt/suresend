@@ -100,10 +100,12 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
       // Search filter
       final matchesSearch = _searchQuery.isEmpty ||
           transaction.id.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          (transaction.counterpartyName
-                  ?.toLowerCase()
-                  .contains(_searchQuery.toLowerCase()) ??
-              false);
+          transaction.buyer.fullName
+              .toLowerCase()
+              .contains(_searchQuery.toLowerCase()) ||
+          transaction.seller.fullName
+              .toLowerCase()
+              .contains(_searchQuery.toLowerCase());
 
       // Status filter
       final matchesFilter = _filterStatus == 'all' ||
@@ -132,15 +134,20 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
     // Calculate stats
     final activeCount = transactions
         .where((t) =>
-            t.status == 'In Escrow' ||
+            t.status == 'in_escrow' ||
             t.status == 'In Progress' ||
             t.status == 'Pending')
         .length;
     final completedCount =
-        transactions.where((t) => t.status == 'Completed').length;
+        transactions.where((t) => t.status == 'completed').length;
     final disputedCount =
-        transactions.where((t) => t.status == 'Disputed').length;
+        transactions.where((t) => t.status == 'disputed').length;
     final totalCount = transactions.length;
+
+    // Calculate escrow balance (sum of amounts in escrow)
+    final escrowBalance = transactions
+        .where((t) => t.status == 'in_escrow')
+        .fold<double>(0.0, (sum, t) => sum + t.amount);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -284,7 +291,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    '\$${wallet?.escrowBalance.toStringAsFixed(2) ?? '0.00'}',
+                                    '\$${escrowBalance.toStringAsFixed(2)}',
                                     style: const TextStyle(
                                       color: AppColors.primaryForeground,
                                       fontSize: 28,
@@ -812,7 +819,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        transaction.description ?? 'Transaction',
+                        transaction.description,
                         style: TextStyle(
                           fontSize: 14,
                           color: AppColors.textSecondary,
@@ -820,16 +827,24 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      if (transaction.counterpartyName != null) ...[
-                        const SizedBox(height: 2),
-                        Text(
-                          '${transaction.buyerUsername == context.read<AuthProvider>().user?.username ? 'Seller: ' : 'Buyer: '}${transaction.counterpartyName}',
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: AppColors.textMuted,
-                          ),
-                        ),
-                      ],
+                      const SizedBox(height: 2),
+                      Builder(
+                        builder: (context) {
+                          final currentUsername =
+                              context.read<AuthProvider>().user?.username;
+                          final isBuyer =
+                              transaction.buyer.username == currentUsername;
+                          final counterparty =
+                              isBuyer ? transaction.seller : transaction.buyer;
+                          return Text(
+                            '${isBuyer ? 'Seller: ' : 'Buyer: '}${counterparty.fullName}',
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: AppColors.textMuted,
+                            ),
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),

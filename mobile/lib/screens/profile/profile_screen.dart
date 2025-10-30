@@ -16,7 +16,7 @@ class ProfileScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: AppTheme.spacingM),
+            const SizedBox(height: AppTheme.spacingM),
             GestureDetector(
               onTap: () {
                 // handle avatar edit
@@ -28,7 +28,7 @@ class ProfileScreen extends StatelessWidget {
                     const AssetImage('assets/images/avatar_placeholder.png'),
               ),
             ),
-            SizedBox(height: AppTheme.spacingM),
+            const SizedBox(height: AppTheme.spacingM),
             Text(
               'Nice Name',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -36,9 +36,9 @@ class ProfileScreen extends StatelessWidget {
                     color: AppTheme.textPrimary,
                   ),
             ),
-            SizedBox(height: AppTheme.spacingXs),
+            const SizedBox(height: AppTheme.spacingXs),
             const _KycChip(status: 'Verified'),
-            SizedBox(height: AppTheme.spacingL),
+            const SizedBox(height: AppTheme.spacingL),
             const Card(
               child: Padding(
                 padding: EdgeInsets.all(AppTheme.spacingM),
@@ -55,7 +55,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: AppTheme.spacingL),
+            const SizedBox(height: AppTheme.spacingL),
             Row(
               children: [
                 Expanded(
@@ -66,7 +66,7 @@ class ProfileScreen extends StatelessWidget {
                     child: const Text('Edit Profile'),
                   ),
                 ),
-                SizedBox(width: AppTheme.spacingM),
+                const SizedBox(width: AppTheme.spacingM),
                 Expanded(
                   child: OutlinedButton(
                     onPressed: () {
@@ -102,7 +102,7 @@ class _ProfileField extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
-          SizedBox(width: AppTheme.spacingM),
+          const SizedBox(width: AppTheme.spacingM),
           Text(
             value,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -142,7 +142,7 @@ class _KycChip extends StatelessWidget {
             color: isVerified ? Colors.green : Colors.orange,
             size: 16,
           ),
-          SizedBox(width: AppTheme.spacingS),
+          const SizedBox(width: AppTheme.spacingS),
           Text(
             status,
             style: TextStyle(

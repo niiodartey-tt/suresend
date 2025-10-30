@@ -450,7 +450,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Text(
             'Quick Actions',
             style: TextStyle(
@@ -941,7 +941,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                     color: AppTheme.textPrimaryColor,
                   ),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
                   'Real-time tracking for your orders',
                   style: TextStyle(

@@ -24,7 +24,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   bool _agreeToTerms = false;
-  String _selectedUserType = 'user';
+  final String _selectedUserType = 'user';
 
   @override
   void dispose() {
@@ -469,7 +469,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: AppColors.textSecondary,
                                   ),
-                              children: [
+                              children: const [
                                 TextSpan(
                                   text: 'Terms of Service',
                                   style: TextStyle(
@@ -477,7 +477,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     decoration: TextDecoration.underline,
                                   ),
                                 ),
-                                const TextSpan(text: ' and '),
+                                TextSpan(text: ' and '),
                                 TextSpan(
                                   text: 'Privacy Policy',
                                   style: TextStyle(

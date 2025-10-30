@@ -79,7 +79,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       child: const Text('Top Up Wallet'),
                     ),
                   ),
-                  SizedBox(width: AppTheme.spacingM),
+                  const SizedBox(width: AppTheme.spacingM),
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () {

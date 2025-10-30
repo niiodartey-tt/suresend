@@ -76,7 +76,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
                       ),
-                      SizedBox(height: AppTheme.spacing16),
+                      const SizedBox(height: AppTheme.spacing16),
 
                       // Title
                       Text(
@@ -89,7 +89,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               fontWeight: FontWeight.w500,
                             ),
                       ),
-                      SizedBox(height: AppTheme.spacing8),
+                      const SizedBox(height: AppTheme.spacing8),
 
                       // Subtitle
                       Text(
@@ -129,7 +129,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                     fontWeight: FontWeight.w500,
                                   ),
                             ),
-                            SizedBox(height: AppTheme.spacing8),
+                            const SizedBox(height: AppTheme.spacing8),
                             TextFormField(
                               controller: _emailController,
                               keyboardType: TextInputType.emailAddress,
@@ -147,7 +147,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 return null;
                               },
                             ),
-                            SizedBox(height: AppTheme.spacing8),
+                            const SizedBox(height: AppTheme.spacing8),
 
                             // Helper text
                             Text(
@@ -159,7 +159,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                     color: AppColors.textSecondary,
                                   ),
                             ),
-                            SizedBox(height: AppTheme.spacing24),
+                            const SizedBox(height: AppTheme.spacing24),
 
                             // Submit button
                             SizedBox(
@@ -197,7 +197,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Icon(Icons.arrow_back, size: 16),
-                    SizedBox(width: AppTheme.spacing4),
+                    const SizedBox(width: AppTheme.spacing4),
                     Text(
                       'Back to Login',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -242,7 +242,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         color: AppColors.success,
                       ),
                     ),
-                    SizedBox(height: AppTheme.spacing24),
+                    const SizedBox(height: AppTheme.spacing24),
 
                     // Title
                     Text(
@@ -250,7 +250,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       style: Theme.of(context).textTheme.headlineMedium,
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: AppTheme.spacing8),
+                    const SizedBox(height: AppTheme.spacing8),
 
                     // Message
                     RichText(
@@ -273,7 +273,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(height: AppTheme.spacing16),
+                    const SizedBox(height: AppTheme.spacing16),
 
                     // Additional info
                     Text(
@@ -283,7 +283,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           ),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: AppTheme.spacing24),
+                    const SizedBox(height: AppTheme.spacing24),
 
                     // Back to login button
                     SizedBox(

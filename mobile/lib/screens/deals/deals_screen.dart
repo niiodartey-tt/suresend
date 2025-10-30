@@ -128,7 +128,7 @@ class _DealsScreenState extends State<DealsScreen>
                             size: 22,
                           ),
                         ),
-                        SizedBox(width: AppTheme.spacingM),
+                        const SizedBox(width: AppTheme.spacingM),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,7 +209,7 @@ class _DealsScreenState extends State<DealsScreen>
                                   ),
                                 ],
                               ),
-                              SizedBox(height: AppTheme.spacingM),
+                              const SizedBox(height: AppTheme.spacingM),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -235,7 +235,7 @@ class _DealsScreenState extends State<DealsScreen>
                                           ),
                                         ),
                                       ),
-                                      SizedBox(width: AppTheme.spacingM),
+                                      const SizedBox(width: AppTheme.spacingM),
                                       Text(
                                         deal['date'],
                                         style: Theme.of(context)

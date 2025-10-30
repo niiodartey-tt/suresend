@@ -110,7 +110,7 @@ class _StatsCardState extends State<StatsCard>
                       fontWeight: FontWeight.bold,
                     ),
               ),
-              SizedBox(height: AppTheme.spacingXs),
+              const SizedBox(height: AppTheme.spacingXs),
               Text(
                 _getTitle(),
                 style: Theme.of(context).textTheme.bodyMedium,

@@ -9,37 +9,34 @@ class SkeletonLoader extends StatefulWidget {
   final EdgeInsets? margin;
 
   const SkeletonLoader({
-    Key? key,
+    super.key,
     this.width,
     this.height = 16,
     this.borderRadius,
     this.margin,
-  }) : super(key: key);
+  });
 
   const SkeletonLoader.rectangular({
-    Key? key,
+    super.key,
     this.width,
     this.height = 16,
     this.margin,
-  })  : borderRadius = const BorderRadius.all(Radius.circular(4)),
-        super(key: key);
+  })  : borderRadius = const BorderRadius.all(Radius.circular(4));
 
   const SkeletonLoader.circular({
-    Key? key,
+    super.key,
     required double size,
     this.margin,
   })  : width = size,
         height = size,
-        borderRadius = null,
-        super(key: key);
+        borderRadius = null;
 
   const SkeletonLoader.card({
-    Key? key,
+    super.key,
     this.width = double.infinity,
     this.height = 100,
     this.margin,
-  })  : borderRadius = const BorderRadius.all(Radius.circular(20)),
-        super(key: key);
+  })  : borderRadius = const BorderRadius.all(Radius.circular(20));
 
   @override
   State<SkeletonLoader> createState() => _SkeletonLoaderState();
@@ -123,12 +120,12 @@ class SkeletonListTile extends StatelessWidget {
   final EdgeInsets? padding;
 
   const SkeletonListTile({
-    Key? key,
+    super.key,
     this.hasLeading = true,
     this.hasSubtitle = true,
     this.hasTrailing = false,
     this.padding,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +162,7 @@ class SkeletonListTile extends StatelessWidget {
 
 /// Skeleton loader for transaction cards
 class SkeletonTransactionCard extends StatelessWidget {
-  const SkeletonTransactionCard({Key? key}) : super(key: key);
+  const SkeletonTransactionCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -174,16 +171,16 @@ class SkeletonTransactionCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
+      child: const Padding(
+        padding: EdgeInsets.all(16),
         child: Row(
           children: [
-            const SkeletonLoader.circular(size: 48),
-            const SizedBox(width: 12),
+            SkeletonLoader.circular(size: 48),
+            SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   SkeletonLoader(width: 140, height: 16),
                   SizedBox(height: 8),
                   SkeletonLoader(width: 100, height: 12),
@@ -192,7 +189,7 @@ class SkeletonTransactionCard extends StatelessWidget {
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
-              children: const [
+              children: [
                 SkeletonLoader(width: 80, height: 16),
                 SizedBox(height: 8),
                 SkeletonLoader(width: 60, height: 12),
@@ -207,7 +204,7 @@ class SkeletonTransactionCard extends StatelessWidget {
 
 /// Skeleton loader for wallet balance card
 class SkeletonWalletCard extends StatelessWidget {
-  const SkeletonWalletCard({Key? key}) : super(key: key);
+  const SkeletonWalletCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -216,11 +213,11 @@ class SkeletonWalletCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
+      child: const Padding(
+        padding: EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             SkeletonLoader(width: 120, height: 14),
             SizedBox(height: 16),
             SkeletonLoader(width: 180, height: 32),
@@ -241,23 +238,23 @@ class SkeletonWalletCard extends StatelessWidget {
 
 /// Skeleton loader for notification items
 class SkeletonNotificationCard extends StatelessWidget {
-  const SkeletonNotificationCard({Key? key}) : super(key: key);
+  const SkeletonNotificationCard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+    return const Card(
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SkeletonLoader.circular(size: 12),
-            const SizedBox(width: 12),
+            SkeletonLoader.circular(size: 12),
+            SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   SkeletonLoader(width: double.infinity, height: 16),
                   SizedBox(height: 8),
                   SkeletonLoader(width: double.infinity, height: 14),

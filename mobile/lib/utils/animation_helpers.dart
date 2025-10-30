@@ -170,12 +170,12 @@ class AnimatedListItem extends StatelessWidget {
   final Duration? delay;
 
   const AnimatedListItem({
-    Key? key,
+    super.key,
     required this.child,
     required this.index,
     this.duration,
     this.delay,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -209,11 +209,11 @@ class AnimatedButton extends StatefulWidget {
   final Duration? duration;
 
   const AnimatedButton({
-    Key? key,
+    super.key,
     required this.child,
     required this.onPressed,
     this.duration,
-  }) : super(key: key);
+  });
 
   @override
   State<AnimatedButton> createState() => _AnimatedButtonState();
@@ -278,12 +278,12 @@ class PulseAnimation extends StatefulWidget {
   final double maxScale;
 
   const PulseAnimation({
-    Key? key,
+    super.key,
     required this.child,
     this.duration,
     this.minScale = 0.95,
     this.maxScale = 1.05,
-  }) : super(key: key);
+  });
 
   @override
   State<PulseAnimation> createState() => _PulseAnimationState();
@@ -333,12 +333,12 @@ class ShimmerEffect extends StatefulWidget {
   final Duration? duration;
 
   const ShimmerEffect({
-    Key? key,
+    super.key,
     required this.child,
     this.baseColor,
     this.highlightColor,
     this.duration,
-  }) : super(key: key);
+  });
 
   @override
   State<ShimmerEffect> createState() => _ShimmerEffectState();

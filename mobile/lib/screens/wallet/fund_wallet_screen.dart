@@ -345,7 +345,7 @@ class _PaymentMethodCard extends StatelessWidget {
                 ),
               ),
               if (isSelected)
-                Icon(
+                const Icon(
                   Icons.check_circle,
                   color: AppTheme.primaryColor,
                 ),

@@ -215,7 +215,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           size: 32,
                         ),
                         const SizedBox(height: 12),
-                        Text(
+                        const Text(
                           'Two-Factor Authentication',
                           style: TextStyle(
                             fontSize: 16,

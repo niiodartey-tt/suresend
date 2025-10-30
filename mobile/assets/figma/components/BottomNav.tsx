@@ -33,7 +33,7 @@ export function BottomNav({ activeScreen, onNavigate, onCreateTransaction }: Bot
                 onClick={onCreateTransaction}
                 className="relative -mt-8"
               >
-                <div className="bg-[#043b69] p-4 shadow-lg">
+                <div className="bg-[#043b69] p-4 shadow-lg rounded-full">
                   <Icon className="w-6 h-6 text-white" />
                 </div>
               </motion.button>

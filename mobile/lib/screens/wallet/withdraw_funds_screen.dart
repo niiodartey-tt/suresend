@@ -7,7 +7,7 @@ import '../../widgets/error_retry_widget.dart';
 import '../../utils/animation_helpers.dart';
 
 class WithdrawFundsScreen extends StatefulWidget {
-  const WithdrawFundsScreen({Key? key}) : super(key: key);
+  const WithdrawFundsScreen({super.key});
 
   @override
   State<WithdrawFundsScreen> createState() => _WithdrawFundsScreenState();
@@ -204,7 +204,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                       });
                     },
                   );
-                }).toList(),
+                }),
                 const SizedBox(height: 24),
 
                 // Mobile Money Network Selection (only if mobile_money is selected)
@@ -218,7 +218,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                   ),
                   const SizedBox(height: 12),
                   DropdownButtonFormField<String>(
-                    value: _selectedNetwork,
+                    initialValue: _selectedNetwork,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: 'Choose mobile money network',
@@ -401,13 +401,12 @@ class _WithdrawalMethodCard extends StatelessWidget {
   final VoidCallback onTap;
 
   const _WithdrawalMethodCard({
-    Key? key,
     required this.icon,
     required this.title,
     required this.subtitle,
     required this.isSelected,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -459,7 +458,7 @@ class _WithdrawalMethodCard extends StatelessWidget {
                 ),
               ),
               if (isSelected)
-                Icon(
+                const Icon(
                   Icons.check_circle,
                   color: AppTheme.primaryColor,
                 ),

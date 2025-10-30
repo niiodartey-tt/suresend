@@ -8,9 +8,10 @@ import { useState } from "react";
 
 interface FundWalletProps {
   onBack: () => void;
+  onNavigate?: (screen: string, data?: any) => void;
 }
 
-export function FundWallet({ onBack }: FundWalletProps) {
+export function FundWallet({ onBack, onNavigate }: FundWalletProps) {
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const [amount, setAmount] = useState("");
 
@@ -21,10 +22,16 @@ export function FundWallet({ onBack }: FundWalletProps) {
   ];
 
   const handlePayment = () => {
-    // Simulate payment success
-    setTimeout(() => {
-      onBack();
-    }, 1000);
+    if (onNavigate && amount && selectedMethod) {
+      onNavigate("pin-confirmation", {
+        action: "deposit",
+        transaction: { 
+          amount: amount,
+          method: selectedMethod,
+          type: "deposit"
+        }
+      });
+    }
   };
 
   return (

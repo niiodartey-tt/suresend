@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:suresend/config/theme.dart';
-import 'package:suresend/providers/auth_provider.dart';
 import 'package:suresend/screens/auth/login_screen.dart';
-import 'package:suresend/screens/dashboard/unified_dashboard.dart';
-import 'package:suresend/screens/dashboard/rider_dashboard.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

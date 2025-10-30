@@ -10,13 +10,13 @@ class ErrorRetryWidget extends StatelessWidget {
   final bool compact;
 
   const ErrorRetryWidget({
-    Key? key,
+    super.key,
     this.title,
     required this.message,
     this.onRetry,
     this.icon = Icons.error_outline,
     this.compact = false,
-  }) : super(key: key);
+  });
 
   /// Network error variant
   const ErrorRetryWidget.network({
@@ -210,13 +210,13 @@ class EmptyStateWidget extends StatelessWidget {
   final String? actionLabel;
 
   const EmptyStateWidget({
-    Key? key,
+    super.key,
     this.title,
     required this.message,
     this.icon = Icons.inbox_outlined,
     this.onAction,
     this.actionLabel,
-  }) : super(key: key);
+  });
 
   /// Empty notifications variant
   const EmptyStateWidget.notifications({
@@ -335,11 +335,11 @@ class LoadingOverlay extends StatelessWidget {
   final String? message;
 
   const LoadingOverlay({
-    Key? key,
+    super.key,
     required this.isLoading,
     required this.child,
     this.message,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

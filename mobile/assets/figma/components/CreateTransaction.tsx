@@ -24,7 +24,12 @@ export function CreateTransaction({ transactionType, onBack, onSubmit }: CreateT
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ ...formData, transactionType });
+    // Navigate to PIN confirmation before creating escrow
+    onSubmit({ 
+      ...formData, 
+      transactionType,
+      requiresPin: true 
+    });
   };
 
   const isBuying = transactionType === "buy";
@@ -34,13 +39,13 @@ export function CreateTransaction({ transactionType, onBack, onSubmit }: CreateT
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className={`sticky top-0 ${isBuying ? 'bg-blue-600' : 'bg-green-600'} text-white p-4 z-10`}
+        className="bg-gradient-to-br from-[#043b69] to-[#032d51] text-white p-6 z-10"
       >
         <div className="flex items-center gap-4 max-w-md mx-auto">
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={onBack}
-            className="p-2 hover:bg-white/10 rounded-full"
+            className="p-2 hover:bg-white/10"
           >
             <ArrowLeft className="w-5 h-5" />
           </motion.button>
@@ -96,19 +101,19 @@ export function CreateTransaction({ transactionType, onBack, onSubmit }: CreateT
             transition={{ delay: 0.3 }}
           >
             <Label>
-              {isBuying ? "Seller Email" : "Buyer Email"}
+              {isBuying ? "Seller Username/Phone" : "Buyer Username/Phone"}
             </Label>
             <Input
-              type="email"
-              placeholder={isBuying ? "seller@example.com" : "buyer@example.com"}
+              type="text"
+              placeholder={isBuying ? "@username or +1234567890" : "@username or +1234567890"}
               value={formData.counterpartyEmail}
               onChange={(e) => setFormData({ ...formData, counterpartyEmail: e.target.value })}
               className="mt-2"
             />
             <p className="text-xs text-gray-500 mt-1">
               {isBuying 
-                ? "Enter the email of the person you're buying from"
-                : "Enter the email of your buyer"}
+                ? "Enter the username or phone number of the seller"
+                : "Enter the username or phone number of the buyer"}
             </p>
           </motion.div>
 
@@ -161,7 +166,7 @@ export function CreateTransaction({ transactionType, onBack, onSubmit }: CreateT
               <motion.div
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.99 }}
-                className="mt-2 border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-green-600 transition-colors"
+                className="mt-2 border-2 border-dashed border-gray-300 p-8 text-center cursor-pointer hover:border-[#043b69] transition-colors"
               >
                 <Upload className="w-8 h-8 mx-auto mb-2 text-gray-400" />
                 <p className="text-gray-500">Click to upload or drag and drop</p>
@@ -177,13 +182,10 @@ export function CreateTransaction({ transactionType, onBack, onSubmit }: CreateT
           >
             <Button
               type="submit"
-              className={`w-full shadow-lg ${
-                isBuying 
-                  ? 'bg-blue-600 hover:bg-blue-700' 
-                  : 'bg-green-600 hover:bg-green-700'
-              }`}
+              className="w-full bg-[#043b69] hover:bg-[#032d51] shadow-lg"
+              disabled={!formData.title || !formData.counterpartyEmail || !formData.amount || !formData.description}
             >
-              {isBuying ? "Continue to Payment" : "Create Listing"}
+              {isBuying ? "Create Escrow Transaction" : "Create Escrow Listing"}
             </Button>
           </motion.div>
         </form>

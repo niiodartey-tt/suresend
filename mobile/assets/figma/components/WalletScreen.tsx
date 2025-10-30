@@ -10,11 +10,16 @@ interface WalletScreenProps {
 
 export function WalletScreen({ onBack, onNavigate }: WalletScreenProps) {
   const transactions = [
-    { id: 1, type: "credit", amount: 500, description: "Wallet Top Up", date: "Oct 24, 2025" },
-    { id: 2, type: "debit", amount: 450, description: "Escrow Payment", date: "Oct 24, 2025" },
-    { id: 3, type: "credit", amount: 1200, description: "Transaction Completed", date: "Oct 22, 2025" },
-    { id: 4, type: "debit", amount: 350, description: "Escrow Payment", date: "Oct 20, 2025" },
-    { id: 5, type: "credit", amount: 2000, description: "Wallet Top Up", date: "Oct 18, 2025" },
+    { id: 1, type: "credit", amount: 850, description: "Escrow Created - ESC-45823", date: "Oct 28, 2025", txId: "ESC-45823" },
+    { id: 2, type: "credit", amount: 1200, description: "Transaction Completed - ESC-45822", date: "Oct 27, 2025", txId: "ESC-45822" },
+    { id: 3, type: "debit", amount: 450, description: "Escrow Payment - ESC-45821", date: "Oct 26, 2025", txId: "ESC-45821" },
+    { id: 4, type: "credit", amount: 2500, description: "Wallet Top Up", date: "Oct 25, 2025", txId: null },
+    { id: 5, type: "debit", amount: 680, description: "Escrow Payment - ESC-45819", date: "Oct 24, 2025", txId: "ESC-45819" },
+    { id: 6, type: "credit", amount: 1800, description: "Transaction Completed - ESC-45818", date: "Oct 23, 2025", txId: "ESC-45818" },
+    { id: 7, type: "credit", amount: 3200, description: "Transaction Completed - ESC-45817", date: "Oct 22, 2025", txId: "ESC-45817" },
+    { id: 8, type: "credit", amount: 1000, description: "Wallet Top Up", date: "Oct 21, 2025", txId: null },
+    { id: 9, type: "credit", amount: 750, description: "Transaction Completed - ESC-45814", date: "Oct 19, 2025", txId: "ESC-45814" },
+    { id: 10, type: "debit", amount: 500, description: "Withdrawal to Bank", date: "Oct 18, 2025", txId: null },
   ];
 
   return (

@@ -1,9 +1,10 @@
 import { motion } from "motion/react";
-import { Search, ArrowLeft } from "lucide-react";
+import { Search, ArrowLeft, X, MessageCircle } from "lucide-react";
 import { Input } from "./ui/input";
 import { Card } from "./ui/card";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { Badge } from "./ui/badge";
+import { useState } from "react";
 
 interface MessagesListProps {
   onBack: () => void;
@@ -11,44 +12,63 @@ interface MessagesListProps {
 }
 
 export function MessagesList({ onBack, onSelectChat }: MessagesListProps) {
-  const chats = [
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const allChats = [
     {
       id: 1,
-      name: "Alice Smith",
-      lastMessage: "I've sent the payment",
+      name: "Sarah Johnson",
+      lastMessage: "New escrow created: MacBook Pro M3",
       time: "2m ago",
-      unread: 2,
-      transactionId: "ESC-10234",
-      avatar: "AS",
+      unread: 1,
+      transactionId: "ESC-45823",
+      avatar: "SJ",
+      hasEscrowNotification: true,
     },
     {
       id: 2,
-      name: "Bob Johnson",
-      lastMessage: "When will you ship the item?",
-      time: "1h ago",
+      name: "James Miller",
+      lastMessage: "Transaction completed successfully!",
+      time: "1d ago",
       unread: 0,
-      transactionId: "ESC-10233",
-      avatar: "BJ",
+      transactionId: "ESC-45822",
+      avatar: "JM",
     },
     {
       id: 3,
-      name: "Carol White",
-      lastMessage: "Perfect, thanks!",
-      time: "3h ago",
+      name: "Mike Davis",
+      lastMessage: "When will you ship the item?",
+      time: "2d ago",
       unread: 0,
-      transactionId: "ESC-10232",
-      avatar: "CW",
+      transactionId: "ESC-45821",
+      avatar: "MD",
     },
     {
       id: 4,
-      name: "David Brown",
-      lastMessage: "Can we schedule a call?",
-      time: "1d ago",
+      name: "Emma Wilson",
+      lastMessage: "Perfect, thanks!",
+      time: "3d ago",
+      unread: 0,
+      transactionId: "ESC-45820",
+      avatar: "EW",
+    },
+    {
+      id: 5,
+      name: "Robert Chen",
+      lastMessage: "I have some concerns about the item",
+      time: "4d ago",
       unread: 1,
-      transactionId: "ESC-10231",
-      avatar: "DB",
+      transactionId: "ESC-45819",
+      avatar: "RC",
     },
   ];
+
+  // Filter chats based on search
+  const filteredChats = allChats.filter((chat) => 
+    chat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    chat.lastMessage.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    chat.transactionId.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="h-screen bg-[#F9FAFB] pb-24 overflow-y-auto">
@@ -78,14 +98,41 @@ export function MessagesList({ onBack, onSelectChat }: MessagesListProps) {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
             <Input
               placeholder="Search messages..."
-              className="pl-10 bg-[#F9FAFB]"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 pr-10 bg-[#F9FAFB]"
             />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            )}
           </motion.div>
         </div>
       </motion.div>
 
       <div className="max-w-md mx-auto p-6 space-y-3">
-        {chats.map((chat, index) => (
+        {filteredChats.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center py-12"
+          >
+            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <MessageCircle className="w-8 h-8 text-gray-400" />
+            </div>
+            <h3 className="mb-2">No messages found</h3>
+            <p className="text-gray-500">
+              {searchQuery 
+                ? "Try a different search term" 
+                : "Start a conversation from a transaction"}
+            </p>
+          </motion.div>
+        ) : (
+          filteredChats.map((chat, index) => (
           <motion.div
             key={chat.id}
             initial={{ opacity: 0, y: 20 }}
@@ -129,7 +176,8 @@ export function MessagesList({ onBack, onSelectChat }: MessagesListProps) {
               </div>
             </Card>
           </motion.div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );

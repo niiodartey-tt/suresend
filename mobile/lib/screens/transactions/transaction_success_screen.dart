@@ -10,13 +10,13 @@ class TransactionSuccessScreen extends StatelessWidget {
   final Map<String, String>? details;
 
   const TransactionSuccessScreen({
-    Key? key,
+    super.key,
     required this.title,
     required this.message,
     this.amount,
     this.reference,
     this.details,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class TransactionSuccessScreen extends StatelessWidget {
               Text(
                 message,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   color: AppTheme.textSecondaryColor,
                 ),
@@ -111,7 +111,7 @@ class TransactionSuccessScreen extends StatelessWidget {
                               value: entry.value,
                             ),
                           );
-                        }).toList(),
+                        }),
                     ],
                   ),
                 ),
@@ -162,12 +162,11 @@ class _DetailRow extends StatelessWidget {
   final Color? valueColor;
 
   const _DetailRow({
-    Key? key,
     required this.label,
     required this.value,
     this.valueBold = false,
     this.valueColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +175,7 @@ class _DetailRow extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14,
             color: AppTheme.textSecondaryColor,
           ),

@@ -14,14 +14,32 @@ interface ChatScreenProps {
 export function ChatScreen({ chat, onBack }: ChatScreenProps) {
   const [message, setMessage] = useState("");
 
-  const messages = [
-    { id: 1, sender: "other", text: "Hi! I'm interested in this item.", time: "10:30 AM" },
-    { id: 2, sender: "me", text: "Great! It's in perfect condition.", time: "10:32 AM" },
-    { id: 3, sender: "other", text: "I've sent the payment to escrow.", time: "10:35 AM" },
-    { id: 4, sender: "me", text: "Perfect! I'll ship it today.", time: "10:36 AM" },
-    { id: 5, sender: "other", text: "When can I expect delivery?", time: "10:38 AM" },
-    { id: 6, sender: "me", text: "Should arrive in 2-3 business days.", time: "10:40 AM" },
+  // Show escrow notification if this is a new escrow chat
+  const hasEscrowNotification = chat?.hasEscrowNotification || false;
+  
+  const baseMessages = [
+    { id: 1, sender: "other", text: "Hi! I'm interested in this item.", time: "10:30 AM", type: "regular" },
+    { id: 2, sender: "me", text: "Great! It's in perfect condition.", time: "10:32 AM", type: "regular" },
   ];
+  
+  const escrowMessages = hasEscrowNotification ? [
+    { 
+      id: 3, 
+      sender: "system", 
+      text: `🔒 Escrow Created\n\n${chat?.name || "User"} has created a new escrow transaction for ${chat?.transactionId || "this item"}. Funds are now secured in escrow until both parties confirm completion.`, 
+      time: "10:35 AM",
+      type: "escrow"
+    },
+  ] : [];
+  
+  const regularMessages = [
+    { id: 4, sender: "other", text: "I've sent the payment to escrow.", time: "10:35 AM", type: "regular" },
+    { id: 5, sender: "me", text: "Perfect! I'll ship it today.", time: "10:36 AM", type: "regular" },
+    { id: 6, sender: "other", text: "When can I expect delivery?", time: "10:38 AM", type: "regular" },
+    { id: 7, sender: "me", text: "Should arrive in 2-3 business days.", time: "10:40 AM", type: "regular" },
+  ];
+  
+  const messages = [...baseMessages, ...escrowMessages, ...regularMessages];
 
   const handleSend = () => {
     if (message.trim()) {
@@ -71,18 +89,30 @@ export function ChatScreen({ chat, onBack }: ChatScreenProps) {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
-              className={`flex ${msg.sender === "me" ? "justify-end" : "justify-start"}`}
+              className={`flex ${
+                msg.type === "escrow" 
+                  ? "justify-center" 
+                  : msg.sender === "me" 
+                    ? "justify-end" 
+                    : "justify-start"
+              }`}
             >
               <div
-                className={`max-w-[75%] rounded-2xl px-4 py-2 ${
-                  msg.sender === "me"
-                    ? "bg-[#043b69] text-white"
-                    : "bg-white shadow-sm"
+                className={`${
+                  msg.type === "escrow"
+                    ? "max-w-[85%] bg-blue-50 border-2 border-blue-200 text-blue-900 px-4 py-3"
+                    : msg.sender === "me"
+                      ? "max-w-[75%] bg-[#043b69] text-white rounded-2xl px-4 py-2"
+                      : "max-w-[75%] bg-white shadow-sm rounded-2xl px-4 py-2"
                 }`}
               >
-                <p>{msg.text}</p>
+                <p className="whitespace-pre-line">{msg.text}</p>
                 <p className={`text-xs mt-1 ${
-                  msg.sender === "me" ? "text-white/70" : "text-gray-500"
+                  msg.type === "escrow"
+                    ? "text-blue-700 text-center"
+                    : msg.sender === "me" 
+                      ? "text-white/70" 
+                      : "text-gray-500"
                 }`}>
                   {msg.time}
                 </p>

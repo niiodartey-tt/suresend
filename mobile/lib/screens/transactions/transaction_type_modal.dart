@@ -138,7 +138,7 @@ class _TransactionTypeCardState extends State<_TransactionTypeCard> {
                   ],
                 ),
               ),
-              Icon(
+              const Icon(
                 Icons.arrow_forward_ios_rounded,
                 color: AppTheme.textSecondary,
                 size: 16,

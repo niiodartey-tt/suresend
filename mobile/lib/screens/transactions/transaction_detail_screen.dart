@@ -7,7 +7,6 @@ import '../../providers/transaction_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/skeleton_loader.dart';
 import '../../widgets/error_retry_widget.dart';
-import '../../utils/animation_helpers.dart';
 
 class TransactionDetailScreen extends StatefulWidget {
   final String transactionId;
@@ -707,7 +706,7 @@ class _ConfirmDeliveryDialogState extends State<_ConfirmDeliveryDialog> {
             title: Text(_confirmed ? 'Yes, received' : 'No, not received'),
             value: _confirmed,
             onChanged: (value) => setState(() => _confirmed = value),
-            activeColor: Colors.green,
+            activeThumbColor: Colors.green,
           ),
           const SizedBox(height: 16),
           TextField(

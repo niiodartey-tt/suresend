@@ -6,7 +6,7 @@ import '../../models/wallet.dart';
 import '../../config/theme.dart';
 
 class WalletTransactionsScreen extends StatefulWidget {
-  const WalletTransactionsScreen({Key? key}) : super(key: key);
+  const WalletTransactionsScreen({super.key});
 
   @override
   State<WalletTransactionsScreen> createState() =>
@@ -144,7 +144,7 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
                             Text(
                               _filterType == 'all'
                                   ? 'No transactions yet'
-                                  : 'No ${_filterType} transactions',
+                                  : 'No $_filterType transactions',
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.grey.shade600,
@@ -180,12 +180,11 @@ class _FilterChip extends StatelessWidget {
   final Color? color;
 
   const _FilterChip({
-    Key? key,
     required this.label,
     required this.isSelected,
     required this.onTap,
     this.color,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -217,9 +216,8 @@ class _TransactionCard extends StatelessWidget {
   final WalletTransaction transaction;
 
   const _TransactionCard({
-    Key? key,
     required this.transaction,
-  }) : super(key: key);
+  });
 
   IconData _getTransactionIcon() {
     switch (transaction.type) {
@@ -427,10 +425,9 @@ class _DetailRow extends StatelessWidget {
   final String value;
 
   const _DetailRow({
-    Key? key,
     required this.label,
     required this.value,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

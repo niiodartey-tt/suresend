@@ -8,9 +8,10 @@ import { useState } from "react";
 
 interface WithdrawFundsProps {
   onBack: () => void;
+  onNavigate?: (screen: string, data?: any) => void;
 }
 
-export function WithdrawFunds({ onBack }: WithdrawFundsProps) {
+export function WithdrawFunds({ onBack, onNavigate }: WithdrawFundsProps) {
   const [formData, setFormData] = useState({
     amount: "",
     method: "",
@@ -20,10 +21,17 @@ export function WithdrawFunds({ onBack }: WithdrawFundsProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setShowSuccess(true);
-    setTimeout(() => {
-      onBack();
-    }, 2000);
+    if (onNavigate && formData.amount && formData.method) {
+      onNavigate("pin-confirmation", {
+        action: "withdraw",
+        transaction: { 
+          amount: formData.amount,
+          method: formData.method,
+          accountNumber: formData.accountNumber,
+          type: "withdrawal"
+        }
+      });
+    }
   };
 
   return (

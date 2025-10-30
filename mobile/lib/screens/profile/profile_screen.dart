@@ -37,19 +37,19 @@ class ProfileScreen extends StatelessWidget {
                   ),
             ),
             const SizedBox(height: AppTheme.spacingXs),
-            _KycChip(status: 'Verified'),
+            const _KycChip(status: 'Verified'),
             const SizedBox(height: AppTheme.spacingL),
-            Card(
+            const Card(
               child: Padding(
-                padding: const EdgeInsets.all(AppTheme.spacingM),
+                padding: EdgeInsets.all(AppTheme.spacingM),
                 child: Column(
                   children: [
                     _ProfileField(label: 'Full Name', value: 'Nice Name'),
-                    const Divider(),
+                    Divider(),
                     _ProfileField(label: 'Email', value: 'you@example.com'),
-                    const Divider(),
+                    Divider(),
                     _ProfileField(label: 'Phone', value: '+233 24 000 0000'),
-                    const Divider(),
+                    Divider(),
                     _ProfileField(label: 'Country', value: 'Ghana'),
                   ],
                 ),

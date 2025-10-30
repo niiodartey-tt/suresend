@@ -30,7 +30,10 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
   void initState() {
     super.initState();
     _selectedRole = widget.role; // Initialize with provided role
-    _loadTransactions();
+    // Defer loading data to after first frame to avoid notifyListeners during build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadTransactions();
+    });
     _scrollController.addListener(_onScroll);
   }
 

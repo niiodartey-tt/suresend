@@ -7,7 +7,6 @@ import '../../providers/transaction_provider.dart';
 import '../../providers/notification_provider.dart';
 import '../../providers/wallet_provider.dart';
 import '../../widgets/skeleton_loader.dart';
-import '../../widgets/error_retry_widget.dart';
 import '../../utils/animation_helpers.dart';
 import '../auth/login_screen.dart';
 import '../transactions/create_transaction_screen.dart';
@@ -170,7 +169,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                   ),
                 ),
                 const SizedBox(height: 2),
-                Text(
+                const Text(
                   'Welcome to SafePay Ghana',
                   style: TextStyle(
                     fontSize: 12,
@@ -326,7 +325,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                   ),
                 );
               },
-              child: Text(
+              child: const Text(
                 'View Transaction History',
                 style: TextStyle(
                   color: AppTheme.primaryColor,
@@ -452,11 +451,11 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
           child: Text(
             'Quick Actions',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
               color: AppTheme.textPrimaryColor,
@@ -656,7 +655,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
         Text(
           label,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 11,
             color: AppTheme.textSecondaryColor,
           ),
@@ -791,7 +790,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                                 const SizedBox(height: 4),
                                 Text(
                                   '${transaction.statusDisplay} • ${dateFormat.format(transaction.createdAt)}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 12,
                                     color: AppTheme.textSecondaryColor,
                                   ),
@@ -868,7 +867,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
             color: Colors.grey.shade400,
           ),
           const SizedBox(height: 12),
-          Text(
+          const Text(
             'No transactions yet',
             style: TextStyle(
               fontSize: 14,
@@ -932,11 +931,11 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
             ),
           ),
           const SizedBox(width: 16),
-          Expanded(
+          const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Track Active Deliveries',
                   style: TextStyle(
                     fontSize: 15,
@@ -944,7 +943,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                     color: AppTheme.textPrimaryColor,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   'Real-time tracking for your orders',
                   style: TextStyle(
@@ -955,7 +954,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
               ],
             ),
           ),
-          Icon(
+          const Icon(
             Icons.arrow_forward_ios,
             size: 18,
             color: AppTheme.primaryColor,
@@ -1058,14 +1057,14 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
           const SizedBox(height: 16),
           Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
               color: AppTheme.textSecondaryColor,
             ),
           ),
           const SizedBox(height: 8),
-          Text(
+          const Text(
             'Coming Soon',
             style: TextStyle(
               fontSize: 14,
@@ -1082,7 +1081,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
 
     showModalBottomSheet(
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(AppTheme.cardBorderRadius),
         ),

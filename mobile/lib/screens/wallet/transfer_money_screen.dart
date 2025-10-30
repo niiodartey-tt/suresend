@@ -9,7 +9,7 @@ import '../../utils/animation_helpers.dart';
 import '../transactions/transaction_success_screen.dart';
 
 class TransferMoneyScreen extends StatefulWidget {
-  const TransferMoneyScreen({Key? key}) : super(key: key);
+  const TransferMoneyScreen({super.key});
 
   @override
   State<TransferMoneyScreen> createState() => _TransferMoneyScreenState();
@@ -528,12 +528,11 @@ class _ConfirmationRow extends StatelessWidget {
   final bool valueBold;
 
   const _ConfirmationRow({
-    Key? key,
     required this.label,
     required this.value,
     this.valueColor,
     this.valueBold = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

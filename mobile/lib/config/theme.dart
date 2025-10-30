@@ -24,21 +24,22 @@ class AppTheme {
   static const double spacing48 = 48.0;
 
   // ============================================
-  // BORDER RADIUS CONSTANTS
+  // BORDER RADIUS CONSTANTS (Based on Figma: --radius: 1px)
   // ============================================
+  static const double radiusBase = 1.0; // Figma base radius
   static const double radiusXs = 1.0;
-  static const double radiusSm = 3.0;
-  static const double radiusMd = 6.0;
-  static const double radiusLg = 8.0;
-  static const double radiusXl = 12.0;
-  static const double radius2xl = 16.0;
+  static const double radiusSm = 1.0;
+  static const double radiusMd = 1.0;
+  static const double radiusLg = 1.0;
+  static const double radiusXl = 5.0; // For special cases
+  static const double radius2xl = 9.0; // For special cases
   static const double radiusFull = 100.0;
 
-  // Border radius for specific components
-  static const double cardBorderRadius = radiusLg;
-  static const double buttonBorderRadius = radiusMd;
-  static const double inputBorderRadius = radiusMd;
-  static const double badgeBorderRadius = radiusMd;
+  // Border radius for specific components (matching Figma minimal design)
+  static const double cardBorderRadius = radiusBase;
+  static const double buttonBorderRadius = radiusBase;
+  static const double inputBorderRadius = radiusBase;
+  static const double badgeBorderRadius = radiusBase;
 
   // ============================================
   // ELEVATION/SHADOW CONSTANTS

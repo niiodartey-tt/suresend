@@ -145,7 +145,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 minLines: 1,
               ),
             ),
-            const SizedBox(width: AppTheme.spacingS),
+            SizedBox(width: AppTheme.spacingS),
             CircleAvatar(
               backgroundColor: AppTheme.primary,
               child: IconButton(
@@ -213,7 +213,7 @@ class _MessageBubble extends StatelessWidget {
                     color: isMe ? Colors.white : Colors.black,
                   ),
                 ),
-                const SizedBox(height: AppTheme.spacingXs),
+                SizedBox(height: AppTheme.spacingXs),
                 Text(
                   _formatTimestamp(timestamp),
                   style: TextStyle(

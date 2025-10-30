@@ -25,12 +25,12 @@ class TransactionTypeModal extends StatelessWidget {
               borderRadius: BorderRadius.circular(AppTheme.radiusS),
             ),
           ),
-          const SizedBox(height: AppTheme.spacingL),
+          SizedBox(height: AppTheme.spacingL),
           Text(
             'Transaction Type',
             style: Theme.of(context).textTheme.headlineMedium,
           ),
-          const SizedBox(height: AppTheme.spacingXl),
+          SizedBox(height: AppTheme.spacingXl),
           _TransactionTypeCard(
             title: 'Product Based',
             subtitle: 'I want to sell a product',
@@ -40,7 +40,7 @@ class TransactionTypeModal extends StatelessWidget {
               // Navigate to create transaction
             },
           ),
-          const SizedBox(height: AppTheme.spacingM),
+          SizedBox(height: AppTheme.spacingM),
           _TransactionTypeCard(
             title: 'Service Based',
             subtitle: 'I want to provide a service',
@@ -50,7 +50,7 @@ class TransactionTypeModal extends StatelessWidget {
               // Navigate to create transaction
             },
           ),
-          const SizedBox(height: AppTheme.spacingL),
+          SizedBox(height: AppTheme.spacingL),
         ],
       ),
     );
@@ -121,7 +121,7 @@ class _TransactionTypeCardState extends State<_TransactionTypeCard> {
                   size: 32,
                 ),
               ),
-              const SizedBox(width: AppTheme.spacingM),
+              SizedBox(width: AppTheme.spacingM),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,7 +130,7 @@ class _TransactionTypeCardState extends State<_TransactionTypeCard> {
                       widget.title,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
-                    const SizedBox(height: AppTheme.spacingXs),
+                    SizedBox(height: AppTheme.spacingXs),
                     Text(
                       widget.subtitle,
                       style: Theme.of(context).textTheme.bodyMedium,

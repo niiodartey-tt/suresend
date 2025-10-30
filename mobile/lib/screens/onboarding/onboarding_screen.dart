@@ -144,7 +144,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       ),
                     ),
                   ),
-                  const SizedBox(height: AppTheme.spacing24),
+                  SizedBox(height: AppTheme.spacing24),
 
                   // Next/Get Started button
                   SizedBox(
@@ -160,7 +160,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                                 ? 'Next'
                                 : 'Get Started',
                           ),
-                          const SizedBox(width: AppTheme.spacing8),
+                          SizedBox(width: AppTheme.spacing8),
                           const Icon(Icons.arrow_forward, size: 16),
                         ],
                       ),
@@ -205,7 +205,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 ),
               ),
             ),
-            const SizedBox(height: AppTheme.spacing32),
+            SizedBox(height: AppTheme.spacing32),
 
             // Title
             Text(
@@ -215,7 +215,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                   ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: AppTheme.spacing16),
+            SizedBox(height: AppTheme.spacing16),
 
             // Description
             Text(

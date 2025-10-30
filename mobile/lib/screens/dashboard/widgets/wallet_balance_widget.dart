@@ -19,7 +19,7 @@ class WalletBalanceWidget extends StatelessWidget {
                 fontSize: 16,
               ),
             ),
-            const SizedBox(height: AppTheme.spacingS),
+            SizedBox(height: AppTheme.spacingS),
             Text(
               '\$4,500',
               style: Theme.of(context).textTheme.displayLarge?.copyWith(
@@ -27,7 +27,7 @@ class WalletBalanceWidget extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
             ),
-            const SizedBox(height: AppTheme.spacingM),
+            SizedBox(height: AppTheme.spacingM),
             Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: AppTheme.spacingM,
@@ -47,7 +47,7 @@ class WalletBalanceWidget extends StatelessWidget {
                       fontSize: 14,
                     ),
                   ),
-                  const SizedBox(width: AppTheme.spacingS),
+                  SizedBox(width: AppTheme.spacingS),
                   Text(
                     '\$200',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(

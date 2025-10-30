@@ -41,7 +41,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ],
             ),
           ),
-          const SizedBox(height: AppTheme.spacingL),
+          SizedBox(height: AppTheme.spacingL),
           _buildSectionTitle('Payments'),
           Card(
             child: Column(
@@ -64,7 +64,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ],
             ),
           ),
-          const SizedBox(height: AppTheme.spacingL),
+          SizedBox(height: AppTheme.spacingL),
           _buildSectionTitle('App Preferences'),
           Card(
             child: Column(

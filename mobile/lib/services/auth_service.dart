@@ -165,7 +165,8 @@ class AuthService {
   /// Logout user
   Future<Map<String, dynamic>> logout() async {
     try {
-      /_unused_/ await _apiService.post(
+      // ignore: unused_local_variable
+      final result = await _apiService.post(
         'auth/logout',
         requiresAuth: true,
       );

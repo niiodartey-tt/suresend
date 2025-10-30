@@ -19,7 +19,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
   final ScrollController _scrollController = ScrollController();
   bool _isInitialLoading = true;
   bool _hasError = false;
-  String _errorMessage = '';
 
   @override
   void initState() {
@@ -48,7 +47,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
     if (mounted) {
       setState(() {
         _hasError = false;
-        _errorMessage = '';
       });
     }
 
@@ -67,7 +65,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
         setState(() {
           _isInitialLoading = false;
           _hasError = true;
-          _errorMessage = e.toString();
         });
       }
     }
@@ -181,8 +178,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
 
-  // Unused method - can be removed or used later
-  // Widget _buildEmptyState() {
+  Widget _buildEmptyState() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

@@ -30,7 +30,6 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
   int _currentIndex = 0;
   bool _isInitialLoading = true;
   // TODO: Use for error handling - bool _hasError = false;
-  String _errorMessage = '';
 
   @override
   void initState() {
@@ -62,7 +61,6 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
     if (mounted) {
       setState(() {
         // _hasError = false;
-        _errorMessage = '';
       });
     }
 

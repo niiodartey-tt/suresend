@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import '../models/user.dart';
 import '../services/auth_service.dart';
-import '../services/storage_service.dart';
 
 enum AuthStatus {
   initial,
@@ -12,7 +11,6 @@ enum AuthStatus {
 
 class AuthProvider with ChangeNotifier {
   final AuthService _authService = AuthService();
-  // Unused: final StorageService _storageService = StorageService();
 
   AuthStatus _status = AuthStatus.initial;
   User? _user;

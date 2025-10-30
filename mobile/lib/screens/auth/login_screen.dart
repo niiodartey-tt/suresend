@@ -47,8 +47,8 @@ class _LoginScreenState extends State<LoginScreen> {
       // Check if phoneNumber is available
       if (phoneNumber == null || phoneNumber.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Phone number not found. Please try again.'),
+          SnackBar(
+            content: const Text('Phone number not found. Please try again.'),
             backgroundColor: AppTheme.errorColor,
           ),
         );

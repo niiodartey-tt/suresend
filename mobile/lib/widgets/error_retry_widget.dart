@@ -307,7 +307,7 @@ class EmptyStateWidget extends StatelessWidget {
                 onPressed: onAction,
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppTheme.primaryColor,
-                  side: const BorderSide(color: AppTheme.primaryColor),
+                  side: BorderSide(color: AppTheme.primaryColor),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
                     vertical: 12,

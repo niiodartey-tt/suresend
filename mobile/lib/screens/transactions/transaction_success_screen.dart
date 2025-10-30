@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../config/theme.dart';
-import '../dashboard/unified_dashboard.dart';
+import '../navigation/main_navigation.dart';
 
 class TransactionSuccessScreen extends StatelessWidget {
   final String title;
@@ -120,10 +120,10 @@ class TransactionSuccessScreen extends StatelessWidget {
               // Go to Dashboard Button
               ElevatedButton(
                 onPressed: () {
-                  // Navigate to dashboard and remove all previous routes
+                  // Navigate to main navigation and remove all previous routes
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
-                      builder: (context) => const UnifiedDashboard(),
+                      builder: (context) => const MainNavigation(),
                     ),
                     (route) => false,
                   );

@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../config/theme.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/custom_button.dart';
-import '../dashboard/unified_dashboard.dart';
+import '../navigation/main_navigation.dart';
 import '../dashboard/rider_dashboard.dart';
 
 class OTPVerificationScreen extends StatefulWidget {
@@ -61,8 +61,8 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
       if (user?.isRider == true) {
         dashboard = const RiderDashboard();
       } else {
-        // All users (can buy and sell) go to unified dashboard
-        dashboard = const UnifiedDashboard();
+        // All users (can buy and sell) go to main navigation with bottom nav
+        dashboard = const MainNavigation();
       }
 
       Navigator.of(context).pushAndRemoveUntil(

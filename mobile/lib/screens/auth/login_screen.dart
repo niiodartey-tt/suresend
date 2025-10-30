@@ -142,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // Email Address
+                      // Email or Username
                       Text(
                         'Email Address',
                         style: Theme.of(context).textTheme.labelMedium,
@@ -150,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
+                        keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           hintText: 'your@email.com',
                           prefixIcon: const Icon(Icons.email_outlined, size: 20),
@@ -181,7 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return 'Please enter your email or username';
+                            return 'Please enter your email';
                           }
                           return null;
                         },

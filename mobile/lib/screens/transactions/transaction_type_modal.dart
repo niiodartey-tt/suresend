@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:suresend/theme/app_theme.dart';
+import 'package:suresend/config/app_colors.dart';
+import 'package:suresend/config/theme.dart';
+import 'create_transaction_screen.dart';
 
 class TransactionTypeModal extends StatelessWidget {
   const TransactionTypeModal({super.key});
@@ -7,144 +9,159 @@ class TransactionTypeModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(AppTheme.spacingL),
+      padding: const EdgeInsets.all(AppTheme.spacing24),
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: AppColors.card,
         borderRadius: BorderRadius.vertical(
-          top: Radius.circular(AppTheme.radiusXl),
+          top: Radius.circular(16),
         ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 40,
-            height: 4,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(AppTheme.radiusS),
-            ),
+          // Header
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Create Transaction',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
+              IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(Icons.close),
+                iconSize: 20,
+              ),
+            ],
           ),
-          const SizedBox(height: AppTheme.spacingL),
+          const SizedBox(height: 8),
           Text(
-            'Transaction Type',
-            style: Theme.of(context).textTheme.headlineMedium,
+            'Choose whether you want to buy or sell',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.textSecondary,
+                ),
           ),
-          const SizedBox(height: AppTheme.spacingXl),
-          _TransactionTypeCard(
-            title: 'Product Based',
-            subtitle: 'I want to sell a product',
-            icon: Icons.inventory_2_rounded,
+          const SizedBox(height: 24),
+
+          // Buy Option
+          _TransactionTypeOption(
+            icon: Icons.shopping_cart_outlined,
+            iconColor: const Color(0xFF3B82F6),
+            iconBgColor: const Color(0xFFDBeafe),
+            title: 'Buy',
+            subtitle: 'I want to purchase something',
             onTap: () {
-              Navigator.pop(context, 'product');
-              // Navigate to create transaction
+              Navigator.pop(context);
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const CreateTransactionScreen(
+                    transactionType: 'buy',
+                  ),
+                ),
+              );
             },
           ),
-          const SizedBox(height: AppTheme.spacingM),
-          _TransactionTypeCard(
-            title: 'Service Based',
-            subtitle: 'I want to provide a service',
-            icon: Icons.handshake_rounded,
+          const SizedBox(height: 16),
+
+          // Sell Option
+          _TransactionTypeOption(
+            icon: Icons.store_outlined,
+            iconColor: const Color(0xFF10B981),
+            iconBgColor: const Color(0xFFD1FAE5),
+            title: 'Sell',
+            subtitle: 'I want to sell a product or service',
+            isHighlighted: true,
             onTap: () {
-              Navigator.pop(context, 'service');
-              // Navigate to create transaction
+              Navigator.pop(context);
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const CreateTransactionScreen(
+                    transactionType: 'sell',
+                  ),
+                ),
+              );
             },
           ),
-          const SizedBox(height: AppTheme.spacingL),
+          const SizedBox(height: 16),
         ],
       ),
     );
   }
 }
 
-class _TransactionTypeCard extends StatefulWidget {
+class _TransactionTypeOption extends StatelessWidget {
+  final IconData icon;
+  final Color iconColor;
+  final Color iconBgColor;
   final String title;
   final String subtitle;
-  final IconData icon;
+  final bool isHighlighted;
   final VoidCallback onTap;
 
-  const _TransactionTypeCard({
+  const _TransactionTypeOption({
+    required this.icon,
+    required this.iconColor,
+    required this.iconBgColor,
     required this.title,
     required this.subtitle,
-    required this.icon,
+    this.isHighlighted = false,
     required this.onTap,
   });
 
   @override
-  State<_TransactionTypeCard> createState() => _TransactionTypeCardState();
-}
-
-class _TransactionTypeCardState extends State<_TransactionTypeCard> {
-  bool _isPressed = false;
-
-  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (_) => setState(() => _isPressed = true),
-      onTapUp: (_) {
-        setState(() => _isPressed = false);
-        widget.onTap();
-      },
-      onTapCancel: () => setState(() => _isPressed = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
+      child: Container(
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(AppTheme.radiusM),
+          color: isHighlighted
+              ? const Color(0xFFD1FAE5)
+              : AppColors.background,
+          borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
           border: Border.all(
-            color: _isPressed ? AppTheme.primary : Colors.grey[300]!,
-            width: 2,
+            color: isHighlighted
+                ? const Color(0xFF10B981)
+                : AppColors.border,
+            width: isHighlighted ? 2 : 1,
           ),
-          boxShadow: _isPressed
-              ? [
-                  BoxShadow(
-                    color: AppTheme.primary.withValues(alpha: 0.2),
-                    blurRadius: 8,
-                    spreadRadius: 2,
-                  )
-                ]
-              : [],
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(AppTheme.spacingL),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(AppTheme.spacingM),
-                decoration: BoxDecoration(
-                  color: AppTheme.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(AppTheme.radiusM),
-                ),
-                child: Icon(
-                  widget.icon,
-                  color: AppTheme.primary,
-                  size: 32,
-                ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: iconBgColor,
+                borderRadius: BorderRadius.circular(8),
               ),
-              const SizedBox(width: AppTheme.spacingM),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.title,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: AppTheme.spacingXs),
-                    Text(
-                      widget.subtitle,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ],
-                ),
+              child: Icon(icon, color: iconColor, size: 24),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                  ),
+                ],
               ),
-              const Icon(
-                Icons.arrow_forward_ios_rounded,
-                color: AppTheme.textSecondary,
-                size: 16,
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

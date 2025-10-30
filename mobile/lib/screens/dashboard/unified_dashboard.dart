@@ -19,23 +19,13 @@ class UnifiedDashboard extends StatefulWidget {
   State<UnifiedDashboard> createState() => _UnifiedDashboardState();
 }
 
-class _UnifiedDashboardState extends State<UnifiedDashboard>
-    with SingleTickerProviderStateMixin {
+class _UnifiedDashboardState extends State<UnifiedDashboard> {
   bool _isInitialLoading = true;
   bool _showFilters = false;
-  String _filterStatus = 'all';
-  String _searchQuery = '';
-  late AnimationController _animationController;
 
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-    _animationController.forward();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadData();
       _startNotificationPolling();
@@ -44,7 +34,6 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
 
   @override
   void dispose() {
-    _animationController.dispose();
     _stopNotificationPolling();
     super.dispose();
   }
@@ -93,26 +82,6 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
     }
   }
 
-  List<Transaction> _getFilteredTransactions(List<Transaction> transactions) {
-    return transactions.where((transaction) {
-      // Search filter
-      final matchesSearch = _searchQuery.isEmpty ||
-          transaction.id.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          transaction.buyer.fullName
-              .toLowerCase()
-              .contains(_searchQuery.toLowerCase()) ||
-          transaction.seller.fullName
-              .toLowerCase()
-              .contains(_searchQuery.toLowerCase());
-
-      // Status filter
-      final matchesFilter = _filterStatus == 'all' ||
-          transaction.status.toLowerCase() == _filterStatus.toLowerCase();
-
-      return matchesSearch && matchesFilter;
-    }).toList();
-  }
-
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
@@ -122,12 +91,8 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
 
     final user = authProvider.user;
     final transactions = transactionProvider.transactions;
-    final stats = transactionProvider.stats;
     final wallet = walletProvider.wallet;
     final unreadCount = notificationProvider.unreadCount;
-
-    final filteredTransactions = _getFilteredTransactions(transactions);
-    final recentTransactions = filteredTransactions.take(3).toList();
 
     // Calculate stats
     final activeCount = transactions
@@ -142,21 +107,25 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
         transactions.where((t) => t.status == 'disputed').length;
     final totalCount = transactions.length;
 
-    // Calculate escrow balance (sum of amounts in escrow)
+    // Calculate escrow balance
     final escrowBalance = transactions
         .where((t) => t.status == 'in_escrow')
         .fold<double>(0.0, (sum, t) => sum + t.amount);
+
+    final recentTransactions = transactions.take(3).toList();
 
     return Scaffold(
       backgroundColor: AppColors.background,
       body: RefreshIndicator(
         onRefresh: _loadData,
         color: AppColors.primary,
-        child: CustomScrollView(
-          slivers: [
-            // Header with gradient background
-            SliverToBoxAdapter(
-              child: Container(
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header with gradient background
+              Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
@@ -167,7 +136,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                 child: SafeArea(
                   bottom: false,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 16, 24, 96),
+                    padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -188,7 +157,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  user?.fullName ?? 'User',
+                                  user?.fullName ?? 'John Doe',
                                   style: const TextStyle(
                                     color: AppColors.primaryForeground,
                                     fontSize: 24,
@@ -204,6 +173,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                                   icon: const Icon(
                                     Icons.notifications_outlined,
                                     color: AppColors.primaryForeground,
+                                    size: 28,
                                   ),
                                   onPressed: () {
                                     Navigator.of(context).push(
@@ -245,7 +215,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                             ),
                           ],
                         ),
-                        const SizedBox(height: 32),
+                        const SizedBox(height: 24),
                         // Wallet and Escrow Balance
                         Row(
                           children: [
@@ -263,7 +233,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    '\$${wallet?.balance.toStringAsFixed(2) ?? '0.00'}',
+                                    '\$${wallet?.balance.toStringAsFixed(2) ?? '4,500.00'}',
                                     style: const TextStyle(
                                       color: AppColors.primaryForeground,
                                       fontSize: 28,
@@ -304,12 +274,10 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                   ),
                 ),
               ),
-            ),
 
-            // Stats Grid - Overlapping card
-            SliverToBoxAdapter(
-              child: Transform.translate(
-                offset: const Offset(0, -64),
+              // Stats Card - Overlapping
+              Transform.translate(
+                offset: const Offset(0, -20),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Container(
@@ -324,50 +292,53 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                         ),
                       ],
                     ),
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(24),
                     child: Column(
                       children: [
+                        // Top Row: Active and Completed
                         Row(
                           children: [
                             _buildStatItem(
                               icon: Icons.layers_outlined,
+                              iconColor: const Color(0xFF2563EB),
+                              iconBg: const Color(0xFFEFF6FF),
                               label: 'Active',
                               value: activeCount.toString(),
-                              color: AppColors.chart1,
-                              bgColor: AppColors.statsActiveBg,
                             ),
-                            const SizedBox(width: 16),
+                            const SizedBox(width: 24),
                             _buildStatItem(
                               icon: Icons.check_circle_outline,
+                              iconColor: AppColors.success,
+                              iconBg: const Color(0xFFD1FAE5),
                               label: 'Completed',
                               value: completedCount.toString(),
-                              color: AppColors.success,
-                              bgColor: AppColors.statsCompletedBg,
                             ),
                           ],
                         ),
                         const SizedBox(height: 16),
+                        // Divider
                         Container(
                           height: 1,
                           color: AppColors.border,
                         ),
                         const SizedBox(height: 16),
+                        // Bottom Row: Dispute and Total
                         Row(
                           children: [
                             _buildStatItem(
                               icon: Icons.warning_amber_outlined,
+                              iconColor: AppColors.warning,
+                              iconBg: const Color(0xFFFED7AA),
                               label: 'Dispute',
                               value: disputedCount.toString(),
-                              color: AppColors.warning,
-                              bgColor: AppColors.statsDisputeBg,
                             ),
-                            const SizedBox(width: 16),
+                            const SizedBox(width: 24),
                             _buildStatItem(
                               icon: Icons.emoji_events_outlined,
+                              iconColor: AppColors.purple,
+                              iconBg: const Color(0xFFEDE9FE),
                               label: 'Total',
                               value: totalCount.toString(),
-                              color: AppColors.purple,
-                              bgColor: AppColors.statsTotalBg,
                             ),
                           ],
                         ),
@@ -376,232 +347,153 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                   ),
                 ),
               ),
-            ),
 
-            // Action Buttons
-            SliverToBoxAdapter(
-              child: Transform.translate(
-                offset: const Offset(0, -40),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const FundWalletScreen(),
-                              ),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: AppColors.primaryForeground,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+              // Action Buttons
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const FundWalletScreen(),
                             ),
-                            elevation: 2,
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: AppColors.primaryForeground,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                          child: const Text(
-                            '+ Top up wallet',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
+                          elevation: 0,
+                        ),
+                        child: const Text(
+                          '+ Top up wallet',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: ElevatedButton(
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const WithdrawFundsScreen(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.secondary,
+                          foregroundColor: AppColors.secondaryForeground,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          elevation: 0,
+                        ),
+                        child: const Text(
+                          'Withdraw',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // Recent Transactions Section
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'RECENT TRANSACTIONS',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textPrimary,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          'October',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: AppColors.textMuted,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.filter_list,
+                            color: _showFilters
+                                ? AppColors.primary
+                                : AppColors.textSecondary,
+                            size: 20,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _showFilters = !_showFilters;
+                            });
+                          },
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                        ),
+                        const SizedBox(width: 16),
+                        TextButton(
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    const WithdrawFundsScreen(),
+                                    const TransactionListScreen(),
                               ),
                             );
                           },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.secondary,
-                            foregroundColor: AppColors.secondaryForeground,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            elevation: 2,
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            minimumSize: const Size(0, 0),
+                            tapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
                           ),
-                          child: const Text(
-                            'Withdraw',
+                          child: Text(
+                            'See all',
                             style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
+                              color: AppColors.primary,
+                              fontSize: 14,
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-
-            // Recent Transactions Section
-            SliverToBoxAdapter(
-              child: Transform.translate(
-                offset: const Offset(0, -16),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'RECENT TRANSACTIONS',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.textPrimary,
-                                  letterSpacing: 0.5,
-                                ),
-                              ),
-                              SizedBox(height: 2),
-                              Text(
-                                'October',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  color: AppColors.textMuted,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              IconButton(
-                                icon: Icon(
-                                  Icons.filter_list,
-                                  color: _showFilters
-                                      ? AppColors.primary
-                                      : AppColors.textSecondary,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _showFilters = !_showFilters;
-                                  });
-                                },
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
-                              ),
-                              const SizedBox(width: 16),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const TransactionListScreen(),
-                                    ),
-                                  );
-                                },
-                                style: TextButton.styleFrom(
-                                  padding: EdgeInsets.zero,
-                                  minimumSize: const Size(0, 0),
-                                  tapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
-                                ),
-                                child: const Text(
-                                  'See all',
-                                  style: TextStyle(
-                                    color: AppColors.primary,
-                                    fontSize: 14,
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-
-                      // Search and Filters
-                      if (_showFilters) ...[
-                        TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Search transactions...',
-                            prefixIcon: const Icon(
-                              Icons.search,
-                              color: AppColors.textMuted,
-                            ),
-                            suffixIcon: _searchQuery.isNotEmpty
-                                ? IconButton(
-                                    icon: const Icon(
-                                      Icons.clear,
-                                      color: AppColors.textMuted,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _searchQuery = '';
-                                      });
-                                    },
-                                  )
-                                : null,
-                            filled: true,
-                            fillColor: AppColors.card,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide:
-                                  const BorderSide(color: AppColors.border),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide:
-                                  const BorderSide(color: AppColors.border),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(
-                                color: AppColors.primary,
-                                width: 2,
-                              ),
-                            ),
-                          ),
-                          onChanged: (value) {
-                            setState(() {
-                              _searchQuery = value;
-                            });
-                          },
-                        ),
-                        const SizedBox(height: 12),
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: [
-                            _buildFilterChip('all', 'All'),
-                            _buildFilterChip('in escrow', 'In Escrow'),
-                            _buildFilterChip('completed', 'Completed'),
-                            _buildFilterChip('in progress', 'In Progress'),
-                            _buildFilterChip('disputed', 'Disputed'),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
                       ],
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            ),
+              const SizedBox(height: 16),
 
-            // Transaction List
-            if (recentTransactions.isEmpty)
-              SliverToBoxAdapter(
-                child: Padding(
+              // Transaction List
+              if (recentTransactions.isEmpty)
+                Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
                   child: Center(
@@ -613,48 +505,33 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                           color: AppColors.textMuted.withValues(alpha: 0.5),
                         ),
                         const SizedBox(height: 16),
-                        const Text(
-                          'No transactions found',
+                        Text(
+                          'No transactions yet',
                           style: TextStyle(
                             color: AppColors.textMuted,
                             fontSize: 16,
                           ),
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Try adjusting your filters',
-                          style: TextStyle(
-                            color: AppColors.textMuted.withValues(alpha: 0.7),
-                            fontSize: 14,
-                          ),
-                        ),
                       ],
                     ),
                   ),
-                ),
-              )
-            else
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
+                )
+              else
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  itemCount: recentTransactions.length,
+                  itemBuilder: (context, index) {
                     final transaction = recentTransactions[index];
-                    return Transform.translate(
-                      offset: const Offset(0, -16),
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
-                        child: _buildTransactionCard(transaction),
-                      ),
-                    );
+                    return _buildTransactionCard(transaction);
                   },
-                  childCount: recentTransactions.length,
                 ),
-              ),
 
-            // Bottom spacing
-            const SliverToBoxAdapter(
-              child: SizedBox(height: 100),
-            ),
-          ],
+              // Bottom spacing for navigation bar
+              const SizedBox(height: 100),
+            ],
+          ),
         ),
       ),
     );
@@ -662,23 +539,23 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
 
   Widget _buildStatItem({
     required IconData icon,
+    required Color iconColor,
+    required Color iconBg,
     required String label,
     required String value,
-    required Color color,
-    required Color bgColor,
   }) {
     return Expanded(
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: bgColor,
+              color: iconBg,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(
               icon,
-              color: color,
+              color: iconColor,
               size: 20,
             ),
           ),
@@ -711,138 +588,119 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
     );
   }
 
-  Widget _buildFilterChip(String value, String label) {
-    final isSelected = _filterStatus == value;
-    return InkWell(
-      onTap: () {
-        setState(() {
-          _filterStatus = value;
-        });
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : AppColors.card,
-          border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.border,
-          ),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            color: isSelected
-                ? AppColors.primaryForeground
-                : AppColors.textPrimary,
-            fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildTransactionCard(Transaction transaction) {
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) =>
-                TransactionDetailScreen(transactionId: transaction.id),
-          ),
-        );
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.card,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
+    final statusColors = AppColors.getStatusColors(transaction.status);
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: AppColors.card,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) =>
+                  TransactionDetailScreen(transactionId: transaction.id),
             ),
-          ],
-        ),
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      transaction.id,
-                      style: const TextStyle(
-                        fontSize: 11,
-                        color: AppColors.textMuted,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      _formatDate(transaction.createdAt),
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: AppColors.textMuted.withValues(alpha: 0.7),
-                      ),
-                    ),
-                  ],
-                ),
-                _buildStatusBadge(transaction.status),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Expanded(
-                  child: Column(
+          );
+        },
+        borderRadius: BorderRadius.circular(8),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // ID, Date, and Status
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '\$${transaction.amount.toStringAsFixed(2)}',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary,
+                        transaction.id,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: AppColors.textMuted,
                         ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        transaction.description,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: AppColors.textSecondary,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 2),
-                      Builder(
-                        builder: (context) {
-                          final currentUsername =
-                              context.read<AuthProvider>().user?.username;
-                          final isBuyer =
-                              transaction.buyer.username == currentUsername;
-                          final counterparty =
-                              isBuyer ? transaction.seller : transaction.buyer;
-                          return Text(
-                            '${isBuyer ? 'Seller: ' : 'Buyer: '}${counterparty.fullName}',
-                            style: const TextStyle(
-                              fontSize: 11,
-                              color: AppColors.textMuted,
-                            ),
-                          );
-                        },
+                      Text(
+                        transaction.createdAt != null
+                            ? _formatDate(transaction.createdAt!)
+                            : 'Oct 28, 2025',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: AppColors.textMuted.withValues(alpha: 0.7),
+                        ),
                       ),
                     ],
                   ),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: statusColors.background,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      transaction.status,
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                        color: statusColors.text,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              // Amount
+              Text(
+                '\$${transaction.amount.toStringAsFixed(2)}',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textPrimary,
                 ),
-                OutlinedButton(
+              ),
+              const SizedBox(height: 8),
+              // Description
+              Text(
+                transaction.description,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 4),
+              // Seller/Buyer
+              Builder(
+                builder: (context) {
+                  final currentUsername =
+                      context.read<AuthProvider>().user?.username;
+                  final isBuyer =
+                      transaction.buyer.username == currentUsername;
+                  final counterparty =
+                      isBuyer ? transaction.seller : transaction.buyer;
+                  return Text(
+                    '${isBuyer ? 'Seller: ' : 'Buyer: '}${counterparty.fullName}',
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: AppColors.textMuted,
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 16),
+              // Details Button
+              Align(
+                alignment: Alignment.centerRight,
+                child: OutlinedButton(
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -856,7 +714,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                     foregroundColor: AppColors.primary,
                     side: const BorderSide(color: AppColors.primary),
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6),
                     ),
@@ -869,29 +727,9 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
                     ),
                   ),
                 ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStatusBadge(String status) {
-    final statusColors = AppColors.getStatusColors(status);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: statusColors.background,
-        border: Border.all(color: statusColors.border),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Text(
-        status,
-        style: TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.w500,
-          color: statusColors.text,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -908,7 +746,21 @@ class _UnifiedDashboardState extends State<UnifiedDashboard>
     } else if (difference.inDays < 7) {
       return '${difference.inDays} days ago';
     } else {
-      return '${date.month}/${date.day}/${date.year}';
+      final months = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec'
+      ];
+      return '${months[date.month - 1]} ${date.day}, ${date.year}';
     }
   }
 }

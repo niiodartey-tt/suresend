@@ -160,14 +160,14 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
               children: [
                 Text(
                   'Hi, ${user?.fullName.split(' ').first ?? 'User'} 👋',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: AppTheme.textPrimaryColor,
                   ),
                 ),
                 const SizedBox(height: 2),
-                const Text(
+                Text(
                   'Welcome to SafePay Ghana',
                   style: TextStyle(
                     fontSize: 12,
@@ -323,7 +323,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                   ),
                 );
               },
-              child: const Text(
+              child: Text(
                 'View Transaction History',
                 style: TextStyle(
                   color: AppTheme.primaryColor,
@@ -449,7 +449,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
+        Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Text(
             'Quick Actions',
@@ -524,7 +524,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
               Text(
                 label,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
                   color: AppTheme.textPrimaryColor,
@@ -558,7 +558,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Escrow Summary',
                 style: TextStyle(
                   fontSize: 18,
@@ -653,7 +653,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
         Text(
           label,
           textAlign: TextAlign.center,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 11,
             color: AppTheme.textSecondaryColor,
           ),
@@ -675,7 +675,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Recent Activity',
                 style: TextStyle(
                   fontSize: 18,
@@ -779,7 +779,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                                   transaction.description,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
                                     color: AppTheme.textPrimaryColor,
@@ -788,7 +788,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                                 const SizedBox(height: 4),
                                 Text(
                                   '${transaction.statusDisplay} • ${dateFormat.format(transaction.createdAt)}',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 12,
                                     color: AppTheme.textSecondaryColor,
                                   ),
@@ -802,7 +802,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                             children: [
                               Text(
                                 '₵${transaction.amount.toStringAsFixed(2)}',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
                                   color: AppTheme.textPrimaryColor,
@@ -865,7 +865,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
             color: Colors.grey.shade400,
           ),
           const SizedBox(height: 12),
-          const Text(
+          Text(
             'No transactions yet',
             style: TextStyle(
               fontSize: 14,
@@ -929,7 +929,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
             ),
           ),
           const SizedBox(width: 16),
-          const Expanded(
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -952,7 +952,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
               ],
             ),
           ),
-          const Icon(
+          Icon(
             Icons.arrow_forward_ios,
             size: 18,
             color: AppTheme.primaryColor,
@@ -1055,14 +1055,14 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
           const SizedBox(height: 16),
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
               color: AppTheme.textSecondaryColor,
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             'Coming Soon',
             style: TextStyle(
               fontSize: 14,

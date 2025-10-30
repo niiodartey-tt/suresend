@@ -115,7 +115,7 @@ class RiderDashboard extends StatelessWidget {
                   backgroundColor: Colors.white,
                   child: Text(
                     user?.fullName.substring(0, 1).toUpperCase() ?? 'R',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: AppTheme.accentColor,

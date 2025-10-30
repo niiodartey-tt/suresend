@@ -289,7 +289,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
                                 const SizedBox(height: 8),
                                 Text(
                                   '₵ ${wallet.balance.toStringAsFixed(2)}',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 32,
                                     fontWeight: FontWeight.bold,
                                     color: AppTheme.primaryColor,

@@ -132,7 +132,7 @@ class _FundWalletScreenState extends State<FundWalletScreen> {
                                 const SizedBox(height: 8),
                                 Text(
                                   '₵ ${wallet.balance.toStringAsFixed(2)}',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 32,
                                     fontWeight: FontWeight.bold,
                                     color: AppTheme.primaryColor,
@@ -345,7 +345,7 @@ class _PaymentMethodCard extends StatelessWidget {
                 ),
               ),
               if (isSelected)
-                const Icon(
+                Icon(
                   Icons.check_circle,
                   color: AppTheme.primaryColor,
                 ),

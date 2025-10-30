@@ -209,13 +209,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.info_outline,
                           color: AppTheme.primaryColor,
                           size: 32,
                         ),
                         const SizedBox(height: 12),
-                        const Text(
+                        Text(
                           'Two-Factor Authentication',
                           style: TextStyle(
                             fontSize: 16,

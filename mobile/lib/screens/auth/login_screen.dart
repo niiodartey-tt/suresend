@@ -140,18 +140,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // Email or Username
+                      // Email Address
                       Text(
-                        'Email or Username',
+                        'Email Address',
                         style: Theme.of(context).textTheme.labelMedium,
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: _emailController,
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          hintText: 'email or username',
-                          prefixIcon: const Icon(Icons.person_outline, size: 20),
+                          hintText: 'your@email.com',
+                          prefixIcon: const Icon(Icons.email_outlined, size: 20),
                           filled: true,
                           fillColor: AppColors.inputBackground,
                           contentPadding: const EdgeInsets.symmetric(
@@ -277,7 +277,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               'Forgot Password?',
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: AppColors.primary,
-                                    decoration: TextDecoration.underline,
                                   ),
                             ),
                           ),

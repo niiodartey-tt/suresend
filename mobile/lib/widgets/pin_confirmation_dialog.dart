@@ -190,7 +190,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog>
                         size: 24,
                       ),
                     ),
-                    const SizedBox(width: AppTheme.spacing12),
+                    SizedBox(width: AppTheme.spacing12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -252,7 +252,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog>
                                       color: AppColors.textSecondary,
                                     ),
                           ),
-                          const SizedBox(height: AppTheme.spacing4),
+                          SizedBox(height: AppTheme.spacing4),
                           Text(
                             _getActionText(),
                             style: Theme.of(context)
@@ -263,9 +263,9 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog>
                                 ),
                           ),
                           if (widget.transactionData != null) ...[
-                            const SizedBox(height: AppTheme.spacing12),
+                            SizedBox(height: AppTheme.spacing12),
                             const Divider(height: 1),
-                            const SizedBox(height: AppTheme.spacing12),
+                            SizedBox(height: AppTheme.spacing12),
                             Text(
                               'Amount',
                               style: Theme.of(context)
@@ -275,7 +275,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog>
                                     color: AppColors.textSecondary,
                                   ),
                             ),
-                            const SizedBox(height: AppTheme.spacing4),
+                            SizedBox(height: AppTheme.spacing4),
                             Text(
                               '\$${widget.transactionData!['amount'] ?? '0.00'}',
                               style: Theme.of(context)
@@ -286,7 +286,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog>
                                   ),
                             ),
                             if (widget.transactionData!['id'] != null) ...[
-                              const SizedBox(height: AppTheme.spacing12),
+                              SizedBox(height: AppTheme.spacing12),
                               Text(
                                 'Transaction ID',
                                 style: Theme.of(context)
@@ -296,7 +296,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog>
                                       color: AppColors.textSecondary,
                                     ),
                               ),
-                              const SizedBox(height: AppTheme.spacing4),
+                              SizedBox(height: AppTheme.spacing4),
                               Text(
                                 widget.transactionData!['id'],
                                 style: Theme.of(context)
@@ -311,7 +311,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog>
                         ],
                       ),
                     ),
-                    const SizedBox(height: AppTheme.spacing24),
+                    SizedBox(height: AppTheme.spacing24),
 
                     // PIN input label
                     Text(
@@ -320,7 +320,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog>
                             fontWeight: FontWeight.w500,
                           ),
                     ),
-                    const SizedBox(height: AppTheme.spacing16),
+                    SizedBox(height: AppTheme.spacing16),
 
                     // PIN input
                     Pinput(
@@ -335,7 +335,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog>
                       onCompleted: _handleConfirm,
                       errorText: _errorMessage.isEmpty ? null : _errorMessage,
                     ),
-                    const SizedBox(height: AppTheme.spacing8),
+                    SizedBox(height: AppTheme.spacing8),
 
                     // Demo hint
                     Text(
@@ -347,7 +347,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog>
 
                     // Error message
                     if (_errorMessage.isNotEmpty) ...[
-                      const SizedBox(height: AppTheme.spacing12),
+                      SizedBox(height: AppTheme.spacing12),
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: AppTheme.spacing12,
@@ -365,7 +365,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog>
                               size: 16,
                               color: AppColors.error,
                             ),
-                            const SizedBox(width: AppTheme.spacing8),
+                            SizedBox(width: AppTheme.spacing8),
                             Expanded(
                               child: Text(
                                 _errorMessage,
@@ -381,7 +381,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog>
                         ),
                       ),
                     ],
-                    const SizedBox(height: AppTheme.spacing24),
+                    SizedBox(height: AppTheme.spacing24),
 
                     // Action buttons
                     Row(
@@ -397,7 +397,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog>
                             child: const Text('Cancel'),
                           ),
                         ),
-                        const SizedBox(width: AppTheme.spacing12),
+                        SizedBox(width: AppTheme.spacing12),
                         Expanded(
                           child: ElevatedButton(
                             onPressed: _isLoading ||

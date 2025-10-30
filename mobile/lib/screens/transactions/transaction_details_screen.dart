@@ -37,7 +37,7 @@ class TransactionDetailsScreen extends StatelessWidget {
                         _StatusChip(status: transaction['status']),
                       ],
                     ),
-                    const SizedBox(height: AppTheme.spacingM),
+                    SizedBox(height: AppTheme.spacingM),
                     Text(
                       '\$${transaction['amount'].toStringAsFixed(2)}',
                       style: Theme.of(context).textTheme.displayLarge?.copyWith(
@@ -50,7 +50,7 @@ class TransactionDetailsScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: AppTheme.spacingL),
+            SizedBox(height: AppTheme.spacingL),
 
             // Buyer/Seller Info
             Card(
@@ -64,7 +64,7 @@ class TransactionDetailsScreen extends StatelessWidget {
                       avatar: transaction['seller']['avatar'],
                       phone: transaction['seller']['phone'],
                     ),
-                    const Divider(height: AppTheme.spacingL),
+                    Divider(height: AppTheme.spacingL),
                     _UserInfoTile(
                       title: 'Buyer',
                       name: transaction['buyer']['name'],
@@ -76,7 +76,7 @@ class TransactionDetailsScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: AppTheme.spacingL),
+            SizedBox(height: AppTheme.spacingL),
 
             // Progress Tracker
             Card(
@@ -89,14 +89,14 @@ class TransactionDetailsScreen extends StatelessWidget {
                       'Progress',
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
-                    const SizedBox(height: AppTheme.spacingM),
+                    SizedBox(height: AppTheme.spacingM),
                     const _ProgressTracker(currentStep: 2),
                   ],
                 ),
               ),
             ),
 
-            const SizedBox(height: AppTheme.spacingL),
+            SizedBox(height: AppTheme.spacingL),
 
             // Action Buttons
             Row(
@@ -109,7 +109,7 @@ class TransactionDetailsScreen extends StatelessWidget {
                     child: const Text('Release Funds'),
                   ),
                 ),
-                const SizedBox(width: AppTheme.spacingM),
+                SizedBox(width: AppTheme.spacingM),
                 Expanded(
                   child: OutlinedButton(
                     onPressed: () {
@@ -201,7 +201,7 @@ class _UserInfoTile extends StatelessWidget {
           radius: 24,
           backgroundImage: NetworkImage(avatar),
         ),
-        const SizedBox(width: AppTheme.spacingM),
+        SizedBox(width: AppTheme.spacingM),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -210,12 +210,12 @@ class _UserInfoTile extends StatelessWidget {
                 title,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-              const SizedBox(height: AppTheme.spacingXs),
+              SizedBox(height: AppTheme.spacingXs),
               Text(
                 name,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
-              const SizedBox(height: AppTheme.spacingXs),
+              SizedBox(height: AppTheme.spacingXs),
               Text(
                 phone,
                 style: Theme.of(context).textTheme.bodyMedium,

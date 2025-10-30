@@ -122,7 +122,7 @@ class _TransactionsListState extends State<TransactionsList>
                               ),
                             ],
                           ),
-                          const SizedBox(height: AppTheme.spacingM),
+                          SizedBox(height: AppTheme.spacingM),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -134,7 +134,7 @@ class _TransactionsListState extends State<TransactionsList>
                                     style:
                                         Theme.of(context).textTheme.titleMedium,
                                   ),
-                                  const SizedBox(height: AppTheme.spacingXs),
+                                  SizedBox(height: AppTheme.spacingXs),
                                   Text(
                                     transaction['type'],
                                     style:
@@ -154,7 +154,7 @@ class _TransactionsListState extends State<TransactionsList>
                               ),
                             ],
                           ),
-                          const SizedBox(height: AppTheme.spacingM),
+                          SizedBox(height: AppTheme.spacingM),
                           Align(
                             alignment: Alignment.centerRight,
                             child: TextButton(

@@ -396,10 +396,10 @@ class AppTheme {
     ),
 
     // Bottom sheet
-    bottomSheetTheme: BottomSheetThemeData(
+    bottomSheetTheme: const BottomSheetThemeData(
       backgroundColor: AppColors.card,
       elevation: elevationXl,
-      shape: const RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(radiusXl),
         ),

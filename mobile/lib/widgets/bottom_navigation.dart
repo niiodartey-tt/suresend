@@ -20,8 +20,8 @@ class AppBottomNavigation extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.card,
-        border: Border(
-          top: BorderSide(
+        border: const Border(
+          top: const BorderSide(
             color: AppColors.border,
             width: 1,
           ),
@@ -132,7 +132,7 @@ class AppBottomNavigation extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: onCreateTransaction,
-            customBorder: const CircleBorder(),
+            customBorder: const Circleconst Border(),
             child: const Icon(
               Icons.add,
               size: 28,

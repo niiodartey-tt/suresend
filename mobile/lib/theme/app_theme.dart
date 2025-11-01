@@ -17,10 +17,13 @@ class AppTheme {
   static const double spacingXl = 32.0;
 
   // Border Radius
+  static const double radiusXs = 2.0;
   static const double radiusS = 4.0;
   static const double radiusM = 8.0;
+  static const double radiusMd = 8.0; // Alias for radiusM
   static const double radiusL = 16.0;
   static const double radiusXl = 24.0;
+  static const double cardBorderRadius = 12.0;
 
   // Status Colors
   static const success = Color(0xFF43A047);

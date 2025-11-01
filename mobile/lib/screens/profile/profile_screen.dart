@@ -23,21 +23,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _loadUserData() async {
-    // For demo purposes, using static data
-    // In production, this would fetch from storage service or API
-    setState(() {
-      _userData = {
-        'name': 'John Doe',
-        'username': '@johndoe',
-        'userId': 'ESC-USER-16234567',
-        'bio': 'Professional buyer and seller on the platform. Specializing in electronics and tech products.',
-        'memberSince': 'Jan 2024',
-        'isVerified': true,
-        'totalBalance': 4700.00,
-        'availableBalance': 4500.00,
-        'escrowBalance': 200.00,
-      };
-    });
+    // Load user profile from storage
+    final profile = _storageService.getUserProfile();
+
+    if (profile != null) {
+      setState(() {
+        _userData = profile;
+      });
+    } else {
+      // No profile found, initialize default
+      await _storageService.switchToTestAccount('John Doe');
+      final defaultProfile = _storageService.getUserProfile();
+
+      if (mounted && defaultProfile != null) {
+        setState(() {
+          _userData = defaultProfile;
+        });
+      }
+    }
   }
 
   String _getInitials(String name) {

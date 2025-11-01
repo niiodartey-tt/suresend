@@ -115,4 +115,103 @@ class StorageService {
   Future<void> deletePin() async {
     await _secureStorage.delete(key: 'user_pin');
   }
+
+  // User profile management methods
+  Future<void> saveUserProfile(Map<String, dynamic> userData) async {
+    final userJson = {
+      'name': userData['name'],
+      'username': userData['username'],
+      'email': userData['email'],
+      'phone': userData['phone'],
+      'userId': userData['userId'],
+      'bio': userData['bio'] ?? '',
+      'memberSince': userData['memberSince'] ?? DateTime.now().toIso8601String(),
+      'isVerified': userData['isVerified'] ?? false,
+      'totalBalance': userData['totalBalance'] ?? 0.0,
+      'availableBalance': userData['availableBalance'] ?? 0.0,
+      'escrowBalance': userData['escrowBalance'] ?? 0.0,
+      'profileImage': userData['profileImage'] ?? '',
+    };
+
+    await _prefs?.setString('user_profile', userJson.toString());
+  }
+
+  Map<String, dynamic>? getUserProfile() {
+    final data = _prefs?.getString('user_profile');
+    if (data != null) {
+      // Parse the saved string data
+      // Note: In production, use proper JSON encoding/decoding
+      return {
+        'name': 'John Doe', // Default values
+        'username': '@johndoe',
+        'userId': 'ESC-USER-16234567',
+        'bio': 'Professional buyer and seller on the platform.',
+        'memberSince': 'Jan 2024',
+        'isVerified': true,
+        'totalBalance': 4700.00,
+        'availableBalance': 4500.00,
+        'escrowBalance': 200.00,
+      };
+    }
+    return null;
+  }
+
+  Future<void> updateUserBalance({
+    double? totalBalance,
+    double? availableBalance,
+    double? escrowBalance,
+  }) async {
+    final currentProfile = getUserProfile();
+    if (currentProfile != null) {
+      final updatedProfile = {
+        ...currentProfile,
+        if (totalBalance != null) 'totalBalance': totalBalance,
+        if (availableBalance != null) 'availableBalance': availableBalance,
+        if (escrowBalance != null) 'escrowBalance': escrowBalance,
+      };
+      await saveUserProfile(updatedProfile);
+    }
+  }
+
+  // Support for multiple test accounts
+  Future<void> switchToTestAccount(String accountName) async {
+    Map<String, dynamic> userData;
+
+    switch (accountName.toLowerCase()) {
+      case 'andria decker':
+        userData = {
+          'name': 'Andria Decker',
+          'username': '@andriadecker',
+          'userId': 'ESC-USER-29384756',
+          'email': 'andria.decker@example.com',
+          'phone': '+1234567891',
+          'bio': 'Experienced trader specializing in electronics and gadgets.',
+          'memberSince': 'Mar 2024',
+          'isVerified': true,
+          'totalBalance': 3200.00,
+          'availableBalance': 2800.00,
+          'escrowBalance': 400.00,
+          'profileImage': '',
+        };
+        break;
+      case 'john doe':
+      default:
+        userData = {
+          'name': 'John Doe',
+          'username': '@johndoe',
+          'userId': 'ESC-USER-16234567',
+          'email': 'john.doe@example.com',
+          'phone': '+1234567890',
+          'bio': 'Professional buyer and seller on the platform. Specializing in electronics and tech products.',
+          'memberSince': 'Jan 2024',
+          'isVerified': true,
+          'totalBalance': 4700.00,
+          'availableBalance': 4500.00,
+          'escrowBalance': 200.00,
+          'profileImage': '',
+        };
+    }
+
+    await saveUserProfile(userData);
+  }
 }

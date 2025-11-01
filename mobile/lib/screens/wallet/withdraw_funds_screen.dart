@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/wallet_provider.dart';
 import '../../config/theme.dart';
+import '../../config/app_colors.dart';
 import '../../widgets/skeleton_loader.dart';
 import '../../widgets/error_retry_widget.dart';
 import '../../utils/animation_helpers.dart';
@@ -95,7 +96,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
             SnackBar(
               content: Text(result['message'] ??
                   'Withdrawal request submitted successfully'),
-              backgroundColor: Colors.green,
+              backgroundColor: AppColors.success,
             ),
           );
           Navigator.pop(context);
@@ -106,7 +107,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
             SnackBar(
               content: Text(
                   result['message'] ?? 'Failed to submit withdrawal request'),
-              backgroundColor: Colors.red,
+              backgroundColor: AppColors.error,
             ),
           );
         }
@@ -119,7 +120,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error: ${e.toString()}'),
-            backgroundColor: Colors.red,
+            backgroundColor: AppColors.error,
           ),
         );
       }
@@ -161,7 +162,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                   'Available Balance',
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: Colors.grey,
+                                    color: AppColors.textSecondary,
                                   ),
                                 ),
                                 const SizedBox(height: 8),
@@ -333,19 +334,19 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
 
                 // Information Card
                 Card(
-                  color: Colors.blue.shade50,
+                  color: AppColors.accentBackground,
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Row(
                       children: [
-                        Icon(Icons.info_outline, color: Colors.blue.shade700),
+                        const Icon(Icons.info_outline, color: AppColors.primary),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             'Withdrawals are processed within 1-3 business days. A processing fee may apply.',
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.blue.shade700,
+                              color: AppColors.primary,
                             ),
                           ),
                         ),
@@ -363,7 +364,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                     ),
                   ),
                   child: _isLoading
@@ -415,7 +416,7 @@ class _WithdrawalMethodCard extends StatelessWidget {
       color: isSelected ? AppTheme.primaryColor.withValues(alpha: 0.1) : null,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppTheme.radiusMd),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(
@@ -425,11 +426,11 @@ class _WithdrawalMethodCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color:
                       isSelected ? AppTheme.primaryColor : Colors.grey.shade200,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                 ),
                 child: Icon(
                   icon,
-                  color: isSelected ? Colors.white : Colors.grey.shade700,
+                  color: isSelected ? Colors.white : AppColors.textSecondary,
                   size: 28,
                 ),
               ),
@@ -451,7 +452,7 @@ class _WithdrawalMethodCard extends StatelessWidget {
                       subtitle,
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.grey.shade600,
+                        color: AppColors.textSecondary,
                       ),
                     ),
                   ],

@@ -150,7 +150,7 @@ class TransactionDetailsScreen extends StatelessWidget {
                       const SizedBox(height: 16),
                       // Progress bar
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(AppTheme.radiusXs),
                         child: LinearProgressIndicator(
                           value: transaction['progress'] / 100,
                           minHeight: 8,
@@ -268,7 +268,7 @@ class TransactionDetailsScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppTheme.modalBorderRadius),
       ),
       child: Text(
         status,
@@ -318,7 +318,7 @@ class TransactionDetailsScreen extends StatelessWidget {
                 icon,
                 size: 16,
                 color: isCompleted
-                    ? Colors.white
+                    ? AppColors.primaryForeground
                     : isActive
                         ? AppColors.primary
                         : AppColors.textMuted,

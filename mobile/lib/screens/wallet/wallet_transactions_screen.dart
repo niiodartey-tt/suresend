@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../../providers/wallet_provider.dart';
 import '../../models/wallet.dart';
 import '../../config/theme.dart';
+import '../../config/app_colors.dart';
 
 class WalletTransactionsScreen extends StatefulWidget {
   const WalletTransactionsScreen({super.key});
@@ -65,13 +66,13 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
                   const Icon(
                     Icons.error_outline,
                     size: 64,
-                    color: Colors.red,
+                    color: AppColors.error,
                   ),
                   const SizedBox(height: 16),
                   Text(
                     'Error: ${walletProvider.error}',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.red),
+                    style: const TextStyle(color: AppColors.error),
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
@@ -111,7 +112,7 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
                           _filterType = 'credit';
                         });
                       },
-                      color: Colors.green,
+                      color: AppColors.success,
                     ),
                     const SizedBox(width: 8),
                     _FilterChip(
@@ -122,7 +123,7 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
                           _filterType = 'debit';
                         });
                       },
-                      color: Colors.red,
+                      color: AppColors.error,
                     ),
                   ],
                 ),
@@ -138,7 +139,7 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
                             Icon(
                               Icons.receipt_long_outlined,
                               size: 64,
-                              color: Colors.grey.shade400,
+                              color: AppColors.textSecondary,
                             ),
                             const SizedBox(height: 16),
                             Text(
@@ -147,7 +148,7 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
                                   : 'No $_filterType transactions',
                               style: TextStyle(
                                 fontSize: 16,
-                                color: Colors.grey.shade600,
+                                color: AppColors.textSecondary,
                               ),
                             ),
                           ],
@@ -192,17 +193,17 @@ class _FilterChip extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(AppTheme.radius2xl),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected ? chipColor : Colors.grey.shade200,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(AppTheme.radius2xl),
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: isSelected ? Colors.white : Colors.grey.shade700,
+            color: isSelected ? Colors.white : AppColors.textSecondary,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             fontSize: 14,
           ),
@@ -231,7 +232,7 @@ class _TransactionCard extends StatelessWidget {
   }
 
   Color _getTransactionColor() {
-    return transaction.isCredit ? Colors.green : Colors.red;
+    return transaction.isCredit ? AppColors.success : AppColors.error;
   }
 
   String _getTransactionSign() {
@@ -249,7 +250,7 @@ class _TransactionCard extends StatelessWidget {
         onTap: () {
           _showTransactionDetails(context);
         },
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppTheme.radiusMd),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(
@@ -259,7 +260,7 @@ class _TransactionCard extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                 ),
                 child: Icon(
                   _getTransactionIcon(),
@@ -288,7 +289,7 @@ class _TransactionCard extends StatelessWidget {
                       dateFormat.format(transaction.createdAt),
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.grey.shade600,
+                        color: AppColors.textSecondary,
                       ),
                     ),
                     if (transaction.reference.isNotEmpty) ...[
@@ -297,7 +298,7 @@ class _TransactionCard extends StatelessWidget {
                         'Ref: ${transaction.reference}',
                         style: TextStyle(
                           fontSize: 11,
-                          color: Colors.grey.shade500,
+                          color: AppColors.textSecondary,
                         ),
                       ),
                     ],
@@ -322,7 +323,7 @@ class _TransactionCard extends StatelessWidget {
                     'Bal: ₵${transaction.balanceAfter.toStringAsFixed(2)}',
                     style: TextStyle(
                       fontSize: 11,
-                      color: Colors.grey.shade600,
+                      color: AppColors.textSecondary,
                     ),
                   ),
                 ],
@@ -374,7 +375,7 @@ class _TransactionCard extends StatelessWidget {
                     transaction.isCredit ? 'Received' : 'Sent',
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.grey.shade600,
+                      color: AppColors.textSecondary,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -438,7 +439,7 @@ class _DetailRow extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: 14,
-            color: Colors.grey.shade600,
+            color: AppColors.textSecondary,
           ),
         ),
         Flexible(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../config/theme.dart';
+import '../../config/app_colors.dart';
 import '../../providers/wallet_provider.dart';
 import '../../widgets/skeleton_loader.dart';
 import '../../widgets/error_retry_widget.dart';
@@ -65,7 +66,7 @@ class _FundWalletScreenState extends State<FundWalletScreen> {
                   result['data']['paymentUrl'],
                   style: const TextStyle(
                     fontSize: 12,
-                    color: Colors.blue,
+                    color: AppColors.primary,
                     decoration: TextDecoration.underline,
                   ),
                 ),
@@ -126,7 +127,7 @@ class _FundWalletScreenState extends State<FundWalletScreen> {
                                   'Available Balance',
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: Colors.grey,
+                                    color: AppColors.textSecondary,
                                   ),
                                 ),
                                 const SizedBox(height: 8),
@@ -147,19 +148,19 @@ class _FundWalletScreenState extends State<FundWalletScreen> {
 
                 // Info card
                 Card(
-                  color: Colors.blue.shade50,
+                  color: AppColors.accentBackground,
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Row(
                       children: [
-                        Icon(Icons.info_outline, color: Colors.blue.shade700),
+                        const Icon(Icons.info_outline, color: AppColors.primary),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             'Add money to your wallet to make payments and transfers.',
                             style: TextStyle(
                               fontSize: 13,
-                              color: Colors.blue.shade700,
+                              color: AppColors.primary,
                             ),
                           ),
                         ),
@@ -195,7 +196,7 @@ class _FundWalletScreenState extends State<FundWalletScreen> {
                       color: Colors.black87,
                     ),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppTheme.radiusLg),
                     ),
                     helperText: 'Min: GHS 10.00 • Max: GHS 10,000.00',
                   ),
@@ -254,7 +255,7 @@ class _FundWalletScreenState extends State<FundWalletScreen> {
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
                     ),
                   ),
                   child: _isLoading
@@ -302,7 +303,7 @@ class _PaymentMethodCard extends StatelessWidget {
       color: isSelected ? AppTheme.primaryColor.withValues(alpha: 0.1) : null,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Row(
@@ -317,7 +318,7 @@ class _PaymentMethodCard extends StatelessWidget {
                 ),
                 child: Icon(
                   icon,
-                  color: isSelected ? Colors.white : Colors.grey.shade600,
+                  color: isSelected ? Colors.white : AppColors.textSecondary,
                 ),
               ),
               const SizedBox(width: 16),
@@ -338,7 +339,7 @@ class _PaymentMethodCard extends StatelessWidget {
                       subtitle,
                       style: TextStyle(
                         fontSize: 13,
-                        color: Colors.grey.shade600,
+                        color: AppColors.textSecondary,
                       ),
                     ),
                   ],

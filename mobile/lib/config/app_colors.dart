@@ -82,6 +82,10 @@ class AppColors {
   static const Color accentBackground = Color(0xFFE8F0FE);
   static const Color accentForeground = Color(0xFF0A2647);
 
+  /// Onboarding illustration background - #CED9E5 (Light Gray-Blue)
+  /// Used for: Onboarding screen illustration containers
+  static const Color onboardingIllustrationBg = Color(0xFFCED9E5);
+
   // ============================================
   // TEXT COLORS
   // ============================================
@@ -103,7 +107,7 @@ class AppColors {
   static const Color border = Color(0x1A000000);
 
   /// Ring/focus indicator color (same as primary)
-  static const Color ring = Color(0xFF043b69);
+  static const Color ring = Color(0xFF0A2647);
 
   // ============================================
   // STATUS COLORS FOR TRANSACTIONS
@@ -138,10 +142,10 @@ class AppColors {
   // CHART/ANALYTICS COLORS
   // ============================================
 
-  static const Color chart1 = Color(0xFF043b69); // Primary blue
-  static const Color chart2 = Color(0xFF10B981); // Green
-  static const Color chart3 = Color(0xFFF59E0B); // Orange
-  static const Color chart4 = Color(0xFFEF4444); // Red
+  static const Color chart1 = Color(0xFF0A2647); // Primary blue
+  static const Color chart2 = Color(0xFF00C853); // Green
+  static const Color chart3 = Color(0xFFFF9800); // Orange
+  static const Color chart4 = Color(0xFFE53935); // Red
   static const Color chart5 = Color(0xFF8B5CF6); // Purple
 
   // ============================================

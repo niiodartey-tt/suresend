@@ -376,7 +376,7 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               color: AppColors.card,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppTheme.modalBorderRadius),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,

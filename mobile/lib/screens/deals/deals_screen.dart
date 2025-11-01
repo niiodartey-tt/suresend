@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:suresend/theme/app_theme.dart';
-import 'package:suresend/config/app_colors.dart';
-import 'package:suresend/config/theme.dart';
+import '../../config/app_colors.dart';
+import '../../config/theme.dart';
 
 class DealsScreen extends StatefulWidget {
   const DealsScreen({super.key});

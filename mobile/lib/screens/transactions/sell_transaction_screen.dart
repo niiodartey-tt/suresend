@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:suresend/theme/app_colors.dart';
 import 'package:suresend/theme/app_theme.dart';
 import 'package:suresend/widgets/pin_confirmation_modal.dart';
 import 'package:suresend/screens/success/escrow_created_success_screen.dart';
+import 'package:suresend/providers/transaction_provider.dart';
+import 'package:suresend/providers/notification_provider.dart';
+import 'package:suresend/utils/error_handler.dart';
 
 /// Sell Transaction Screen
 /// Similar to buy_transaction.png but for selling items
@@ -49,22 +53,80 @@ class _SellTransactionScreenState extends State<SellTransactionScreen> {
       return;
     }
 
+    final transactionProvider = context.read<TransactionProvider>();
+    final notificationProvider = context.read<NotificationProvider>();
+
     // Show PIN confirmation modal
     await PinConfirmationModal.show(
       context: context,
       action: 'Create Escrow Transaction',
       amount: '\$${_amountController.text}',
-      onConfirm: (pin) {
-        // Navigate to success screen
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => EscrowCreatedSuccessScreen(
-              transactionId: 'ESC-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}',
-              amount: '\$${_amountController.text}',
-              date: _formatDate(DateTime.now()),
-            ),
+      onConfirm: (pin) async {
+        // Show loading indicator
+        if (!mounted) return;
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => const Center(
+            child: CircularProgressIndicator(),
           ),
         );
+
+        try {
+          // Create escrow transaction (for sell, the buyer ID is provided)
+          final result = await transactionProvider.createEscrow(
+            sellerId: _buyerController.text, // Actually buyerId for sell transactions
+            amount: double.parse(_amountController.text),
+            description: _itemController.text,
+            paymentMethod: 'wallet',
+          );
+
+          if (!mounted) return;
+
+          // Close loading dialog
+          Navigator.of(context).pop();
+
+          if (result['success']) {
+            final transactionId = result['transactionId'] ?? 'ESC-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}';
+
+            // Add local notification
+            notificationProvider.addLocalNotification(
+              title: 'Escrow Created',
+              message: 'Escrow of \$${_amountController.text} has been created for ${_itemController.text}',
+              type: 'transaction',
+              data: {
+                'transactionId': transactionId,
+                'amount': _amountController.text,
+                'description': _itemController.text,
+                'buyer': _buyerController.text,
+                'category': _selectedCategory,
+                'type': 'sell',
+              },
+            );
+
+            // Navigate to success screen
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => EscrowCreatedSuccessScreen(
+                  transactionId: transactionId,
+                  amount: '\$${_amountController.text}',
+                  date: _formatDate(DateTime.now()),
+                ),
+              ),
+            );
+          } else {
+            // Show error
+            ErrorHandler.showError(context, result['error'] ?? 'Failed to create transaction');
+          }
+        } catch (e) {
+          if (!mounted) return;
+
+          // Close loading dialog
+          Navigator.of(context).pop();
+
+          // Show error
+          ErrorHandler.showError(context, e);
+        }
       },
     );
   }

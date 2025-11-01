@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../config/app_colors.dart';
-import '../../config/theme.dart';
+import '../../theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
 import 'register_screen.dart';
 import 'forgot_password_screen.dart';
@@ -83,14 +83,10 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Gradient Header
+            // Gradient Header - Navy blue gradient as per spec
             Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [AppColors.primary, AppColors.primaryDark],
-                ),
+              decoration: BoxDecoration(
+                gradient: AppColors.primaryGradient,
               ),
               padding: const EdgeInsets.fromLTRB(32, 60, 32, 60),
               width: double.infinity,
@@ -128,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: BoxDecoration(
                   color: AppColors.card,
                   borderRadius:
-                      BorderRadius.circular(AppTheme.cardBorderRadius),
+                      BorderRadius.circular(AppTheme.radiusCard),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.1),
@@ -170,22 +166,22 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(
-                                AppTheme.inputBorderRadius),
+                                AppTheme.radiusSmall),
                             borderSide:
-                                const BorderSide(color: AppColors.border),
+                                const BorderSide(color: AppColors.mutedBlue),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(
-                                AppTheme.inputBorderRadius),
+                                AppTheme.radiusSmall),
                             borderSide:
-                                const BorderSide(color: AppColors.border),
+                                const BorderSide(color: AppColors.mutedBlue),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
-                            borderSide: const BorderSide(color: AppColors.ring, width: 2),
+                            borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
+                            borderSide: const BorderSide(color: AppColors.primary, width: 2),
                           ),
                           errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
+                            borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                             borderSide: const BorderSide(color: AppColors.error),
                           ),
                         ),
@@ -239,22 +235,22 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(
-                                AppTheme.inputBorderRadius),
+                                AppTheme.radiusSmall),
                             borderSide:
-                                const BorderSide(color: AppColors.border),
+                                const BorderSide(color: AppColors.mutedBlue),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(
-                                AppTheme.inputBorderRadius),
+                                AppTheme.radiusSmall),
                             borderSide:
-                                const BorderSide(color: AppColors.border),
+                                const BorderSide(color: AppColors.mutedBlue),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
-                            borderSide: const BorderSide(color: AppColors.ring, width: 2),
+                            borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
+                            borderSide: const BorderSide(color: AppColors.primary, width: 2),
                           ),
                           errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
+                            borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                             borderSide: const BorderSide(color: AppColors.error),
                           ),
                         ),
@@ -328,9 +324,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 24),
 
-                      // Sign In Button
+                      // Sign In Button - 48px height as per spec
                       SizedBox(
-                        height: 52,
+                        height: AppTheme.buttonHeight,
                         child: ElevatedButton(
                           onPressed:
                               authProvider.isLoading ? null : _handleLogin,
@@ -339,7 +335,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             foregroundColor: AppColors.primaryForeground,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(
-                                  AppTheme.buttonBorderRadius),
+                                  AppTheme.radiusSmall),
                             ),
                             elevation: 0,
                           ),

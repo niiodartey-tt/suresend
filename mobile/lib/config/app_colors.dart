@@ -7,55 +7,52 @@ class AppColors {
   AppColors._();
 
   // ============================================
-  // PRIMARY COLORS (Light Mode)
+  // PRIMARY COLORS (Light Mode) - From claude_code_prompt.md
   // ============================================
 
-  /// Primary brand color - #043b69 (Dark Blue)
+  /// Primary Navy Blue - #0A2647
   /// Used for: Main CTA buttons, headers, navigation active states
-  static const Color primary = Color(0xFF043b69);
+  static const Color primary = Color(0xFF0A2647);
 
-  /// Dark variant of primary - #032d51
-  /// Used for: Hover states for primary buttons
-  static const Color primaryDark = Color(0xFF032d51);
+  /// Secondary Blue - #144272
+  /// Used for: Accents, secondary elements
+  static const Color secondary = Color(0xFF144272);
+
+  /// Light Blue - #205295
+  /// Used for: Button hover states, badges
+  static const Color lightBlue = Color(0xFF205295);
+
+  /// Muted Blue - #7B96B0
+  /// Used for: Disabled states, borders
+  static const Color mutedBlue = Color(0xFF7B96B0);
 
   /// Primary foreground (text on primary background)
   static const Color primaryForeground = Color(0xFFFFFFFF);
-
-  // ============================================
-  // SECONDARY COLORS
-  // ============================================
-
-  /// Secondary color - #111111 (Almost Black)
-  /// Used for: Secondary buttons, dark text
-  static const Color secondary = Color(0xFF111111);
 
   /// Secondary foreground (text on secondary background)
   static const Color secondaryForeground = Color(0xFFFFFFFF);
 
   // ============================================
-  // SEMANTIC COLORS
+  // SEMANTIC COLORS - From claude_code_prompt.md
   // ============================================
 
-  /// Success color - #10B981 (Green)
-  /// Used for: Positive actions, completed transactions
-  static const Color success = Color(0xFF10B981);
+  /// Success Green - #00C853
+  /// Used for: Positive actions, completed transactions, success icons
+  static const Color success = Color(0xFF00C853);
   static const Color successLight = Color(0xFFD1FAE5);
-  static const Color successDark = Color(0xFF059669);
+  static const Color successDark = Color(0xFF00A845);
 
-  /// Warning color - #F59E0B (Orange/Amber)
-  /// Used for: Alerts, pending states
-  static const Color warning = Color(0xFFF59E0B);
-  static const Color warningLight = Color(0xFFFEF3C7);
-  static const Color warningDark = Color(0xFFD97706);
+  /// Warning Orange - #FF9800
+  /// Used for: Dispute status, warnings, alerts
+  static const Color warning = Color(0xFFFF9800);
+  static const Color warningLight = Color(0xFFFFF3E0);
+  static const Color warningDark = Color(0xFFE68900);
 
-  /// Error/Destructive color - #DC2626 (Red)
-  /// Used for: Errors, disputes, negative actions
-  static const Color error = Color(0xFFDC2626);
+  /// Error Red - #E53935
+  /// Used for: Errors, delete actions, negative states
+  static const Color error = Color(0xFFE53935);
   static const Color errorLight = Color(0xFFFEE2E2);
-  static const Color errorDark = Color(0xFFB91C1C);
-
-  /// Alternative error color - #EF4444
-  static const Color errorAlt = Color(0xFFEF4444);
+  static const Color errorDark = Color(0xFFC62828);
 
   /// Purple accent - #8B5CF6
   /// Used for: Secondary features, analytics
@@ -64,36 +61,39 @@ class AppColors {
   static const Color purpleDark = Color(0xFF7C3AED);
 
   // ============================================
-  // BACKGROUND COLORS
+  // BACKGROUND COLORS - From claude_code_prompt.md
   // ============================================
 
-  /// Main background - #F9FAFB (Light Gray)
-  /// Used for: App background, muted surfaces
-  static const Color background = Color(0xFFF9FAFB);
+  /// Background Gray - #F5F7FA
+  /// Used for: Page backgrounds
+  static const Color background = Color(0xFFF5F7FA);
 
-  /// Card background - #FFFFFF (White)
+  /// Card White - #FFFFFF
+  /// Used for: Cards, modals
   static const Color card = Color(0xFFFFFFFF);
 
-  /// Input background - #F9FAFB
-  static const Color inputBackground = Color(0xFFF9FAFB);
+  /// Input background - #F5F7FA
+  static const Color inputBackground = Color(0xFFF5F7FA);
 
   /// Accent background - #E8F0FE (Light Blue)
   /// Used for: Background for accented content
   static const Color accentBackground = Color(0xFFE8F0FE);
-  static const Color accentForeground = Color(0xFF043b69);
+  static const Color accentForeground = Color(0xFF0A2647);
 
   // ============================================
-  // TEXT COLORS
+  // TEXT COLORS - From claude_code_prompt.md
   // ============================================
 
-  /// Primary text - #1E1E1E (Dark Gray/Black)
-  static const Color textPrimary = Color(0xFF1E1E1E);
+  /// Text Primary - #1A1A1A
+  /// Used for: Headings, labels
+  static const Color textPrimary = Color(0xFF1A1A1A);
 
-  /// Secondary/muted text - #6B7280 (Medium Gray)
-  static const Color textSecondary = Color(0xFF6B7280);
+  /// Text Secondary - #666666
+  /// Used for: Descriptions, helper text
+  static const Color textSecondary = Color(0xFF666666);
 
   /// Muted foreground (same as textSecondary)
-  static const Color textMuted = Color(0xFF6B7280);
+  static const Color textMuted = Color(0xFF666666);
 
   // ============================================
   // BORDER & DIVIDER COLORS
@@ -237,11 +237,11 @@ class AppColors {
     }
   }
 
-  /// Create gradient for primary header
+  /// Create gradient for primary header - Navy blue gradient
   static LinearGradient get primaryGradient => const LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: [primary, primaryDark],
+        colors: [primary, secondary], // #0A2647 to #144272
       );
 
   /// Create gradient for dark mode header

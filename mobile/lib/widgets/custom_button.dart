@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import '../config/app_colors.dart';
+import '../theme/app_theme.dart';
 
+/// Custom Button Widget following claude_code_prompt.md specifications
+/// Button height: 48px
+/// Border radius: 6-8px
 class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
@@ -20,7 +25,7 @@ class CustomButton extends StatelessWidget {
     this.backgroundColor,
     this.textColor,
     this.width,
-    this.height = 50,
+    this.height = AppTheme.buttonHeight, // 48px from spec
     this.icon,
   });
 

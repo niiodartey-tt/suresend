@@ -33,26 +33,30 @@ class AppBottomNavigation extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
+              // 1. Dashboard - Grid icon
               _buildNavItem(
-                icon: Icons.dashboard_outlined,
-                activeIcon: Icons.dashboard,
+                icon: Icons.grid_view_outlined,
+                activeIcon: Icons.grid_view,
                 label: 'Dashboard',
                 index: 0,
               ),
+              // 2. Deals - Document/list icon
               _buildNavItem(
-                icon: Icons.description_outlined,
-                activeIcon: Icons.description,
+                icon: Icons.receipt_long_outlined,
+                activeIcon: Icons.receipt_long,
                 label: 'Deals',
                 index: 1,
               ),
-              // Center FAB
+              // 3. Create (center) - Large circular "+" button, elevated
               _buildCreateButton(),
+              // 4. Settings - Gear icon
               _buildNavItem(
                 icon: Icons.settings_outlined,
                 activeIcon: Icons.settings,
                 label: 'Settings',
                 index: 2,
               ),
+              // 5. Profile - User icon
               _buildNavItem(
                 icon: Icons.person_outline,
                 activeIcon: Icons.person,
@@ -80,31 +84,29 @@ class AppBottomNavigation extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              isActive ? activeIcon : icon,
-              size: 24,
-              color: isActive ? AppColors.primary : AppColors.textMuted,
+            // Active state: Blue background fill, white icon
+            // Inactive state: Gray icon, no background
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: isActive ? AppColors.primary : Colors.transparent,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                isActive ? activeIcon : icon,
+                size: 24,
+                color: isActive ? Colors.white : AppColors.textMuted,
+              ),
             ),
             const SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 10,
                 fontWeight: isActive ? FontWeight.w500 : FontWeight.w400,
                 color: isActive ? AppColors.primary : AppColors.textMuted,
               ),
             ),
-            const SizedBox(height: 2),
-            // Active indicator dot
-            if (isActive)
-              Container(
-                width: 4,
-                height: 4,
-                decoration: const BoxDecoration(
-                  color: AppColors.primary,
-                  shape: BoxShape.circle,
-                ),
-              ),
           ],
         ),
       ),
@@ -132,7 +134,7 @@ class AppBottomNavigation extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: onCreateTransaction,
-            customBorder: const Circleconst const Border(),
+            customBorder: const CircleBorder(),
             child: const Icon(
               Icons.add,
               size: 28,

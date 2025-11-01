@@ -68,7 +68,7 @@ class EscrowSuccessScreen extends StatelessWidget {
                       Container(
                         width: 100,
                         height: 100,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: AppColors.success,
                           shape: BoxShape.circle,
                         ),
@@ -120,7 +120,7 @@ class EscrowSuccessScreen extends StatelessWidget {
                           message ??
                               'Your escrow transaction has been created successfully. Funds are now held securely until delivery confirmation.',
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 14,
                             color: AppColors.textMuted,
                             height: 1.5,
@@ -327,7 +327,7 @@ class _DetailRow extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 13,
             color: AppColors.textMuted,
           ),

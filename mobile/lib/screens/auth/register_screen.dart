@@ -272,7 +272,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                       ),
                       const SizedBox(height: 4),
-                      Text(
+                      const Text(
                         'This will be used for transactions',
                         style: TextStyle(
                           fontSize: 11,
@@ -385,7 +385,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                       ),
                       const SizedBox(height: 4),
-                      Text(
+                      const Text(
                         'Can also be used for transactions',
                         style: TextStyle(
                           fontSize: 11,

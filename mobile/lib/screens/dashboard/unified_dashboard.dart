@@ -422,7 +422,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
+                    const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
@@ -434,7 +434,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                             letterSpacing: 0.5,
                           ),
                         ),
-                        const SizedBox(height: 2),
+                        SizedBox(height: 2),
                         Text(
                           'October',
                           style: TextStyle(
@@ -478,7 +478,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                             tapTargetSize:
                                 MaterialTapTargetSize.shrinkWrap,
                           ),
-                          child: Text(
+                          child: const Text(
                             'See all',
                             style: TextStyle(
                               color: AppColors.primary,
@@ -507,7 +507,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                           color: AppColors.textMuted.withValues(alpha: 0.5),
                         ),
                         const SizedBox(height: 16),
-                        Text(
+                        const Text(
                           'No transactions yet',
                           style: TextStyle(
                             color: AppColors.textMuted,
@@ -624,16 +624,14 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                     children: [
                       Text(
                         transaction.id,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 11,
                           color: AppColors.textMuted,
                         ),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        transaction.createdAt != null
-                            ? _formatDate(transaction.createdAt!)
-                            : 'Oct 28, 2025',
+                        _formatDate(transaction.createdAt),
                         style: TextStyle(
                           fontSize: 10,
                           color: AppColors.textMuted.withValues(alpha: 0.7),
@@ -663,7 +661,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
               // Amount
               Text(
                 CurrencyFormatter.formatGHS(transaction.amount),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
@@ -673,7 +671,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
               // Description
               Text(
                 transaction.description,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 14,
                   color: AppColors.textPrimary,
                   fontWeight: FontWeight.w500,
@@ -691,7 +689,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                       isBuyer ? transaction.seller : transaction.buyer;
                   return Text(
                     '${isBuyer ? 'Seller: ' : 'Buyer: '}${counterparty.fullName}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 11,
                       color: AppColors.textMuted,
                     ),

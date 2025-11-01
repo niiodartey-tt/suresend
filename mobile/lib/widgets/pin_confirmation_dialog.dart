@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:suresend/config/app_colors.dart';
-import 'package:suresend/config/theme.dart';
 
 /// PIN Confirmation Dialog matching ui_reference/confirm_transaction.png
 class PinConfirmationDialog extends StatefulWidget {
@@ -147,7 +146,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'Confirm Transaction',
                           style: TextStyle(
                             color: AppColors.primaryForeground,
@@ -197,7 +196,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'Action',
                           style: TextStyle(
                             fontSize: 11,
@@ -208,7 +207,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog> {
                         const SizedBox(height: 4),
                         Text(
                           _getActionText(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 15,
                             color: AppColors.textPrimary,
                             fontWeight: FontWeight.w600,
@@ -216,7 +215,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog> {
                         ),
                         if (amount.isNotEmpty) ...[
                           const SizedBox(height: 16),
-                          Text(
+                          const Text(
                             'Amount',
                             style: TextStyle(
                               fontSize: 11,
@@ -229,7 +228,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog> {
                             amount.toString().startsWith('GHS') || amount.toString().startsWith('₵')
                                 ? amount.toString()
                                 : 'GHS $amount',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 18,
                               color: AppColors.textPrimary,
                               fontWeight: FontWeight.w700,
@@ -238,7 +237,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog> {
                         ],
                         if (transactionId.isNotEmpty) ...[
                           const SizedBox(height: 16),
-                          Text(
+                          const Text(
                             'Transaction ID',
                             style: TextStyle(
                               fontSize: 11,
@@ -249,7 +248,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog> {
                           const SizedBox(height: 4),
                           Text(
                             transactionId,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 13,
                               color: AppColors.textPrimary,
                               fontWeight: FontWeight.w500,
@@ -262,7 +261,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog> {
                   const SizedBox(height: 24),
 
                   // PIN Input Label
-                  Text(
+                  const Text(
                     'Enter 4-Digit PIN',
                     style: TextStyle(
                       fontSize: 13,
@@ -341,7 +340,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog> {
                   const SizedBox(height: 16),
 
                   // Demo PIN note
-                  Center(
+                  const Center(
                     child: Text(
                       'For demo purposes, use PIN: 1234',
                       style: TextStyle(

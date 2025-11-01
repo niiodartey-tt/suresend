@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../config/app_colors.dart';
-import '../../config/theme.dart';
 
 /// Message Chat Screen
 /// Matches ui_references/message_chat.png
@@ -106,7 +105,7 @@ class _MessageChatScreenState extends State<MessageChatScreen> {
             Container(
               width: 36,
               height: 36,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppColors.accentBackground,
                 shape: BoxShape.circle,
               ),

@@ -112,7 +112,7 @@ class _SellTransactionScreenState extends State<SellTransactionScreen> {
                 ),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<String>(
-                  value: _selectedCategory,
+                  initialValue: _selectedCategory,
                   decoration: const InputDecoration(),
                   items: [
                     'Physical Product',
@@ -175,7 +175,7 @@ class _SellTransactionScreenState extends State<SellTransactionScreen> {
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: _amountController,
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   decoration: InputDecoration(
                     hintText: '0.00',
                     prefixIcon: Padding(

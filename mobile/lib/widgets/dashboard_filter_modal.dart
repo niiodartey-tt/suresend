@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../config/app_colors.dart';
-import '../config/theme.dart';
 
 /// Dashboard Filter Modal
 /// Matches ui_references/dashboard_filter.png
@@ -200,7 +199,7 @@ class _DashboardFilterModalState extends State<DashboardFilterModal> {
                     builder: (context, child) {
                       return Theme(
                         data: Theme.of(context).copyWith(
-                          colorScheme: ColorScheme.light(
+                          colorScheme: const ColorScheme.light(
                             primary: AppColors.primary,
                           ),
                         ),

@@ -1,5 +1,6 @@
 /// Currency Formatting Utility
 /// Ensures consistent GHS (₵) currency formatting across the app
+library;
 
 class CurrencyFormatter {
   CurrencyFormatter._();

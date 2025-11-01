@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../config/theme.dart';
-import '../../../config/app_colors.dart';
 
 class TransactionsList extends StatefulWidget {
   const TransactionsList({super.key});

@@ -333,14 +333,14 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                 const SizedBox(height: 24),
 
                 // Information Card
-                Card(
+                const Card(
                   color: AppColors.accentBackground,
                   child: Padding(
-                    padding: const EdgeInsets.all(12.0),
+                    padding: EdgeInsets.all(12.0),
                     child: Row(
                       children: [
-                        const Icon(Icons.info_outline, color: AppColors.primary),
-                        const SizedBox(width: 12),
+                        Icon(Icons.info_outline, color: AppColors.primary),
+                        SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             'Withdrawals are processed within 1-3 business days. A processing fee may apply.',
@@ -450,7 +450,7 @@ class _WithdrawalMethodCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       subtitle,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
                         color: AppColors.textSecondary,
                       ),

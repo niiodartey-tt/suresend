@@ -196,9 +196,9 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             'Platform Commission (2%)',
-                            style: const TextStyle(color: AppColors.textSecondary),
+                            style: TextStyle(color: AppColors.textSecondary),
                           ),
                           Text(
                             'GHS ${transaction.commission.toStringAsFixed(2)}',
@@ -210,9 +210,9 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             'Seller Receives',
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: AppColors.successDark,
                               fontWeight: FontWeight.w500,
                             ),
@@ -422,14 +422,14 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                     borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                     border: Border.all(color: AppColors.errorLight),
                   ),
-                  child: Row(
+                  child: const Row(
                     children: [
-                      const Icon(Icons.warning, color: AppColors.errorDark),
-                      const SizedBox(width: 12),
+                      Icon(Icons.warning, color: AppColors.errorDark),
+                      SizedBox(width: 12),
                       Expanded(
                         child: Text(
                           'This transaction is disputed. Our team will review and resolve it within 3-5 business days.',
-                          style: const TextStyle(color: AppColors.errorDark),
+                          style: TextStyle(color: AppColors.errorDark),
                         ),
                       ),
                     ],
@@ -708,7 +708,7 @@ class _ConfirmDeliveryDialogState extends State<_ConfirmDeliveryDialog> {
             title: Text(_confirmed ? 'Yes, received' : 'No, not received'),
             value: _confirmed,
             onChanged: (value) => setState(() => _confirmed = value),
-            activeColor: AppColors.success,
+            activeThumbColor: AppColors.success,
           ),
           const SizedBox(height: 16),
           TextField(
@@ -730,14 +730,14 @@ class _ConfirmDeliveryDialogState extends State<_ConfirmDeliveryDialog> {
                 color: AppColors.warningLight,
                 borderRadius: BorderRadius.circular(AppTheme.radiusMd),
               ),
-              child: Row(
+              child: const Row(
                 children: [
-                  const Icon(Icons.info, color: AppColors.warningDark, size: 20),
-                  const SizedBox(width: 8),
+                  Icon(Icons.info, color: AppColors.warningDark, size: 20),
+                  SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       'A dispute will be created for review',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
                         color: AppColors.warningDark,
                       ),
@@ -862,14 +862,14 @@ class _RaiseDisputeDialogState extends State<_RaiseDisputeDialog> {
                 color: AppColors.accentBackground,
                 borderRadius: BorderRadius.circular(AppTheme.radiusMd),
               ),
-              child: Row(
+              child: const Row(
                 children: [
-                  const Icon(Icons.info, color: AppColors.primary, size: 20),
-                  const SizedBox(width: 8),
+                  Icon(Icons.info, color: AppColors.primary, size: 20),
+                  SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       'Our team will review and respond within 3-5 business days',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
                         color: AppColors.primary,
                       ),

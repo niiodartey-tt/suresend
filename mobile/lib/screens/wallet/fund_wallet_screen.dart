@@ -147,14 +147,14 @@ class _FundWalletScreenState extends State<FundWalletScreen> {
                 const SizedBox(height: 24),
 
                 // Info card
-                Card(
+                const Card(
                   color: AppColors.accentBackground,
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(16),
                     child: Row(
                       children: [
-                        const Icon(Icons.info_outline, color: AppColors.primary),
-                        const SizedBox(width: 12),
+                        Icon(Icons.info_outline, color: AppColors.primary),
+                        SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             'Add money to your wallet to make payments and transfers.',
@@ -337,7 +337,7 @@ class _PaymentMethodCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       subtitle,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 13,
                         color: AppColors.textSecondary,
                       ),

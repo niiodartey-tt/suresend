@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../config/theme.dart';
-import '../../../config/app_colors.dart';
 
 class WalletBalanceWidget extends StatelessWidget {
   const WalletBalanceWidget({super.key});

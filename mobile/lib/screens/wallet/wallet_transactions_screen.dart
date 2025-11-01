@@ -136,7 +136,7 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.receipt_long_outlined,
                               size: 64,
                               color: AppColors.textSecondary,
@@ -146,7 +146,7 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
                               _filterType == 'all'
                                   ? 'No transactions yet'
                                   : 'No $_filterType transactions',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16,
                                 color: AppColors.textSecondary,
                               ),
@@ -287,7 +287,7 @@ class _TransactionCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       dateFormat.format(transaction.createdAt),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
                         color: AppColors.textSecondary,
                       ),
@@ -296,7 +296,7 @@ class _TransactionCard extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         'Ref: ${transaction.reference}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 11,
                           color: AppColors.textSecondary,
                         ),
@@ -321,7 +321,7 @@ class _TransactionCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     'Bal: ₵${transaction.balanceAfter.toStringAsFixed(2)}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 11,
                       color: AppColors.textSecondary,
                     ),
@@ -373,7 +373,7 @@ class _TransactionCard extends StatelessWidget {
                 children: [
                   Text(
                     transaction.isCredit ? 'Received' : 'Sent',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                       color: AppColors.textSecondary,
                     ),
@@ -437,7 +437,7 @@ class _DetailRow extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14,
             color: AppColors.textSecondary,
           ),

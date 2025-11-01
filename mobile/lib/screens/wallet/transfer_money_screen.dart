@@ -378,7 +378,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
                                   ),
                                   Text(
                                     '@${_recipientDetails!['username']}',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 12,
                                       color: AppColors.textSecondary,
                                     ),
@@ -461,14 +461,14 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
                 const SizedBox(height: 24),
 
                 // Information Card
-                Card(
+                const Card(
                   color: AppColors.accentBackground,
                   child: Padding(
-                    padding: const EdgeInsets.all(12.0),
+                    padding: EdgeInsets.all(12.0),
                     child: Row(
                       children: [
-                        const Icon(Icons.info_outline, color: AppColors.primary),
-                        const SizedBox(width: 12),
+                        Icon(Icons.info_outline, color: AppColors.primary),
+                        SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             'Transfers are instant and cannot be reversed. Please verify the recipient details carefully.',

@@ -23,6 +23,13 @@ class AppTheme {
   static const double spacing32 = 32.0;
   static const double spacing48 = 48.0;
 
+  // Aliases for backwards compatibility
+  static const double spacingXs = spacing4;
+  static const double spacingS = spacing8;
+  static const double spacingM = spacing16;
+  static const double spacingL = spacing24;
+  static const double spacingXl = spacing32;
+
   // ============================================
   // BORDER RADIUS CONSTANTS (Based on claude_code_prompt.md)
   // ============================================
@@ -591,6 +598,10 @@ class AppTheme {
 
   /// @deprecated Use AppColors.primaryDark instead
   static Color get darkBlue => AppColors.primaryDark;
+
+  /// Convenience getters for commonly used colors
+  static const Color primary = AppColors.primary;
+  static const Color textPrimary = AppColors.textPrimary;
 
   /// Helper method for backwards compatibility with withOpacity
   /// @deprecated Use color.withValues(alpha: opacity) instead

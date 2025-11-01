@@ -7,7 +7,7 @@ import '../../providers/transaction_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/skeleton_loader.dart';
 import '../../widgets/error_retry_widget.dart';
-import '../../config/app_colors.dart';
+import '../../theme/app_theme.dart';
 
 class TransactionDetailScreen extends StatefulWidget {
   final String transactionId;

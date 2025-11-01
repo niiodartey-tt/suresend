@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../providers/wallet_provider.dart';
+import 'package:flutter/services.dart';
+import 'package:suresend/theme/app_colors.dart';
 import 'package:suresend/theme/app_theme.dart';
-import '../../widgets/skeleton_loader.dart';
-import '../../widgets/error_retry_widget.dart';
-import 'package:suresend/theme/app_animations.dart';
+import 'package:suresend/widgets/pin_confirmation_modal.dart';
 
 class WithdrawFundsScreen extends StatefulWidget {
   const WithdrawFundsScreen({super.key});
@@ -19,30 +17,8 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
   final _accountNumberController = TextEditingController();
   final _accountNameController = TextEditingController();
 
-  String _selectedMethod = 'bank_transfer';
-  String? _selectedNetwork;
-  bool _isLoading = false;
-
-  final List<Map<String, dynamic>> _withdrawalMethods = [
-    {
-      'id': 'bank_transfer',
-      'title': 'Bank Transfer',
-      'subtitle': 'Withdraw to your bank account',
-      'icon': Icons.account_balance,
-    },
-    {
-      'id': 'mobile_money',
-      'title': 'Mobile Money',
-      'subtitle': 'Withdraw to your mobile money account',
-      'icon': Icons.phone_android,
-    },
-  ];
-
-  final List<Map<String, String>> _mobileMoneyNetworks = [
-    {'id': 'mtn', 'name': 'MTN Mobile Money'},
-    {'id': 'vodafone', 'name': 'Vodafone Cash'},
-    {'id': 'airteltigo', 'name': 'AirtelTigo Money'},
-  ];
+  String _selectedMethod = '';
+  final double _availableBalance = 4500.00; // Demo balance
 
   @override
   void dispose() {
@@ -53,340 +29,373 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
   }
 
   Future<void> _handleWithdrawal() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
+    if (!_formKey.currentState!.validate()) return;
 
-    if (_selectedMethod == 'mobile_money' && _selectedNetwork == null) {
+    if (_selectedMethod.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a mobile money network')),
+        const SnackBar(
+          content: Text('Please select a withdrawal method'),
+          backgroundColor: AppColors.error,
+        ),
       );
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final walletProvider =
-          Provider.of<WalletProvider>(context, listen: false);
-
-      // Construct account details map
-      final accountDetails = <String, dynamic>{
-        'accountNumber': _accountNumberController.text,
-        'accountName': _accountNameController.text,
-        if (_selectedNetwork != null) 'network': _selectedNetwork,
-      };
-
-      final result = await walletProvider.withdrawFunds(
-        amount: double.parse(_amountController.text),
-        withdrawalMethod: _selectedMethod,
-        accountDetails: accountDetails,
-      );
-
-      setState(() {
-        _isLoading = false;
-      });
-
-      if (result['success']) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(result['message'] ??
-                  'Withdrawal request submitted successfully'),
-              backgroundColor: Colors.green,
-            ),
-          );
-          Navigator.pop(context);
-        }
-      } else {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                  result['message'] ?? 'Failed to submit withdrawal request'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-      }
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
-      if (mounted) {
+    // Show PIN confirmation
+    await PinConfirmationModal.show(
+      context: context,
+      action: 'Withdraw Funds',
+      amount: '\$${_amountController.text}',
+      onConfirm: (pin) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: ${e.toString()}'),
-            backgroundColor: Colors.red,
+            content: Text('Withdrawal of \$${_amountController.text} initiated via $_selectedMethod'),
+            backgroundColor: AppColors.success,
           ),
         );
-      }
-    }
+        Navigator.pop(context);
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final walletProvider = Provider.of<WalletProvider>(context);
-    final wallet = walletProvider.wallet;
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Withdraw Funds'),
-        backgroundColor: AppTheme.primaryColor,
-        foregroundColor: Colors.white,
-      ),
-      body: LoadingOverlay(
-        isLoading: _isLoading,
-        message: 'Processing withdrawal...',
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Available Balance Card
-                wallet == null
-                    ? const SkeletonLoader.card(height: 100)
-                    : AnimationHelpers.fadeIn(
-                        child: Card(
-                          color: AppTheme.primaryColor.withValues(alpha: 0.1),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              children: [
-                                const Text(
-                                  'Available Balance',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey,
-                                  ),
+      backgroundColor: AppColors.background,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Navy Blue Header with Available Balance
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: const BoxDecoration(
+                color: AppColors.primary,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(24),
+                  bottomRight: Radius.circular(24),
+                ),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(Icons.arrow_back, color: Colors.white),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                      ),
+                      const SizedBox(width: 16),
+                      const Expanded(
+                        child: Text(
+                          'Withdraw Funds',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  // Available Balance Display
+                  Column(
+                    children: [
+                      const Text(
+                        'Available for Withdrawal',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white70,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        '\$${_availableBalance.toStringAsFixed(2)}',
+                        style: const TextStyle(
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            // Form Section
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(24),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // Info Card
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.orange.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.info_outline, color: Colors.orange, size: 20),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                'Withdrawals are processed within 1-3 business days',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.orange.shade800,
                                 ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  '₵ ${wallet.balance.toStringAsFixed(2)}',
-                                  style: TextStyle(
-                                    fontSize: 32,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppTheme.primaryColor,
-                                  ),
-                                ),
-                              ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // Amount Input
+                      const Text(
+                        'Amount (USD)',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _amountController,
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        decoration: InputDecoration(
+                          hintText: '0.00',
+                          prefixText: '\$ ',
+                          helperText: 'Min: \$10.00 • Available: \$${_availableBalance.toStringAsFixed(2)}',
+                          helperStyle: const TextStyle(
+                            fontSize: 12,
+                            color: AppColors.textMuted,
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: AppColors.border),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: AppColors.border),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(
+                              color: AppColors.primary,
+                              width: 2,
+                            ),
+                          ),
+                        ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                        ],
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter an amount';
+                          }
+                          final amount = double.tryParse(value);
+                          if (amount == null || amount <= 0) {
+                            return 'Please enter a valid amount';
+                          }
+                          if (amount < 10) {
+                            return 'Minimum amount is \$10.00';
+                          }
+                          if (amount > _availableBalance) {
+                            return 'Insufficient balance';
+                          }
+                          return null;
+                        },
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // Withdrawal Method
+                      const Text(
+                        'Withdrawal Method',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Bank Transfer
+                      _WithdrawalMethodCard(
+                        icon: Icons.account_balance,
+                        title: 'Bank Transfer',
+                        subtitle: 'Withdraw to your bank account',
+                        color: AppColors.primary,
+                        isSelected: _selectedMethod == 'Bank',
+                        onTap: () {
+                          setState(() => _selectedMethod = 'Bank');
+                        },
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      // MTN Mobile Money
+                      _WithdrawalMethodCard(
+                        icon: Icons.phone_android,
+                        title: 'MTN Mobile Money',
+                        subtitle: 'Withdraw to MTN MoMo',
+                        color: const Color(0xFFFFCC00),
+                        isSelected: _selectedMethod == 'MTN',
+                        onTap: () {
+                          setState(() => _selectedMethod = 'MTN');
+                        },
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      // Vodafone Cash
+                      _WithdrawalMethodCard(
+                        icon: Icons.phone_iphone,
+                        title: 'Vodafone Cash',
+                        subtitle: 'Withdraw to Vodafone Cash',
+                        color: const Color(0xFFE60000),
+                        isSelected: _selectedMethod == 'Vodafone',
+                        onTap: () {
+                          setState(() => _selectedMethod = 'Vodafone');
+                        },
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      // AirtelTigo Money
+                      _WithdrawalMethodCard(
+                        icon: Icons.smartphone,
+                        title: 'AirtelTigo Money',
+                        subtitle: 'Withdraw to AirtelTigo',
+                        color: const Color(0xFFED1C24),
+                        isSelected: _selectedMethod == 'AirtelTigo',
+                        onTap: () {
+                          setState(() => _selectedMethod = 'AirtelTigo');
+                        },
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // Account Details (shown when method selected)
+                      if (_selectedMethod.isNotEmpty) ...[
+                        const Text(
+                          _selectedMethod == 'Bank' ? 'Bank Account Details' : 'Mobile Money Details',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        TextFormField(
+                          controller: _accountNumberController,
+                          decoration: InputDecoration(
+                            labelText: _selectedMethod == 'Bank' ? 'Account Number' : 'Mobile Number',
+                            hintText: _selectedMethod == 'Bank' ? 'Enter account number' : 'Enter mobile number',
+                            filled: true,
+                            fillColor: Colors.white,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(color: AppColors.border),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(color: AppColors.border),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: AppColors.primary,
+                                width: 2,
+                              ),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return _selectedMethod == 'Bank'
+                                  ? 'Please enter account number'
+                                  : 'Please enter mobile number';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _accountNameController,
+                          decoration: InputDecoration(
+                            labelText: 'Account Name',
+                            hintText: 'Enter account holder name',
+                            filled: true,
+                            fillColor: Colors.white,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(color: AppColors.border),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(color: AppColors.border),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: AppColors.primary,
+                                width: 2,
+                              ),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter account name';
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
+
+                      const SizedBox(height: 32),
+
+                      // Withdraw Button
+                      SizedBox(
+                        height: 52,
+                        child: ElevatedButton(
+                          onPressed: _handleWithdrawal,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            elevation: 0,
+                          ),
+                          child: const Text(
+                            'Withdraw Funds',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
                       ),
-                const SizedBox(height: 24),
 
-                // Withdrawal Method Selection
-                const Text(
-                  'Withdrawal Method',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                      const SizedBox(height: 24),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 12),
-                ..._withdrawalMethods.map((method) {
-                  return _WithdrawalMethodCard(
-                    icon: method['icon'] as IconData,
-                    title: method['title'] as String,
-                    subtitle: method['subtitle'] as String,
-                    isSelected: _selectedMethod == method['id'],
-                    onTap: () {
-                      setState(() {
-                        _selectedMethod = method['id'] as String;
-                        if (_selectedMethod == 'bank_transfer') {
-                          _selectedNetwork = null;
-                        }
-                      });
-                    },
-                  );
-                }),
-                const SizedBox(height: 24),
-
-                // Mobile Money Network Selection (only if mobile_money is selected)
-                if (_selectedMethod == 'mobile_money') ...[
-                  const Text(
-                    'Select Network',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  DropdownButtonFormField<String>(
-                    initialValue: _selectedNetwork,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Choose mobile money network',
-                    ),
-                    items: _mobileMoneyNetworks.map((network) {
-                      return DropdownMenuItem<String>(
-                        value: network['id'],
-                        child: Text(network['name']!),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedNetwork = value;
-                      });
-                    },
-                    validator: (value) {
-                      if (_selectedMethod == 'mobile_money' && value == null) {
-                        return 'Please select a network';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                ],
-
-                // Account Number
-                TextFormField(
-                  controller: _accountNumberController,
-                  decoration: InputDecoration(
-                    labelText: _selectedMethod == 'bank_transfer'
-                        ? 'Account Number'
-                        : 'Mobile Money Number',
-                    hintText: _selectedMethod == 'bank_transfer'
-                        ? 'Enter your account number'
-                        : 'Enter your mobile money number',
-                    border: const OutlineInputBorder(),
-                    prefixIcon: Icon(
-                      _selectedMethod == 'bank_transfer'
-                          ? Icons.account_balance
-                          : Icons.phone_android,
-                    ),
-                  ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter account number';
-                    }
-                    if (_selectedMethod == 'mobile_money' &&
-                        value.length != 10) {
-                      return 'Mobile money number must be 10 digits';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // Account Name
-                TextFormField(
-                  controller: _accountNameController,
-                  decoration: InputDecoration(
-                    labelText: 'Account Name',
-                    hintText: _selectedMethod == 'bank_transfer'
-                        ? 'Enter account holder name'
-                        : 'Enter registered name',
-                    border: const OutlineInputBorder(),
-                    prefixIcon: const Icon(Icons.person),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter account name';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // Amount
-                TextFormField(
-                  controller: _amountController,
-                  decoration: const InputDecoration(
-                    labelText: 'Amount (GHS)',
-                    hintText: '0.00',
-                    border: OutlineInputBorder(),
-                    prefixText: '₵ ',
-                    prefixStyle: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                    helperText: 'Minimum withdrawal: GHS 50',
-                  ),
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter amount';
-                    }
-                    final amount = double.tryParse(value);
-                    if (amount == null) {
-                      return 'Please enter a valid amount';
-                    }
-                    if (amount < 50) {
-                      return 'Minimum withdrawal amount is GHS 50';
-                    }
-                    if (wallet != null && amount > wallet.balance) {
-                      return 'Insufficient balance';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 24),
-
-                // Information Card
-                Card(
-                  color: Colors.blue.shade50,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Row(
-                      children: [
-                        Icon(Icons.info_outline, color: Colors.blue.shade700),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            'Withdrawals are processed within 1-3 business days. A processing fee may apply.',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.blue.shade700,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                // Submit Button
-                ElevatedButton(
-                  onPressed: _isLoading ? null : _handleWithdrawal,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.primaryColor,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: _isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
-                          ),
-                        )
-                      : const Text(
-                          'Submit Withdrawal Request',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -397,6 +406,7 @@ class _WithdrawalMethodCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
+  final Color color;
   final bool isSelected;
   final VoidCallback onTap;
 
@@ -404,66 +414,79 @@ class _WithdrawalMethodCard extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.subtitle,
+    required this.color,
     required this.isSelected,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: isSelected ? 4 : 1,
-      color: isSelected ? AppTheme.primaryColor.withValues(alpha: 0.1) : null,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color:
-                      isSelected ? AppTheme.primaryColor : Colors.grey.shade200,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(
-                  icon,
-                  color: isSelected ? Colors.white : Colors.grey.shade700,
-                  size: 28,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: isSelected ? AppTheme.primaryColor : null,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      subtitle,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey.shade600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              if (isSelected)
-                Icon(
-                  Icons.check_circle,
-                  color: AppTheme.primaryColor,
-                ),
-            ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? color : AppColors.border,
+            width: isSelected ? 2 : 1,
           ),
+          boxShadow: [
+            if (isSelected)
+              BoxShadow(
+                color: color.withOpacity(0.2),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: isSelected ? color.withOpacity(0.1) : AppColors.background,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(
+                icon,
+                color: isSelected ? color : AppColors.textMuted,
+                size: 24,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: isSelected ? color : AppColors.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (isSelected)
+              Icon(
+                Icons.check_circle,
+                color: color,
+                size: 24,
+              ),
+          ],
         ),
       ),
     );

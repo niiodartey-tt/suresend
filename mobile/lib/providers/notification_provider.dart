@@ -175,18 +175,15 @@ class NotificationProvider with ChangeNotifier {
     required String title,
     required String message,
     String type = 'transaction',
-    Map<String, dynamic>? data,
+    Map<String, dynamic>? data, // Preserved for API compatibility, not used in model
   }) {
     final notification = Notification(
       id: 'local_${DateTime.now().millisecondsSinceEpoch}',
-      userId: '', // Will be populated from user context
-      type: type,
       title: title,
       message: message,
-      data: data ?? {},
+      type: type,
       isRead: false,
       createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
     );
 
     _notifications.insert(0, notification);

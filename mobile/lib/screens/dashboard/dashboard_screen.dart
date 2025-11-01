@@ -308,6 +308,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           backgroundColor: AppColors.primary,
                           foregroundColor: AppColors.primaryForeground,
                           padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(AppTheme.buttonBorderRadius),
+                          ),
                         ),
                         icon: const Icon(Icons.add, size: 18),
                         label: const Text('Top up wallet'),
@@ -325,6 +328,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           backgroundColor: const Color(0xFF1F2937),
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(AppTheme.buttonBorderRadius),
+                          ),
                         ),
                         child: const Text('Withdraw'),
                       ),
@@ -646,8 +652,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     side: const BorderSide(color: AppColors.primary),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppTheme.buttonBorderRadius),
+                    ),
                   ),
-                  child: const Text('Detail'),
+                  child: const Text('Details'),
                 ),
               ),
             ],

@@ -5,6 +5,7 @@ import '../notifications/notification_screen.dart';
 import '../wallet/fund_wallet_screen.dart';
 import '../wallet/withdraw_funds_screen.dart';
 import '../transactions/transaction_detail_screen.dart';
+import '../transactions/transaction_list_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -104,47 +105,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
                           ],
                         ),
-                        Stack(
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => const NotificationScreen(),
-                                  ),
-                                );
-                              },
-                              icon: const Icon(
-                                Icons.notifications_outlined,
-                                color: AppColors.primaryForeground,
-                                size: 28,
+                        IconButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const NotificationScreen(),
                               ),
-                            ),
-                            Positioned(
-                              right: 8,
-                              top: 8,
-                              child: Container(
-                                padding: const EdgeInsets.all(4),
-                                decoration: const BoxDecoration(
-                                  color: AppColors.error,
-                                  shape: BoxShape.circle,
-                                ),
-                                constraints: const BoxConstraints(
-                                  minWidth: 18,
-                                  minHeight: 18,
-                                ),
-                                child: const Text(
-                                  '3',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          ],
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.notifications_outlined,
+                            color: AppColors.primaryForeground,
+                            size: 28,
+                          ),
                         ),
                       ],
                     ),
@@ -358,7 +331,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
                             TextButton(
                               onPressed: () {
-                                // Navigate to all transactions
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => const TransactionListScreen(),
+                                  ),
+                                );
                               },
                               child: const Text('See all'),
                             ),
@@ -625,7 +602,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     side: const BorderSide(color: AppColors.primary),
                   ),
-                  child: const Text('Details'),
+                  child: const Text('Detail'),
                 ),
               ),
             ],

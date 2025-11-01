@@ -290,9 +290,9 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
 
                       // Account Details (shown when method selected)
                       if (_selectedMethod.isNotEmpty) ...[
-                        const Text(
+                        Text(
                           _selectedMethod == 'Bank' ? 'Bank Account Details' : 'Mobile Money Details',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: AppColors.textPrimary,

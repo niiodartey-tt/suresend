@@ -7,15 +7,25 @@ import 'providers/notification_provider.dart';
 import 'providers/wallet_provider.dart';
 import 'screens/splash_screen.dart';
 import 'services/storage_service.dart';
+import 'services/api_service.dart';
+import 'config/routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize services
   await StorageService().init();
-  runApp(const SureSendApp());
+
+  // Initialize API service
+  final apiService = ApiService();
+
+  runApp(SureSendApp(apiService: apiService));
 }
 
 class SureSendApp extends StatelessWidget {
-  const SureSendApp({super.key});
+  final ApiService apiService;
+
+  const SureSendApp({super.key, required this.apiService});
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +41,12 @@ class SureSendApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
         home: const SplashScreen(),
+        // Add route generator
+        onGenerateRoute: AppRouteGenerator.generateRoute,
+        // Define named routes for common navigation
+        routes: {
+          AppRoutes.login: (context) => const SplashScreen(), // Will redirect to login
+        },
       ),
     );
   }

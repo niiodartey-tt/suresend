@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:suresend/theme/app_colors.dart';
 import 'package:suresend/theme/app_theme.dart';
+import 'package:suresend/services/storage_service.dart';
+import 'package:suresend/providers/notification_provider.dart';
+import 'package:suresend/providers/transaction_provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -484,12 +488,67 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: const Text('Cancel'),
           ),
           ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Logged out successfully')),
-              );
-              // TODO: Navigate to login screen
+            onPressed: () async {
+              Navigator.pop(context); // Close the dialog first
+
+              // Show loading indicator
+              if (mounted) {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
+
+              try {
+                // Clear storage
+                final storageService = StorageService();
+                await storageService.clearSession();
+
+                // Clear all providers
+                if (mounted) {
+                  context.read<NotificationProvider>().clearNotifications();
+                  context.read<TransactionProvider>().clearTransactions();
+                }
+
+                // Close loading indicator
+                if (mounted) {
+                  Navigator.pop(context);
+                }
+
+                // Show success message
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Logged out successfully'),
+                      backgroundColor: AppColors.success,
+                    ),
+                  );
+                }
+
+                // Navigate to login screen and remove all previous routes
+                if (mounted) {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    '/login',
+                    (route) => false,
+                  );
+                }
+              } catch (e) {
+                // Close loading indicator if there's an error
+                if (mounted) {
+                  Navigator.pop(context);
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Logout failed: ${e.toString()}'),
+                      backgroundColor: AppColors.error,
+                    ),
+                  );
+                }
+              }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.error,

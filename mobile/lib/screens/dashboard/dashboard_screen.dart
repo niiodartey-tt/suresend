@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:suresend/theme/app_colors.dart';
 import 'package:suresend/theme/app_theme.dart';
+import 'package:suresend/providers/notification_provider.dart';
 import '../notifications/notification_screen.dart';
 import '../wallet/fund_wallet_screen.dart';
 import '../wallet/withdraw_funds_screen.dart';
@@ -105,19 +107,54 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
                           ],
                         ),
-                        IconButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const NotificationScreen(),
-                              ),
+                        Consumer<NotificationProvider>(
+                          builder: (context, notificationProvider, child) {
+                            final unreadCount = notificationProvider.unreadCount;
+
+                            return Stack(
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => const NotificationScreen(),
+                                      ),
+                                    );
+                                  },
+                                  icon: const Icon(
+                                    Icons.notifications_outlined,
+                                    color: AppColors.primaryForeground,
+                                    size: 28,
+                                  ),
+                                ),
+                                if (unreadCount > 0)
+                                  Positioned(
+                                    right: 8,
+                                    top: 8,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(4),
+                                      decoration: const BoxDecoration(
+                                        color: Colors.red,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      constraints: const BoxConstraints(
+                                        minWidth: 18,
+                                        minHeight: 18,
+                                      ),
+                                      child: Text(
+                                        unreadCount > 99 ? '99+' : unreadCount.toString(),
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
+                              ],
                             );
                           },
-                          icon: const Icon(
-                            Icons.notifications_outlined,
-                            color: AppColors.primaryForeground,
-                            size: 28,
-                          ),
                         ),
                       ],
                     ),
@@ -137,17 +174,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     ),
                               ),
                               const SizedBox(height: 4),
-                              Text(
-                                '\$4,500.00',
-                                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                                      color: AppColors.primaryForeground,
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                              FittedBox(
+                                fit: BoxFit.scaleDown,
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  '\$4,500.00',
+                                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                        color: AppColors.primaryForeground,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                ),
                               ),
                             ],
                           ),
                         ),
-                        const SizedBox(width: 32),
+                        const SizedBox(width: 24),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,12 +200,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     ),
                               ),
                               const SizedBox(height: 4),
-                              Text(
-                                '\$200.00',
-                                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                                      color: AppColors.primaryForeground,
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                              FittedBox(
+                                fit: BoxFit.scaleDown,
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  '\$200.00',
+                                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                        color: AppColors.primaryForeground,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                ),
                               ),
                             ],
                           ),

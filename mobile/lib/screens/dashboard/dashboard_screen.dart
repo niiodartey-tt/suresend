@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:suresend/theme/app_colors.dart';
 import 'package:suresend/theme/app_theme.dart';
-import 'package:suresend/shared/components/custom_bottom_nav.dart';
-import '../deals/deals_screen.dart';
-import '../profile/profile_screen.dart';
-import '../settings/settings_screen.dart';
-import '../transactions/transaction_type_modal.dart';
 import '../notifications/notification_screen.dart';
 import '../wallet/fund_wallet_screen.dart';
 import '../wallet/withdraw_funds_screen.dart';
-import '../transactions/transaction_details_screen.dart';
+import '../transactions/transaction_detail_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -19,7 +14,6 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  int _currentIndex = 0;
   bool _showFilter = false;
   String _selectedFilter = 'All';
 
@@ -63,50 +57,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       return _allTransactions;
     }
     return _allTransactions.where((t) => t['status'] == _selectedFilter).toList();
-  }
-
-  void _onTabTapped(int index) {
-    if (index == 2) {
-      // Show transaction modal for center FAB
-      _showTransactionModal();
-      return;
-    }
-
-    setState(() {
-      _currentIndex = index;
-    });
-
-    // Navigate to different screens based on index
-    switch (index) {
-      case 0:
-        // Already on dashboard, do nothing
-        break;
-      case 1:
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const DealsScreen()),
-        );
-        break;
-      case 3:
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const SettingsScreen()),
-        );
-        break;
-      case 4:
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const ProfileScreen()),
-        );
-        break;
-    }
-  }
-
-  void _showTransactionModal() {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (context) => const TransactionTypeModal(),
-    );
   }
 
   @override
@@ -486,16 +436,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomNav(
-        currentIndex: _currentIndex,
-        onTap: _onTabTapped,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _showTransactionModal,
-        backgroundColor: AppColors.primary,
-        child: const Icon(Icons.add, color: AppColors.primaryForeground),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
@@ -601,7 +541,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => TransactionDetailsScreen(
+              builder: (context) => TransactionDetailScreen(
                 transactionId: transaction['id'],
               ),
             ),
@@ -675,7 +615,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => TransactionDetailsScreen(
+                        builder: (context) => TransactionDetailScreen(
                           transactionId: transaction['id'],
                         ),
                       ),

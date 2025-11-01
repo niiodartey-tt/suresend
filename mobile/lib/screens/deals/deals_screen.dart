@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:suresend/theme/app_theme.dart';
+import 'package:suresend/theme/app_colors.dart';
+import 'package:suresend/providers/transaction_provider.dart';
 import '../transactions/transaction_detail_screen.dart';
 
 class DealsScreen extends StatefulWidget {
@@ -9,265 +12,346 @@ class DealsScreen extends StatefulWidget {
   _DealsScreenState createState() => _DealsScreenState();
 }
 
-class _DealsScreenState extends State<DealsScreen>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller; // Make controller final
+class _DealsScreenState extends State<DealsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Fetch transactions when screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<TransactionProvider>().fetchTransactions(refresh: true);
+    });
+  }
 
   Color _getStatusColor(String status) {
     switch (status) {
       case 'Completed':
+      case 'completed':
         return Colors.green.shade700;
       case 'In Escrow':
-        return AppTheme.primary;
+      case 'in_escrow':
+      case 'escrow':
+        return AppColors.primary;
       case 'In Progress':
+      case 'in_progress':
+      case 'pending_confirmation':
         return Colors.orange.shade700;
       case 'Pending':
+      case 'pending':
         return Colors.grey.shade700;
+      case 'Disputed':
+      case 'disputed':
+        return Colors.red.shade700;
       default:
         return Colors.grey;
     }
   }
 
-  // Add proper dispose
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+  String _formatStatus(String status) {
+    switch (status) {
+      case 'in_escrow':
+        return 'In Escrow';
+      case 'in_progress':
+      case 'pending_confirmation':
+        return 'In Progress';
+      case 'completed':
+        return 'Completed';
+      case 'disputed':
+        return 'Disputed';
+      case 'cancelled':
+        return 'Cancelled';
+      case 'pending':
+        return 'Pending';
+      default:
+        return status;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> deals = [
-      {
-        'id': 'ESC-10234',
-        'title': 'iPhone 15 Pro',
-        'type': 'product',
-        'amount': 450,
-        'status': 'In Escrow',
-        'counterparty': 'Alice Smith',
-        'role': 'seller',
-        'date': 'Oct 24, 2025',
-      },
-      {
-        'id': 'ESC-10233',
-        'title': 'MacBook Pro',
-        'type': 'product',
-        'amount': 1200,
-        'status': 'Completed',
-        'counterparty': 'Bob Johnson',
-        'role': 'buyer',
-        'date': 'Oct 22, 2025',
-      },
-      {
-        'id': 'ESC-10232',
-        'title': 'Web Design Service',
-        'type': 'service',
-        'amount': 350,
-        'status': 'In Progress',
-        'counterparty': 'Carol White',
-        'role': 'seller',
-        'date': 'Oct 20, 2025',
-      },
-      {
-        'id': 'ESC-10231',
-        'title': 'Logo Design',
-        'type': 'service',
-        'amount': 200,
-        'status': 'Pending',
-        'counterparty': 'David Brown',
-        'role': 'buyer',
-        'date': 'Oct 18, 2025',
-      },
-    ];
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Deals'),
         elevation: 0,
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(AppTheme.spacingM),
-        itemCount: deals.length,
-        itemBuilder: (context, index) {
-          final deal = deals[index];
-          final roleIsBuyer = deal['role'] == 'buyer';
+      body: Consumer<TransactionProvider>(
+        builder: (context, transactionProvider, child) {
+          final transactions = transactionProvider.transactions;
+          final isLoading = transactionProvider.isLoading;
+          final hasError = transactionProvider.error != null;
 
-          return Card(
-            margin: const EdgeInsets.only(bottom: AppTheme.spacingM),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppTheme.radiusM),
-            ),
-            elevation: 2,
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => TransactionDetailScreen(
-                      transactionId: deal['id'],
+          // Loading state
+          if (isLoading && transactions.isEmpty) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          // Error state
+          if (hasError && transactions.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 64,
+                    color: Colors.grey.shade400,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Failed to load deals',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey.shade600,
                     ),
                   ),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(AppTheme.spacingM),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(AppTheme.spacingS),
-                          decoration: BoxDecoration(
-                            color: roleIsBuyer
-                                ? AppTheme.withAlpha(AppTheme.primary, 0.08)
-                                : AppTheme.withAlpha(Colors.green, 0.08),
-                            borderRadius:
-                                BorderRadius.circular(AppTheme.radiusM),
-                          ),
-                          child: Icon(
-                            deal['type'] == 'product'
-                                ? Icons.inventory_2_rounded
-                                : Icons.handshake_rounded,
-                            color:
-                                roleIsBuyer ? AppTheme.primary : Colors.green,
-                            size: 22,
+                  const SizedBox(height: 8),
+                  Text(
+                    transactionProvider.error ?? 'Unknown error',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey.shade500,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      transactionProvider.fetchTransactions(refresh: true);
+                    },
+                    icon: const Icon(Icons.refresh),
+                    label: const Text('Retry'),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          // Empty state
+          if (transactions.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.inbox_outlined,
+                    size: 80,
+                    color: Colors.grey.shade300,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'No deals yet',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Create your first deal to get started',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey.shade500,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/create-transaction');
+                    },
+                    icon: const Icon(Icons.add),
+                    label: const Text('Create Deal'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 12,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          // List of deals
+          return RefreshIndicator(
+            onRefresh: () => transactionProvider.fetchTransactions(refresh: true),
+            child: ListView.builder(
+              padding: const EdgeInsets.all(AppTheme.spacingM),
+              itemCount: transactions.length,
+              itemBuilder: (context, index) {
+                final transaction = transactions[index];
+
+                // Determine role based on transaction data
+                // For demo purposes, assuming buyer role if userId matches
+                final roleIsBuyer = true; // This should be determined by comparing userId with transaction buyer/seller
+
+                return Card(
+                  margin: const EdgeInsets.only(bottom: AppTheme.spacingM),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(AppTheme.radiusM),
+                  ),
+                  elevation: 2,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TransactionDetailScreen(
+                            transactionId: transaction.id,
                           ),
                         ),
-                        const SizedBox(width: AppTheme.spacingM),
-                        Expanded(
-                          child: Column(
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(AppTheme.spacingM),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                              Container(
+                                padding: const EdgeInsets.all(AppTheme.spacingS),
+                                decoration: BoxDecoration(
+                                  color: roleIsBuyer
+                                      ? AppColors.primary.withOpacity(0.08)
+                                      : Colors.green.withOpacity(0.08),
+                                  borderRadius: BorderRadius.circular(AppTheme.radiusM),
+                                ),
+                                child: Icon(
+                                  Icons.handshake_rounded,
+                                  color: roleIsBuyer ? AppColors.primary : Colors.green,
+                                  size: 22,
+                                ),
+                              ),
+                              const SizedBox(width: AppTheme.spacingM),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Row(
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Flexible(
+                                                    child: Text(
+                                                      transaction.description,
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyLarge
+                                                          ?.copyWith(
+                                                            fontWeight: FontWeight.w700,
+                                                          ),
+                                                      overflow: TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  Container(
+                                                    padding: const EdgeInsets.symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 4,
+                                                    ),
+                                                    decoration: BoxDecoration(
+                                                      color: roleIsBuyer
+                                                          ? AppColors.primary.withOpacity(0.08)
+                                                          : Colors.green.withOpacity(0.08),
+                                                      borderRadius: BorderRadius.circular(8),
+                                                    ),
+                                                    child: Text(
+                                                      roleIsBuyer ? 'Buying' : 'Selling',
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                        color: roleIsBuyer
+                                                            ? AppColors.primary
+                                                            : Colors.green,
+                                                        fontWeight: FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 4),
+                                              Text(
+                                                transaction.id,
+                                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                                  color: Colors.grey.shade600,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.end,
                                           children: [
                                             Text(
-                                              deal['title'],
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyLarge
-                                                  ?.copyWith(
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                            ),
-                                            const SizedBox(width: 8),
-                                            Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8,
-                                                      vertical: 4),
-                                              decoration: BoxDecoration(
-                                                color: roleIsBuyer
-                                                    ? AppTheme.primary
-                                                        .withValues(alpha: 0.08)
-                                                    : Colors.green.withValues(
-                                                        alpha: 0.08),
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                              ),
-                                              child: Text(
-                                                roleIsBuyer
-                                                    ? 'Buying'
-                                                    : 'Selling',
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: roleIsBuyer
-                                                      ? AppTheme.primary
-                                                      : Colors.green,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
+                                              '${roleIsBuyer ? "-" : "+"}\$${transaction.amount.toStringAsFixed(2)}',
+                                              style: TextStyle(
+                                                color: roleIsBuyer ? Colors.red : Colors.green,
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 16,
                                               ),
                                             ),
                                           ],
                                         ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          deal['id'],
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium,
+                                      ],
+                                    ),
+                                    const SizedBox(height: AppTheme.spacingM),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Container(
+                                              padding: const EdgeInsets.symmetric(
+                                                horizontal: 8,
+                                                vertical: 6,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: _getStatusColor(transaction.status)
+                                                    .withOpacity(0.1),
+                                                borderRadius: BorderRadius.circular(8),
+                                              ),
+                                              child: Text(
+                                                _formatStatus(transaction.status),
+                                                style: TextStyle(
+                                                  color: _getStatusColor(transaction.status),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(width: AppTheme.spacingM),
+                                            Text(
+                                              _formatDate(transaction.createdAt),
+                                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                                color: Colors.grey.shade600,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        '${roleIsBuyer ? "-" : "+"}\$${deal['amount']}',
-                                        style: TextStyle(
-                                          color: roleIsBuyer
-                                              ? Colors.red
-                                              : Colors.green,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: AppTheme.spacingM),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8, vertical: 6),
-                                        decoration: BoxDecoration(
-                                          color: _getStatusColor(deal['status'])
-                                              .withValues(alpha: 0.1),
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        child: Text(
-                                          deal['status'],
-                                          style: TextStyle(
-                                            color:
-                                                _getStatusColor(deal['status']),
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: AppTheme.spacingM),
-                                      Text(
-                                        deal['date'],
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium,
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    "${roleIsBuyer ? 'Seller' : 'Buyer'}: ${deal['counterparty']}",
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey.shade600,
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ],
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             ),
           );
         },
@@ -276,9 +360,17 @@ class _DealsScreenState extends State<DealsScreen>
         onPressed: () {
           Navigator.pushNamed(context, '/create-transaction');
         },
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppColors.primary,
         child: const Icon(Icons.add_rounded),
       ),
     );
+  }
+
+  String _formatDate(DateTime date) {
+    final months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    return '${months[date.month - 1]} ${date.day}, ${date.year}';
   }
 }

@@ -170,6 +170,30 @@ class NotificationProvider with ChangeNotifier {
     _pollingTimer = null;
   }
 
+  /// Add local notification (for real-time updates before backend sync)
+  void addLocalNotification({
+    required String title,
+    required String message,
+    String type = 'transaction',
+    Map<String, dynamic>? data,
+  }) {
+    final notification = Notification(
+      id: 'local_${DateTime.now().millisecondsSinceEpoch}',
+      userId: '', // Will be populated from user context
+      type: type,
+      title: title,
+      message: message,
+      data: data ?? {},
+      isRead: false,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+
+    _notifications.insert(0, notification);
+    _unreadCount++;
+    notifyListeners();
+  }
+
   /// Clear all notifications (local only)
   void clearNotifications() {
     _notifications = [];

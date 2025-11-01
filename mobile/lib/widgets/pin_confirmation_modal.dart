@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:suresend/theme/app_colors.dart';
 import 'package:suresend/theme/app_theme.dart';
+import 'package:suresend/services/storage_service.dart';
+import 'package:suresend/screens/auth/pin_setup_screen.dart';
 
 /// PIN Confirmation Modal
 /// Matches specifications: confirm_transaction.png, confirm_transaction_release_funds.png, confirm_transaction_confirm_action.png
@@ -25,7 +27,27 @@ class PinConfirmationModal extends StatefulWidget {
     required String amount,
     String? transactionId,
     required Function(String pin) onConfirm,
-  }) {
+  }) async {
+    final storageService = StorageService();
+
+    // Check if PIN exists
+    final hasPin = await storageService.hasPin();
+
+    if (!hasPin) {
+      // Navigate to PIN setup screen first
+      final result = await Navigator.of(context).push<bool>(
+        MaterialPageRoute(
+          builder: (context) => const PinSetupScreen(isFirstTimeSetup: false),
+        ),
+      );
+
+      // If PIN was not set up, don't proceed
+      if (result != true) {
+        return;
+      }
+    }
+
+    // Show PIN confirmation modal
     return showDialog(
       context: context,
       barrierDismissible: true,
@@ -43,6 +65,7 @@ class PinConfirmationModal extends StatefulWidget {
 }
 
 class _PinConfirmationModalState extends State<PinConfirmationModal> {
+  final _storageService = StorageService();
   final List<TextEditingController> _pinControllers = List.generate(
     4,
     (index) => TextEditingController(),
@@ -51,6 +74,8 @@ class _PinConfirmationModalState extends State<PinConfirmationModal> {
     4,
     (index) => FocusNode(),
   );
+  bool _isValidating = false;
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -97,10 +122,37 @@ class _PinConfirmationModalState extends State<PinConfirmationModal> {
     }
   }
 
-  void _handleConfirm() {
-    if (_isComplete) {
-      Navigator.pop(context);
-      widget.onConfirm(_pin);
+  Future<void> _handleConfirm() async {
+    if (_isComplete && !_isValidating) {
+      setState(() {
+        _isValidating = true;
+        _errorMessage = null;
+      });
+
+      // Validate PIN
+      final isValid = await _storageService.validatePin(_pin);
+
+      if (!mounted) return;
+
+      if (isValid) {
+        // PIN is correct
+        Navigator.pop(context);
+        widget.onConfirm(_pin);
+      } else {
+        // PIN is incorrect
+        setState(() {
+          _isValidating = false;
+          _errorMessage = 'Incorrect PIN. Please try again.';
+        });
+
+        // Clear PIN fields
+        for (var controller in _pinControllers) {
+          controller.clear();
+        }
+
+        // Focus first field
+        _focusNodes[0].requestFocus();
+      }
     }
   }
 
@@ -297,22 +349,53 @@ class _PinConfirmationModalState extends State<PinConfirmationModal> {
 
                   const SizedBox(height: 16),
 
-                  // Demo text
-                  const Text(
-                    'For demo purposes, use PIN: 1234',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppColors.textMuted,
-                      fontStyle: FontStyle.italic,
+                  // Error message
+                  if (_errorMessage != null)
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: AppColors.error.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: AppColors.error.withOpacity(0.3)),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.error_outline,
+                            color: AppColors.error,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              _errorMessage!,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: AppColors.error,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+
+                  if (_errorMessage == null)
+                    const Text(
+                      'Enter your 4-digit PIN to confirm this action',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppColors.textMuted,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
 
                   const SizedBox(height: 32),
 
                   // Confirm Button
                   ElevatedButton(
-                    onPressed: _isComplete ? _handleConfirm : null,
+                    onPressed: (_isComplete && !_isValidating) ? _handleConfirm : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
@@ -322,13 +405,22 @@ class _PinConfirmationModalState extends State<PinConfirmationModal> {
                       ),
                       disabledBackgroundColor: AppColors.textMuted,
                     ),
-                    child: const Text(
-                      'Confirm',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    child: _isValidating
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            ),
+                          )
+                        : const Text(
+                            'Confirm',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                   ),
 
                   const SizedBox(height: 12),

@@ -94,7 +94,7 @@ class _DealsScreenState extends State<DealsScreen>
           return Card(
             margin: const EdgeInsets.only(bottom: AppTheme.spacingM),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppTheme.radiusM),
+              borderRadius: BorderRadius.circular(AppTheme.radiusMd),
             ),
             elevation: 2,
             child: InkWell(
@@ -117,7 +117,7 @@ class _DealsScreenState extends State<DealsScreen>
                                 ? AppTheme.withAlpha(AppTheme.primary, 0.08)
                                 : AppTheme.withAlpha(Colors.green, 0.08),
                             borderRadius:
-                                BorderRadius.circular(AppTheme.radiusM),
+                                BorderRadius.circular(AppTheme.radiusMd),
                           ),
                           child: Icon(
                             deal['type'] == 'product'

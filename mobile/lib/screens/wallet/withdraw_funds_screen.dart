@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:suresend/theme/app_colors.dart';
 import 'package:suresend/theme/app_theme.dart';
 import 'package:suresend/widgets/pin_confirmation_modal.dart';
+import 'package:suresend/screens/success/transaction_confirmation_screen.dart';
 
 class WithdrawFundsScreen extends StatefulWidget {
   const WithdrawFundsScreen({super.key});
@@ -47,15 +48,51 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
       action: 'Withdraw Funds',
       amount: '\$${_amountController.text}',
       onConfirm: (pin) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Withdrawal of \$${_amountController.text} initiated via $_selectedMethod'),
-            backgroundColor: AppColors.success,
+        // Generate transaction ID
+        final transactionId = 'WTH-${DateTime.now().millisecondsSinceEpoch}';
+        final now = DateTime.now();
+        final date = '${_formatMonth(now.month)} ${now.day}, ${now.year}, ${_formatTime(now)}';
+
+        // Navigate to confirmation screen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TransactionConfirmationScreen(
+              title: 'Withdrawal Initiated',
+              subtitle: 'Your withdrawal request has been processed',
+              transactionId: transactionId,
+              amount: '\$${_amountController.text}',
+              recipient: _accountNameController.text,
+              date: date,
+              description: 'Withdrawal',
+              additionalDetails: {
+                'Withdrawal Method': _selectedMethod,
+                'Account Number': _accountNumberController.text,
+                'Account Name': _accountNameController.text,
+                'Previous Balance': '\$${_availableBalance.toStringAsFixed(2)}',
+                'New Balance': '\$${(_availableBalance - double.parse(_amountController.text)).toStringAsFixed(2)}',
+                'Status': 'Processing',
+              },
+            ),
           ),
         );
-        Navigator.pop(context);
       },
     );
+  }
+
+  String _formatMonth(int month) {
+    const months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    return months[month - 1];
+  }
+
+  String _formatTime(DateTime time) {
+    final hour = time.hour > 12 ? time.hour - 12 : time.hour;
+    final minute = time.minute.toString().padLeft(2, '0');
+    final period = time.hour >= 12 ? 'PM' : 'AM';
+    return '$hour:$minute $period';
   }
 
   @override

@@ -92,4 +92,27 @@ class StorageService {
     await _prefs?.clear();
     await saveRememberMe(rememberMe);
   }
+
+  // PIN management methods
+  Future<void> savePin(String pin) async {
+    await _secureStorage.write(key: 'user_pin', value: pin);
+  }
+
+  Future<String?> getPin() async {
+    return await _secureStorage.read(key: 'user_pin');
+  }
+
+  Future<bool> hasPin() async {
+    final pin = await getPin();
+    return pin != null && pin.isNotEmpty;
+  }
+
+  Future<bool> validatePin(String pin) async {
+    final storedPin = await getPin();
+    return storedPin == pin;
+  }
+
+  Future<void> deletePin() async {
+    await _secureStorage.delete(key: 'user_pin');
+  }
 }

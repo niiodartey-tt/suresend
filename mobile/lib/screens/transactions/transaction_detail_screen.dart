@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:suresend/theme/app_colors.dart';
 import 'package:suresend/theme/app_theme.dart';
 import 'package:suresend/widgets/pin_confirmation_modal.dart';
+import 'package:suresend/screens/success/transaction_confirmation_screen.dart';
 
 /// Transaction Detail Screen
 /// Shows complete transaction information with actions
@@ -136,13 +137,26 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
       amount: '\$${_transaction['amount'].toStringAsFixed(2)}',
       transactionId: _transaction['id'],
       onConfirm: (pin) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Transaction confirmed! Funds released to seller.'),
-            backgroundColor: AppColors.success,
+        // Navigate to confirmation screen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TransactionConfirmationScreen(
+              title: 'Transaction Confirmed',
+              subtitle: 'Funds have been released to the seller',
+              transactionId: _transaction['id'],
+              amount: '\$${_transaction['amount'].toStringAsFixed(2)}',
+              recipient: _transaction['seller'],
+              date: _transaction['date'],
+              description: _transaction['description'],
+              additionalDetails: {
+                'Category': _transaction['category'],
+                'Seller': '${_transaction['seller']} ${_transaction['sellerUsername']}',
+                'Status': 'Completed',
+              },
+            ),
           ),
         );
-        Navigator.pop(context);
       },
     );
   }

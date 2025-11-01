@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:suresend/theme/app_colors.dart';
 import 'package:suresend/theme/app_theme.dart';
-import 'package:suresend/shared/components/custom_bottom_nav.dart';
+import 'package:suresend/services/storage_service.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -13,10 +13,45 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   bool _showBalance = true;
-  int _currentIndex = 4;
+  final _storageService = StorageService();
+  Map<String, dynamic>? _userData;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    // For demo purposes, using static data
+    // In production, this would fetch from storage service or API
+    setState(() {
+      _userData = {
+        'name': 'John Doe',
+        'username': '@johndoe',
+        'userId': 'ESC-USER-16234567',
+        'bio': 'Professional buyer and seller on the platform. Specializing in electronics and tech products.',
+        'memberSince': 'Jan 2024',
+        'isVerified': true,
+        'totalBalance': 4700.00,
+        'availableBalance': 4500.00,
+        'escrowBalance': 200.00,
+      };
+    });
+  }
+
+  String _getInitials(String name) {
+    return name.split(' ').map((word) => word[0]).take(2).join().toUpperCase();
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (_userData == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -30,7 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              // Navigate to settings
+              Navigator.pushNamed(context, '/settings');
             },
             icon: const Icon(Icons.settings_outlined),
           ),
@@ -55,14 +90,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Container(
                                 width: 60,
                                 height: 60,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   color: AppColors.primary,
                                   shape: BoxShape.circle,
                                 ),
-                                child: const Center(
+                                child: Center(
                                   child: Text(
-                                    'JD',
-                                    style: TextStyle(
+                                    _getInitials(_userData!['name']),
+                                    style: const TextStyle(
                                       color: AppColors.primaryForeground,
                                       fontSize: 24,
                                       fontWeight: FontWeight.w600,
@@ -70,21 +105,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                 ),
                               ),
-                              Positioned(
-                                right: 0,
-                                bottom: 0,
-                                child: Container(
-                                  width: 18,
-                                  height: 18,
-                                  decoration: const BoxDecoration(
-                                    color: AppColors.success,
-                                    shape: BoxShape.circle,
-                                    border: Border.fromBorderSide(
-                                      BorderSide(color: AppColors.card, width: 2),
+                              if (_userData!['isVerified'])
+                                Positioned(
+                                  right: 0,
+                                  bottom: 0,
+                                  child: Container(
+                                    width: 18,
+                                    height: 18,
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.success,
+                                      shape: BoxShape.circle,
+                                      border: Border.fromBorderSide(
+                                        BorderSide(color: AppColors.card, width: 2),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
                             ],
                           ),
                           const SizedBox(width: 12),
@@ -95,22 +131,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 Row(
                                   children: [
                                     Text(
-                                      'John Doe',
+                                      _userData!['name'],
                                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                             fontWeight: FontWeight.w600,
                                           ),
                                     ),
-                                    const SizedBox(width: 6),
-                                    const Icon(
-                                      Icons.verified,
-                                      color: AppColors.primary,
-                                      size: 20,
-                                    ),
+                                    if (_userData!['isVerified']) ...[
+                                      const SizedBox(width: 6),
+                                      const Icon(
+                                        Icons.verified,
+                                        color: AppColors.primary,
+                                        size: 20,
+                                      ),
+                                    ],
                                   ],
                                 ),
                                 const SizedBox(height: 2),
                                 Text(
-                                  '@johndoe',
+                                  _userData!['username'],
                                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                         color: AppColors.textSecondary,
                                       ),
@@ -124,23 +162,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       // Verified and Member Since
                       Row(
                         children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFDBeafe),
-                              borderRadius: BorderRadius.circular(4),
+                          if (_userData!['isVerified'])
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFDBeafe),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                'Verified',
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: const Color(0xFF3B82F6),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                              ),
                             ),
-                            child: Text(
-                              'Verified',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: const Color(0xFF3B82F6),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
+                          if (_userData!['isVerified']) const SizedBox(width: 8),
                           Text(
-                            'Member since Jan 2024',
+                            'Member since ${_userData!['memberSince']}',
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                   color: AppColors.textMuted,
                                 ),
@@ -150,7 +189,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(height: 16),
                       // Bio
                       Text(
-                        'Professional buyer and seller on the platform. Specializing in electronics and tech products.',
+                        _userData!['bio'],
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               color: AppColors.textSecondary,
                               height: 1.5,
@@ -174,7 +213,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(
-                                'ESC-USER-16234567',
+                                _userData!['userId'],
                                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                       color: AppColors.textPrimary,
                                       fontWeight: FontWeight.w500,
@@ -183,7 +222,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             InkWell(
                               onTap: () {
-                                Clipboard.setData(const ClipboardData(text: 'ESC-USER-16234567'));
+                                Clipboard.setData(ClipboardData(text: _userData!['userId']));
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text('User ID copied to clipboard'),
@@ -257,7 +296,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 12),
                     // Balance Amount
                     Text(
-                      _showBalance ? '\$4700.00' : '••••••',
+                      _showBalance ? '\$${_userData!['totalBalance'].toStringAsFixed(2)}' : '••••••',
                       style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                             color: AppColors.primaryForeground,
                             fontWeight: FontWeight.w600,
@@ -281,7 +320,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                _showBalance ? '\$4500.00' : '••••••',
+                                _showBalance ? '\$${_userData!['availableBalance'].toStringAsFixed(2)}' : '••••••',
                                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                       color: AppColors.primaryForeground,
                                       fontWeight: FontWeight.w600,
@@ -302,7 +341,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                _showBalance ? '\$200.00' : '••••••',
+                                _showBalance ? '\$${_userData!['escrowBalance'].toStringAsFixed(2)}' : '••••••',
                                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                       color: AppColors.primaryForeground,
                                       fontWeight: FontWeight.w600,
@@ -325,7 +364,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Card(
                       child: InkWell(
                         onTap: () {
-                          // Navigate to transaction history
+                          Navigator.pushNamed(context, '/transaction/list');
                         },
                         borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
                         child: Padding(
@@ -363,7 +402,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Card(
                       child: InkWell(
                         onTap: () {
-                          // Navigate to analytics
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Analytics feature coming soon')),
+                          );
                         },
                         borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
                         child: Padding(
@@ -398,18 +439,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 80), // Space for bottom nav
+              const SizedBox(height: 24),
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: CustomBottomNav(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          if (index == 4) return; // Already on profile
-          setState(() => _currentIndex = index);
-          // Navigate to other screens based on index
-        },
       ),
     );
   }

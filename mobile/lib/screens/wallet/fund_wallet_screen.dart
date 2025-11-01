@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:suresend/theme/app_colors.dart';
 import 'package:suresend/theme/app_theme.dart';
 import 'package:suresend/widgets/pin_confirmation_modal.dart';
+import 'package:suresend/screens/success/transaction_confirmation_screen.dart';
 
 class FundWalletScreen extends StatefulWidget {
   const FundWalletScreen({super.key});
@@ -42,15 +43,49 @@ class _FundWalletScreenState extends State<FundWalletScreen> {
       action: 'Fund Wallet',
       amount: '\$${_amountController.text}',
       onConfirm: (pin) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Wallet funded with \$${_amountController.text} via $_selectedPaymentMethod'),
-            backgroundColor: AppColors.success,
+        // Generate transaction ID
+        final transactionId = 'TXN-${DateTime.now().millisecondsSinceEpoch}';
+        final now = DateTime.now();
+        final date = '${_formatMonth(now.month)} ${now.day}, ${now.year}, ${_formatTime(now)}';
+
+        // Navigate to confirmation screen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TransactionConfirmationScreen(
+              title: 'Wallet Funded Successfully',
+              subtitle: 'Your wallet has been topped up',
+              transactionId: transactionId,
+              amount: '\$${_amountController.text}',
+              recipient: 'SureSend Wallet',
+              date: date,
+              description: 'Wallet Top-up',
+              additionalDetails: {
+                'Payment Method': _selectedPaymentMethod,
+                'Previous Balance': '\$${_currentBalance.toStringAsFixed(2)}',
+                'New Balance': '\$${(_currentBalance + double.parse(_amountController.text)).toStringAsFixed(2)}',
+                'Status': 'Completed',
+              },
+            ),
           ),
         );
-        Navigator.pop(context);
       },
     );
+  }
+
+  String _formatMonth(int month) {
+    const months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    return months[month - 1];
+  }
+
+  String _formatTime(DateTime time) {
+    final hour = time.hour > 12 ? time.hour - 12 : time.hour;
+    final minute = time.minute.toString().padLeft(2, '0');
+    final period = time.hour >= 12 ? 'PM' : 'AM';
+    return '$hour:$minute $period';
   }
 
   @override

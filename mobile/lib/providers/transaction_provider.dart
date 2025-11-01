@@ -302,8 +302,8 @@ class TransactionProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  /// Clear all data
-  void clearAll() {
+  /// Clear all transactions data (for logout)
+  void clearTransactions() {
     _transactions = [];
     _stats = null;
     _currentTransaction = null;
@@ -312,6 +312,11 @@ class TransactionProvider with ChangeNotifier {
     _hasMore = true;
     _error = null;
     notifyListeners();
+  }
+
+  /// Clear all data
+  void clearAll() {
+    clearTransactions();
   }
 
   // Private helper methods

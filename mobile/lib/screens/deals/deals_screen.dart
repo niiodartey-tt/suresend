@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:suresend/theme/app_theme.dart';
+import '../transactions/transaction_detail_screen.dart';
 
 class DealsScreen extends StatefulWidget {
   const DealsScreen({super.key});
@@ -99,8 +100,14 @@ class _DealsScreenState extends State<DealsScreen>
             elevation: 2,
             child: InkWell(
               onTap: () {
-                Navigator.pushNamed(context, '/transaction-details',
-                    arguments: deal);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TransactionDetailScreen(
+                      transactionId: deal['id'],
+                    ),
+                  ),
+                );
               },
               child: Padding(
                 padding: const EdgeInsets.all(AppTheme.spacingM),

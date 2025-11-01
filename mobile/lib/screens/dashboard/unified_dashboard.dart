@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../config/app_colors.dart';
+import '../../config/theme.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/transaction_provider.dart';
 import '../../providers/notification_provider.dart';
@@ -284,7 +285,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                   child: Container(
                     decoration: BoxDecoration(
                       color: AppColors.card,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withValues(alpha: 0.1),
@@ -369,7 +370,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                           foregroundColor: AppColors.primaryForeground,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(AppTheme.buttonBorderRadius),
                           ),
                           elevation: 0,
                         ),
@@ -398,7 +399,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                           foregroundColor: AppColors.secondaryForeground,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(AppTheme.buttonBorderRadius),
                           ),
                           elevation: 0,
                         ),
@@ -552,7 +553,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: iconBg,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppTheme.radiusMd),
             ),
             child: Icon(
               icon,
@@ -596,7 +597,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: AppColors.card,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
         border: Border.all(color: AppColors.border),
       ),
       child: InkWell(
@@ -608,7 +609,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
             ),
           );
         },
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -645,7 +646,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: statusColors.background,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(AppTheme.badgeBorderRadius),
                     ),
                     child: Text(
                       transaction.status,
@@ -717,7 +718,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.circular(AppTheme.buttonBorderRadius),
                     ),
                   ),
                   child: const Text(

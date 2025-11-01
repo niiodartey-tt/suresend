@@ -10,13 +10,13 @@ class AppColors {
   // PRIMARY COLORS (Light Mode)
   // ============================================
 
-  /// Primary brand color - #043b69 (Dark Blue)
+  /// Primary brand color - #0A2647 (Navy Blue)
   /// Used for: Main CTA buttons, headers, navigation active states
-  static const Color primary = Color(0xFF043b69);
+  static const Color primary = Color(0xFF0A2647);
 
-  /// Dark variant of primary - #032d51
+  /// Dark variant of primary - #081d36
   /// Used for: Hover states for primary buttons
-  static const Color primaryDark = Color(0xFF032d51);
+  static const Color primaryDark = Color(0xFF081d36);
 
   /// Primary foreground (text on primary background)
   static const Color primaryForeground = Color(0xFFFFFFFF);
@@ -36,21 +36,21 @@ class AppColors {
   // SEMANTIC COLORS
   // ============================================
 
-  /// Success color - #10B981 (Green)
+  /// Success color - #00C853 (Green)
   /// Used for: Positive actions, completed transactions
-  static const Color success = Color(0xFF10B981);
+  static const Color success = Color(0xFF00C853);
   static const Color successLight = Color(0xFFD1FAE5);
-  static const Color successDark = Color(0xFF059669);
+  static const Color successDark = Color(0xFF00A843);
 
-  /// Warning color - #F59E0B (Orange/Amber)
+  /// Warning color - #FF9800 (Orange)
   /// Used for: Alerts, pending states
-  static const Color warning = Color(0xFFF59E0B);
+  static const Color warning = Color(0xFFFF9800);
   static const Color warningLight = Color(0xFFFEF3C7);
-  static const Color warningDark = Color(0xFFD97706);
+  static const Color warningDark = Color(0xFFE68900);
 
-  /// Error/Destructive color - #DC2626 (Red)
+  /// Error/Destructive color - #E53935 (Red)
   /// Used for: Errors, disputes, negative actions
-  static const Color error = Color(0xFFDC2626);
+  static const Color error = Color(0xFFE53935);
   static const Color errorLight = Color(0xFFFEE2E2);
   static const Color errorDark = Color(0xFFB91C1C);
 
@@ -80,7 +80,7 @@ class AppColors {
   /// Accent background - #E8F0FE (Light Blue)
   /// Used for: Background for accented content
   static const Color accentBackground = Color(0xFFE8F0FE);
-  static const Color accentForeground = Color(0xFF043b69);
+  static const Color accentForeground = Color(0xFF0A2647);
 
   // ============================================
   // TEXT COLORS

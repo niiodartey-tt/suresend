@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
-/// SureSend App Theme - Based on Figma Design System
-/// Primary Font: Lexend Deca
-/// Primary Color: #043b69 (Dark Blue)
-/// Design System Version: 1.0
+/// SureSend App Theme - Based on claude_code_prompt.md specifications
+/// Primary Font: Inter (with SF Pro Display and Roboto fallbacks)
+/// Primary Color: #0A2647 (Navy Blue)
+/// Design System Version: 2.0
 class AppTheme {
   // Private constructor to prevent instantiation
   AppTheme._();
@@ -24,22 +24,22 @@ class AppTheme {
   static const double spacing48 = 48.0;
 
   // ============================================
-  // BORDER RADIUS CONSTANTS (Based on Figma: --radius: 1px)
+  // BORDER RADIUS CONSTANTS (Based on claude_code_prompt.md)
   // ============================================
-  static const double radiusBase = 1.0; // Figma base radius
-  static const double radiusXs = 1.0;
-  static const double radiusSm = 1.0;
-  static const double radiusMd = 1.0;
-  static const double radiusLg = 1.0;
-  static const double radiusXl = 5.0; // For special cases
-  static const double radius2xl = 9.0; // For special cases
+  static const double radiusXs = 4.0;
+  static const double radiusSm = 6.0;
+  static const double radiusMd = 8.0;
+  static const double radiusLg = 12.0;
+  static const double radiusXl = 16.0;
+  static const double radius2xl = 20.0;
   static const double radiusFull = 100.0;
 
-  // Border radius for specific components (matching Figma minimal design)
-  static const double cardBorderRadius = radiusBase;
-  static const double buttonBorderRadius = radiusBase;
-  static const double inputBorderRadius = radiusBase;
-  static const double badgeBorderRadius = radiusBase;
+  // Border radius for specific components (matching claude_code_prompt.md specifications)
+  static const double cardBorderRadius = 12.0;     // Cards: 12-16px
+  static const double buttonBorderRadius = 6.0;    // Buttons: 6-8px
+  static const double inputBorderRadius = 6.0;     // Inputs: 6-8px
+  static const double badgeBorderRadius = 6.0;     // Badges: 6-8px
+  static const double modalBorderRadius = 16.0;    // Modals: 16-20px
 
   // ============================================
   // ELEVATION/SHADOW CONSTANTS
@@ -51,10 +51,10 @@ class AppTheme {
   static const double elevationXl = 8.0;
 
   // ============================================
-  // TEXT THEME (Lexend Deca)
+  // TEXT THEME (Inter with SF Pro Display and Roboto fallbacks)
   // ============================================
   static TextTheme _buildTextTheme(Color textColor, Color secondaryColor) {
-    return GoogleFonts.lexendDecaTextTheme(
+    return GoogleFonts.interTextTheme(
       TextTheme(
         // Display styles (large headings)
         displayLarge: TextStyle(

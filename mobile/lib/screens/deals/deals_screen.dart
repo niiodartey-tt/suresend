@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:suresend/theme/app_theme.dart';
+import 'package:suresend/config/app_colors.dart';
+import 'package:suresend/config/theme.dart';
 
 class DealsScreen extends StatefulWidget {
   const DealsScreen({super.key});
@@ -15,15 +17,15 @@ class _DealsScreenState extends State<DealsScreen>
   Color _getStatusColor(String status) {
     switch (status) {
       case 'Completed':
-        return Colors.green.shade700;
+        return AppColors.success;
       case 'In Escrow':
-        return AppTheme.primary;
+        return AppColors.primary;
       case 'In Progress':
-        return Colors.orange.shade700;
+        return AppColors.warning;
       case 'Pending':
-        return Colors.grey.shade700;
+        return AppColors.textMuted;
       default:
-        return Colors.grey;
+        return AppColors.textMuted;
     }
   }
 
@@ -94,7 +96,7 @@ class _DealsScreenState extends State<DealsScreen>
           return Card(
             margin: const EdgeInsets.only(bottom: AppTheme.spacingM),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppTheme.radiusM),
+              borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
             ),
             elevation: 2,
             child: InkWell(
@@ -114,17 +116,17 @@ class _DealsScreenState extends State<DealsScreen>
                           padding: const EdgeInsets.all(AppTheme.spacingS),
                           decoration: BoxDecoration(
                             color: roleIsBuyer
-                                ? AppTheme.withAlpha(AppTheme.primary, 0.08)
-                                : AppTheme.withAlpha(Colors.green, 0.08),
+                                ? AppColors.primary.withValues(alpha: 0.08)
+                                : AppColors.success.withValues(alpha: 0.08),
                             borderRadius:
-                                BorderRadius.circular(AppTheme.radiusM),
+                                BorderRadius.circular(AppTheme.radiusMd),
                           ),
                           child: Icon(
                             deal['type'] == 'product'
                                 ? Icons.inventory_2_rounded
                                 : Icons.handshake_rounded,
                             color:
-                                roleIsBuyer ? AppTheme.primary : Colors.green,
+                                roleIsBuyer ? AppColors.primary : AppColors.success,
                             size: 22,
                           ),
                         ),
@@ -161,12 +163,12 @@ class _DealsScreenState extends State<DealsScreen>
                                                       vertical: 4),
                                               decoration: BoxDecoration(
                                                 color: roleIsBuyer
-                                                    ? AppTheme.primary
+                                                    ? AppColors.primary
                                                         .withValues(alpha: 0.08)
-                                                    : Colors.green.withValues(
+                                                    : AppColors.success.withValues(
                                                         alpha: 0.08),
                                                 borderRadius:
-                                                    BorderRadius.circular(8),
+                                                    BorderRadius.circular(AppTheme.badgeBorderRadius),
                                               ),
                                               child: Text(
                                                 roleIsBuyer
@@ -175,8 +177,8 @@ class _DealsScreenState extends State<DealsScreen>
                                                 style: TextStyle(
                                                   fontSize: 12,
                                                   color: roleIsBuyer
-                                                      ? AppTheme.primary
-                                                      : Colors.green,
+                                                      ? AppColors.primary
+                                                      : AppColors.success,
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                               ),
@@ -200,8 +202,8 @@ class _DealsScreenState extends State<DealsScreen>
                                         '${roleIsBuyer ? "-" : "+"}\$${deal['amount']}',
                                         style: TextStyle(
                                           color: roleIsBuyer
-                                              ? Colors.red
-                                              : Colors.green,
+                                              ? AppColors.error
+                                              : AppColors.success,
                                           fontWeight: FontWeight.w700,
                                         ),
                                       ),
@@ -223,7 +225,7 @@ class _DealsScreenState extends State<DealsScreen>
                                           color: _getStatusColor(deal['status'])
                                               .withValues(alpha: 0.1),
                                           borderRadius:
-                                              BorderRadius.circular(8),
+                                              BorderRadius.circular(AppTheme.badgeBorderRadius),
                                         ),
                                         child: Text(
                                           deal['status'],
@@ -269,7 +271,7 @@ class _DealsScreenState extends State<DealsScreen>
         onPressed: () {
           Navigator.pushNamed(context, '/create-transaction');
         },
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppColors.primary,
         child: const Icon(Icons.add_rounded),
       ),
     );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../config/app_colors.dart';
-import '../config/theme.dart';
+import 'package:suresend/theme/app_colors.dart';
+import 'package:suresend/theme/app_theme.dart';
 
 /// OTP Verification Modal matching ui_references/login_otp_popup.png
 /// A modal bottom sheet for verifying OTP codes

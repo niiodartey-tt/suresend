@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:suresend/config/theme.dart';
+import 'package:suresend/theme/app_theme.dart';
 import 'package:suresend/services/api_service.dart';
 
 class PlaceholderHomeScreen extends StatefulWidget {

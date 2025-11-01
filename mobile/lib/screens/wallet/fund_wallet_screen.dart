@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import '../../config/theme.dart';
+import 'package:suresend/theme/app_theme.dart';
 import '../../providers/wallet_provider.dart';
 import '../../widgets/skeleton_loader.dart';
 import '../../widgets/error_retry_widget.dart';
-import '../../utils/animation_helpers.dart';
+import 'package:suresend/theme/app_animations.dart';
 
 class FundWalletScreen extends StatefulWidget {
   const FundWalletScreen({super.key});

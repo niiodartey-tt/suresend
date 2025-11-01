@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../config/theme.dart';
+import 'package:suresend/theme/app_theme.dart';
 import '../navigation/main_navigation.dart';
 
 class TransactionSuccessScreen extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../config/app_colors.dart';
-import '../config/theme.dart';
+import 'package:suresend/theme/app_colors.dart';
+import 'package:suresend/theme/app_theme.dart';
 
 /// Dark Mode Enabled Modal
 /// Matches ui_references/dark_mode_eneabled.png

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../config/theme.dart';
+import 'package:suresend/theme/app_theme.dart';
 
 /// Skeleton loader widget with shimmer effect for loading states
 class SkeletonLoader extends StatefulWidget {

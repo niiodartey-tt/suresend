@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../config/theme.dart';
+import 'package:suresend/theme/app_theme.dart';
 
 /// Error widget with retry functionality
 class ErrorRetryWidget extends StatelessWidget {

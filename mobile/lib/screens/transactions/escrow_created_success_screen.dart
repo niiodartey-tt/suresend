@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../config/app_colors.dart';
-import '../../config/theme.dart';
+import 'package:suresend/theme/app_colors.dart';
+import 'package:suresend/theme/app_theme.dart';
 
 /// Escrow Created Success Screen
 /// Matches ui_references/create_escrow_success.png

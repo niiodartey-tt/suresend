@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:suresend/config/app_colors.dart';
+import 'package:suresend/theme/app_colors.dart';
 import '../dashboard/unified_dashboard.dart';
 import '../deals/deals_screen.dart';
 import '../settings/settings_screen.dart';

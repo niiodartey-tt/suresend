@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/wallet_provider.dart';
-import '../../config/theme.dart';
+import 'package:suresend/theme/app_theme.dart';
 import '../../services/transaction_service.dart';
 import '../../widgets/skeleton_loader.dart';
 import '../../widgets/error_retry_widget.dart';
-import '../../utils/animation_helpers.dart';
+import 'package:suresend/theme/app_animations.dart';
 import '../transactions/transaction_success_screen.dart';
 
 class TransferMoneyScreen extends StatefulWidget {

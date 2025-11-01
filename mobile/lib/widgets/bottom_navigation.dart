@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:suresend/config/app_colors.dart';
+import 'package:suresend/theme/app_colors.dart';
 
 /// Bottom Navigation Bar Component
 /// Matches the Figma design with 5 navigation items including a centered FAB

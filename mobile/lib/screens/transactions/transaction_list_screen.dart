@@ -6,7 +6,7 @@ import '../../providers/transaction_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/skeleton_loader.dart';
 import '../../widgets/error_retry_widget.dart';
-import '../../utils/animation_helpers.dart';
+import 'package:suresend/theme/app_animations.dart';
 import '../../theme/app_theme.dart';
 import 'transaction_detail_screen.dart';
 import 'create_transaction_screen.dart';

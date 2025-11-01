@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import '../../config/theme.dart';
+import 'package:suresend/theme/app_theme.dart';
 import '../../providers/notification_provider.dart';
 import '../../models/notification.dart' as app_notification;
 import '../../widgets/skeleton_loader.dart';
 import '../../widgets/error_retry_widget.dart';
-import '../../utils/animation_helpers.dart';
+import 'package:suresend/theme/app_animations.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});

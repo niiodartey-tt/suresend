@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:suresend/config/app_colors.dart';
+import 'package:suresend/theme/app_colors.dart';
 
 class CustomBottomNav extends StatelessWidget {
   final int currentIndex;

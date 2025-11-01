@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
-import 'package:suresend/config/app_colors.dart';
+import 'package:suresend/theme/app_colors.dart';
 import 'package:suresend/theme/app_theme.dart';
 
 /// PIN Confirmation Dialog matching ui_reference/confirm_transaction.png

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../config/app_colors.dart';
-import '../../config/theme.dart';
+import 'package:suresend/theme/app_colors.dart';
+import 'package:suresend/theme/app_theme.dart';
 
 /// Sell Transaction Screen
 /// Similar to buy_transaction.png but for selling

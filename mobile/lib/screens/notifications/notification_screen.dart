@@ -17,8 +17,10 @@ class NotificationScreen extends StatefulWidget {
 
 class _NotificationScreenState extends State<NotificationScreen> {
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
   bool _isInitialLoading = true;
   bool _hasError = false;
+  String _searchQuery = '';
 
   @override
   void initState() {
@@ -30,6 +32,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -96,8 +99,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     final notificationProvider = context.watch<NotificationProvider>();
-    final notifications = notificationProvider.notifications;
+    final allNotifications = notificationProvider.notifications;
     final unreadCount = notificationProvider.unreadCount;
+
+    // Filter notifications based on search query
+    final notifications = _searchQuery.isEmpty
+        ? allNotifications
+        : allNotifications.where((n) {
+            return n.title.toLowerCase().contains(_searchQuery) ||
+                   n.message.toLowerCase().contains(_searchQuery) ||
+                   n.type.toLowerCase().contains(_searchQuery);
+          }).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -112,10 +124,46 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ),
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: _loadNotifications,
-        color: AppTheme.primaryColor,
-        child: _buildBody(notificationProvider, notifications),
+      body: Column(
+        children: [
+          // Search Bar
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Search notifications...',
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: _searchQuery.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          _searchController.clear();
+                          setState(() => _searchQuery = '');
+                        },
+                      )
+                    : null,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(0),
+                ),
+                filled: true,
+                fillColor: Colors.grey.shade50,
+              ),
+              onChanged: (value) {
+                setState(() => _searchQuery = value.toLowerCase());
+              },
+            ),
+          ),
+
+          // Notifications List
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: _loadNotifications,
+              color: AppTheme.primaryColor,
+              child: _buildBody(notificationProvider, notifications),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -144,6 +192,38 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
     // Show empty state
     if (notifications.isEmpty && !notificationProvider.isLoading) {
+      if (_searchQuery.isNotEmpty) {
+        // Show search-specific empty state
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.search_off,
+                size: 80,
+                color: Colors.grey.shade400,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'No notifications found',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.grey.shade600,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Try adjusting your search',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey.shade500,
+                ),
+              ),
+            ],
+          ),
+        );
+      }
       return const EmptyStateWidget.notifications();
     }
 

@@ -43,17 +43,34 @@ class CustomBottomNav extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Icon with bold weight when active
             Icon(
               isSelected ? activeIcon : icon,
               color: isSelected ? AppColors.primary : AppColors.textMuted,
               size: 24,
+              weight: isSelected ? 700 : 400, // Bold icon when active
             ),
             const SizedBox(height: 4),
+
+            // Dot indicator below active tab
+            if (isSelected)
+              Container(
+                width: 4,
+                height: 4,
+                decoration: const BoxDecoration(
+                  color: AppColors.primary,
+                  shape: BoxShape.circle,
+                ),
+              )
+            else
+              const SizedBox(height: 4),
+
+            const SizedBox(height: 2),
             Text(
               label,
               style: TextStyle(
                 fontSize: 12,
-                fontWeight: isSelected ? FontWeight.w500 : FontWeight.w400,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                 color: isSelected ? AppColors.primary : AppColors.textMuted,
               ),
             ),

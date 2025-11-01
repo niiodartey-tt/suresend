@@ -62,7 +62,7 @@ class _PlaceholderHomeScreenState extends State<PlaceholderHomeScreen> {
                 height: 100,
                 decoration: BoxDecoration(
                   color: AppTheme.primaryColor,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(AppTheme.radius2xl),
                 ),
                 child: const Icon(
                   Icons.security,

@@ -302,8 +302,8 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                           children: [
                             _buildStatItem(
                               icon: Icons.layers_outlined,
-                              iconColor: const Color(0xFF2563EB),
-                              iconBg: const Color(0xFFEFF6FF),
+                              iconColor: AppColors.statsActiveText,
+                              iconBg: AppColors.statsActiveBg,
                               label: 'Active',
                               value: activeCount.toString(),
                             ),
@@ -311,7 +311,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                             _buildStatItem(
                               icon: Icons.check_circle_outline,
                               iconColor: AppColors.success,
-                              iconBg: const Color(0xFFD1FAE5),
+                              iconBg: AppColors.statsCompletedBg,
                               label: 'Completed',
                               value: completedCount.toString(),
                             ),
@@ -330,7 +330,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                             _buildStatItem(
                               icon: Icons.warning_amber_outlined,
                               iconColor: AppColors.warning,
-                              iconBg: const Color(0xFFFED7AA),
+                              iconBg: AppColors.statsDisputeBg,
                               label: 'Dispute',
                               value: disputedCount.toString(),
                             ),
@@ -338,7 +338,7 @@ class _UnifiedDashboardState extends State<UnifiedDashboard> {
                             _buildStatItem(
                               icon: Icons.emoji_events_outlined,
                               iconColor: AppColors.purple,
-                              iconBg: const Color(0xFFEDE9FE),
+                              iconBg: AppColors.statsTotalBg,
                               label: 'Total',
                               value: totalCount.toString(),
                             ),

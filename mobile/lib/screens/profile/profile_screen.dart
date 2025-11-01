@@ -127,13 +127,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFDBeafe),
-                              borderRadius: BorderRadius.circular(4),
+                              color: AppColors.accentBackground,
+                              borderRadius: BorderRadius.circular(AppTheme.radiusXs),
                             ),
                             child: Text(
                               'Verified',
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: const Color(0xFF3B82F6),
+                                    color: AppColors.statsActiveText,
                                     fontWeight: FontWeight.w500,
                                   ),
                             ),
@@ -162,7 +162,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                         decoration: BoxDecoration(
                           color: AppColors.background,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                         ),
                         child: Row(
                           children: [
@@ -335,12 +335,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFFDBeafe),
-                                  borderRadius: BorderRadius.circular(8),
+                                  color: AppColors.accentBackground,
+                                  borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                                 ),
                                 child: const Icon(
                                   Icons.receipt_long_outlined,
-                                  color: Color(0xFF3B82F6),
+                                  color: AppColors.statsActiveText,
                                   size: 24,
                                 ),
                               ),
@@ -373,12 +373,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFFD1FAE5),
-                                  borderRadius: BorderRadius.circular(8),
+                                  color: AppColors.successLight,
+                                  borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                                 ),
                                 child: const Icon(
                                   Icons.show_chart,
-                                  color: Color(0xFF10B981),
+                                  color: AppColors.success,
                                   size: 24,
                                 ),
                               ),

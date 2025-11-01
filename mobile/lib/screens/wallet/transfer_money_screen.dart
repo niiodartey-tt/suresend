@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/wallet_provider.dart';
 import '../../config/theme.dart';
+import '../../config/app_colors.dart';
 import '../../services/transaction_service.dart';
 import '../../widgets/skeleton_loader.dart';
 import '../../widgets/error_retry_widget.dart';
@@ -71,7 +72,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('User not found: $searchQuery'),
-              backgroundColor: Colors.red,
+              backgroundColor: AppColors.error,
             ),
           );
         }
@@ -84,7 +85,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error searching for user: ${e.toString()}'),
-            backgroundColor: Colors.red,
+            backgroundColor: AppColors.error,
           ),
         );
       }
@@ -100,7 +101,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please verify the recipient username first'),
-          backgroundColor: Colors.orange,
+          backgroundColor: AppColors.warning,
         ),
       );
       return;
@@ -151,7 +152,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
               'This action cannot be undone.',
               style: TextStyle(
                 fontSize: 12,
-                color: Colors.red,
+                color: AppColors.error,
                 fontStyle: FontStyle.italic,
               ),
             ),
@@ -228,7 +229,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(result['message'] ?? 'Transfer failed'),
-              backgroundColor: Colors.red,
+              backgroundColor: AppColors.error,
             ),
           );
         }
@@ -241,7 +242,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error: ${e.toString()}'),
-            backgroundColor: Colors.red,
+            backgroundColor: AppColors.error,
           ),
         );
       }
@@ -283,7 +284,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
                                   'Available Balance',
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: Colors.grey,
+                                    color: AppColors.textSecondary,
                                   ),
                                 ),
                                 const SizedBox(height: 8),
@@ -329,7 +330,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
                           )
                         : _recipientDetails != null
                             ? const Icon(Icons.check_circle,
-                                color: Colors.green)
+                                color: AppColors.success)
                             : IconButton(
                                 icon: const Icon(Icons.search),
                                 onPressed: _verifyUsername,
@@ -356,13 +357,13 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
                   const SizedBox(height: 12),
                   AnimationHelpers.slideInFromBottom(
                     child: Card(
-                      color: Colors.green.shade50,
+                      color: AppColors.successLight,
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: Row(
                           children: [
-                            Icon(Icons.check_circle,
-                                color: Colors.green.shade700),
+                            const Icon(Icons.check_circle,
+                                color: AppColors.successDark),
                             const SizedBox(width: 12),
                             Expanded(
                               child: Column(
@@ -379,7 +380,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
                                     '@${_recipientDetails!['username']}',
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: Colors.grey.shade600,
+                                      color: AppColors.textSecondary,
                                     ),
                                   ),
                                 ],
@@ -461,19 +462,19 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
 
                 // Information Card
                 Card(
-                  color: Colors.blue.shade50,
+                  color: AppColors.accentBackground,
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Row(
                       children: [
-                        Icon(Icons.info_outline, color: Colors.blue.shade700),
+                        const Icon(Icons.info_outline, color: AppColors.primary),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             'Transfers are instant and cannot be reversed. Please verify the recipient details carefully.',
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.blue.shade700,
+                              color: AppColors.primary,
                             ),
                           ),
                         ),
@@ -491,7 +492,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                     ),
                   ),
                   child: _isLoading
@@ -544,7 +545,7 @@ class _ConfirmationRow extends StatelessWidget {
           child: Text(
             '$label:',
             style: const TextStyle(
-              color: Colors.grey,
+              color: AppColors.textSecondary,
               fontSize: 14,
             ),
           ),

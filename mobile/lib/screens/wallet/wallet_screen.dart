@@ -312,7 +312,7 @@ class _QuickActionCard extends StatelessWidget {
     return Card(
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20),
           child: Column(

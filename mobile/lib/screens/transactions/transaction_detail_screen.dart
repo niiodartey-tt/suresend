@@ -7,6 +7,7 @@ import '../../providers/transaction_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/skeleton_loader.dart';
 import '../../widgets/error_retry_widget.dart';
+import '../../config/app_colors.dart';
 
 class TransactionDetailScreen extends StatefulWidget {
   final String transactionId;
@@ -152,9 +153,9 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                       const SizedBox(height: 4),
                       Text(
                         transaction.transactionRef,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 14,
-                          color: Colors.grey.shade700,
+                          color: AppColors.textSecondary,
                         ),
                       ),
                     ],
@@ -197,11 +198,11 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                         children: [
                           Text(
                             'Platform Commission (2%)',
-                            style: TextStyle(color: Colors.grey.shade600),
+                            style: const TextStyle(color: AppColors.textSecondary),
                           ),
                           Text(
                             'GHS ${transaction.commission.toStringAsFixed(2)}',
-                            style: TextStyle(color: Colors.grey.shade600),
+                            style: const TextStyle(color: AppColors.textSecondary),
                           ),
                         ],
                       ),
@@ -211,15 +212,15 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                         children: [
                           Text(
                             'Seller Receives',
-                            style: TextStyle(
-                              color: Colors.green.shade700,
+                            style: const TextStyle(
+                              color: AppColors.successDark,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                           Text(
                             'GHS ${transaction.amountAfterCommission.toStringAsFixed(2)}',
-                            style: TextStyle(
-                              color: Colors.green.shade700,
+                            style: const TextStyle(
+                              color: AppColors.successDark,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -229,18 +230,18 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Colors.blue.shade50,
-                          borderRadius: BorderRadius.circular(8),
+                          color: AppColors.accentBackground,
+                          borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                         ),
                         child: Row(
                           children: [
-                            Icon(Icons.payment, color: Colors.blue.shade700),
+                            const Icon(Icons.payment, color: AppColors.primary),
                             const SizedBox(width: 12),
                             Text(
                               'Payment: ${transaction.paymentMethod.toUpperCase()}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.w500,
-                                color: Colors.blue.shade700,
+                                color: AppColors.primary,
                               ),
                             ),
                           ],
@@ -385,8 +386,8 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                   label: const Text('Confirm Delivery'),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
+                    backgroundColor: AppColors.success,
+                    foregroundColor: AppColors.primaryForeground,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -396,8 +397,8 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                   label: const Text('Raise Dispute'),
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    foregroundColor: Colors.red,
-                    side: const BorderSide(color: Colors.red),
+                    foregroundColor: AppColors.error,
+                    side: const BorderSide(color: AppColors.error),
                   ),
                 ),
               ],
@@ -408,8 +409,8 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                   label: const Text('Cancel Transaction'),
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    foregroundColor: Colors.red,
-                    side: const BorderSide(color: Colors.red),
+                    foregroundColor: AppColors.error,
+                    side: const BorderSide(color: AppColors.error),
                   ),
                 ),
               ],
@@ -417,18 +418,18 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.red.shade50,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.red.shade200),
+                    color: AppColors.errorLight,
+                    borderRadius: BorderRadius.circular(AppTheme.radiusMd),
+                    border: Border.all(color: AppColors.errorLight),
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.warning, color: Colors.red.shade700),
+                      const Icon(Icons.warning, color: AppColors.errorDark),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
                           'This transaction is disputed. Our team will review and resolve it within 3-5 business days.',
-                          style: TextStyle(color: Colors.red.shade700),
+                          style: const TextStyle(color: AppColors.errorDark),
                         ),
                       ),
                     ],
@@ -445,17 +446,17 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
   Color _getStatusColor(String status) {
     switch (status) {
       case 'in_escrow':
-        return Colors.blue;
+        return AppColors.primary;
       case 'completed':
-        return Colors.green;
+        return AppColors.success;
       case 'disputed':
-        return Colors.red;
+        return AppColors.error;
       case 'cancelled':
-        return Colors.grey;
+        return AppColors.textMuted;
       case 'refunded':
-        return Colors.orange;
+        return AppColors.warning;
       default:
-        return Colors.grey;
+        return AppColors.textMuted;
     }
   }
 
@@ -495,12 +496,12 @@ class _ParticipantTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: isCurrentUser ? Colors.blue.shade50 : Colors.grey.shade50,
-        borderRadius: BorderRadius.circular(8),
+        color: isCurrentUser ? AppColors.accentBackground : AppColors.background,
+        borderRadius: BorderRadius.circular(AppTheme.radiusMd),
       ),
       child: Row(
         children: [
-          Icon(icon, color: isCurrentUser ? Colors.blue : Colors.grey.shade700),
+          Icon(icon, color: isCurrentUser ? AppColors.primary : AppColors.textSecondary),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -510,9 +511,9 @@ class _ParticipantTile extends StatelessWidget {
                   children: [
                     Text(
                       role,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
-                        color: Colors.grey.shade600,
+                        color: AppColors.textSecondary,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -522,14 +523,14 @@ class _ParticipantTile extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(4),
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(AppTheme.radiusXs),
                         ),
                         child: const Text(
                           'You',
                           style: TextStyle(
                             fontSize: 10,
-                            color: Colors.white,
+                            color: AppColors.primaryForeground,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -546,9 +547,9 @@ class _ParticipantTile extends StatelessWidget {
                 ),
                 Text(
                   '@${participant.username}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 12,
-                    color: Colors.grey.shade600,
+                    color: AppColors.textSecondary,
                   ),
                 ),
               ],
@@ -596,14 +597,14 @@ class _TimelineItem extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: isCompleted ? Colors.green : Colors.grey,
+              color: isCompleted ? AppColors.success : AppColors.textMuted,
               size: 24,
             ),
             if (!isLast)
               Container(
                 width: 2,
                 height: 40,
-                color: isCompleted ? Colors.green : Colors.grey.shade300,
+                color: isCompleted ? AppColors.success : AppColors.border,
               ),
           ],
         ),
@@ -616,15 +617,15 @@ class _TimelineItem extends StatelessWidget {
                 title,
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
-                  color: isCompleted ? Colors.black : Colors.grey,
+                  color: isCompleted ? AppColors.textPrimary : AppColors.textMuted,
                 ),
               ),
               const SizedBox(height: 2),
               Text(
                 time,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 12,
-                  color: Colors.grey.shade600,
+                  color: AppColors.textSecondary,
                 ),
               ),
               if (!isLast) const SizedBox(height: 16),
@@ -679,7 +680,7 @@ class _ConfirmDeliveryDialogState extends State<_ConfirmDeliveryDialog> {
                 ? 'Delivery confirmed! Funds released to seller.'
                 : 'Delivery rejected. Dispute has been created.',
           ),
-          backgroundColor: _confirmed ? Colors.green : Colors.orange,
+          backgroundColor: _confirmed ? AppColors.success : AppColors.warning,
         ),
       );
       widget.onConfirmed();
@@ -687,7 +688,7 @@ class _ConfirmDeliveryDialogState extends State<_ConfirmDeliveryDialog> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(result['error'] ?? 'Failed to confirm delivery'),
-          backgroundColor: Colors.red,
+          backgroundColor: AppColors.error,
         ),
       );
     }
@@ -707,7 +708,7 @@ class _ConfirmDeliveryDialogState extends State<_ConfirmDeliveryDialog> {
             title: Text(_confirmed ? 'Yes, received' : 'No, not received'),
             value: _confirmed,
             onChanged: (value) => setState(() => _confirmed = value),
-            activeThumbColor: Colors.green,
+            activeColor: AppColors.success,
           ),
           const SizedBox(height: 16),
           TextField(
@@ -717,7 +718,7 @@ class _ConfirmDeliveryDialogState extends State<_ConfirmDeliveryDialog> {
               labelText: 'Notes (optional)',
               hintText: 'Add any comments...',
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppTheme.radiusMd),
               ),
             ),
           ),
@@ -726,19 +727,19 @@ class _ConfirmDeliveryDialogState extends State<_ConfirmDeliveryDialog> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.orange.shade50,
-                borderRadius: BorderRadius.circular(8),
+                color: AppColors.warningLight,
+                borderRadius: BorderRadius.circular(AppTheme.radiusMd),
               ),
               child: Row(
                 children: [
-                  Icon(Icons.info, color: Colors.orange.shade700, size: 20),
+                  const Icon(Icons.info, color: AppColors.warningDark, size: 20),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       'A dispute will be created for review',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
-                        color: Colors.orange.shade700,
+                        color: AppColors.warningDark,
                       ),
                     ),
                   ),
@@ -756,8 +757,8 @@ class _ConfirmDeliveryDialogState extends State<_ConfirmDeliveryDialog> {
         ElevatedButton(
           onPressed: _submit,
           style: ElevatedButton.styleFrom(
-            backgroundColor: _confirmed ? Colors.green : Colors.orange,
-            foregroundColor: Colors.white,
+            backgroundColor: _confirmed ? AppColors.success : AppColors.warning,
+            foregroundColor: AppColors.primaryForeground,
           ),
           child: const Text('Submit'),
         ),
@@ -807,7 +808,7 @@ class _RaiseDisputeDialogState extends State<_RaiseDisputeDialog> {
         const SnackBar(
           content:
               Text('Dispute raised successfully. Our team will review it.'),
-          backgroundColor: Colors.orange,
+          backgroundColor: AppColors.warning,
         ),
       );
       widget.onRaised();
@@ -815,7 +816,7 @@ class _RaiseDisputeDialogState extends State<_RaiseDisputeDialog> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(result['error'] ?? 'Failed to raise dispute'),
-          backgroundColor: Colors.red,
+          backgroundColor: AppColors.error,
         ),
       );
     }
@@ -841,7 +842,7 @@ class _RaiseDisputeDialogState extends State<_RaiseDisputeDialog> {
                 labelText: 'Reason',
                 hintText: 'Describe the problem...',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                 ),
               ),
               validator: (value) {
@@ -858,19 +859,19 @@ class _RaiseDisputeDialogState extends State<_RaiseDisputeDialog> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.blue.shade50,
-                borderRadius: BorderRadius.circular(8),
+                color: AppColors.accentBackground,
+                borderRadius: BorderRadius.circular(AppTheme.radiusMd),
               ),
               child: Row(
                 children: [
-                  Icon(Icons.info, color: Colors.blue.shade700, size: 20),
+                  const Icon(Icons.info, color: AppColors.primary, size: 20),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       'Our team will review and respond within 3-5 business days',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
-                        color: Colors.blue.shade700,
+                        color: AppColors.primary,
                       ),
                     ),
                   ),
@@ -888,8 +889,8 @@ class _RaiseDisputeDialogState extends State<_RaiseDisputeDialog> {
         ElevatedButton(
           onPressed: _submit,
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.red,
-            foregroundColor: Colors.white,
+            backgroundColor: AppColors.error,
+            foregroundColor: AppColors.primaryForeground,
           ),
           child: const Text('Raise Dispute'),
         ),
@@ -936,7 +937,7 @@ class _CancelTransactionDialogState extends State<_CancelTransactionDialog> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Transaction cancelled successfully'),
-          backgroundColor: Colors.green,
+          backgroundColor: AppColors.success,
         ),
       );
       widget.onCancelled();
@@ -944,7 +945,7 @@ class _CancelTransactionDialogState extends State<_CancelTransactionDialog> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(result['error'] ?? 'Failed to cancel transaction'),
-          backgroundColor: Colors.red,
+          backgroundColor: AppColors.error,
         ),
       );
     }
@@ -967,7 +968,7 @@ class _CancelTransactionDialogState extends State<_CancelTransactionDialog> {
               labelText: 'Reason (optional)',
               hintText: 'Why are you cancelling?',
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppTheme.radiusMd),
               ),
             ),
           ),
@@ -981,8 +982,8 @@ class _CancelTransactionDialogState extends State<_CancelTransactionDialog> {
         ElevatedButton(
           onPressed: _submit,
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.red,
-            foregroundColor: Colors.white,
+            backgroundColor: AppColors.error,
+            foregroundColor: AppColors.primaryForeground,
           ),
           child: const Text('Yes, Cancel'),
         ),

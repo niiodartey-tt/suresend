@@ -80,7 +80,7 @@ class _SkeletonLoaderState extends State<SkeletonLoader>
         color: Colors.grey[300],
         borderRadius: isCircular
             ? BorderRadius.circular((widget.width ?? 0) / 2)
-            : widget.borderRadius ?? BorderRadius.circular(8),
+            : widget.borderRadius ?? BorderRadius.circular(AppTheme.radiusMd),
       ),
       child: AnimatedBuilder(
         animation: _animation,
@@ -103,7 +103,7 @@ class _SkeletonLoaderState extends State<SkeletonLoader>
               ),
               borderRadius: isCircular
                   ? BorderRadius.circular((widget.width ?? 0) / 2)
-                  : widget.borderRadius ?? BorderRadius.circular(8),
+                  : widget.borderRadius ?? BorderRadius.circular(AppTheme.radiusMd),
             ),
           );
         },

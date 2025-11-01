@@ -7,6 +7,7 @@ import '../../providers/auth_provider.dart';
 import '../../widgets/skeleton_loader.dart';
 import '../../widgets/error_retry_widget.dart';
 import '../../utils/animation_helpers.dart';
+import '../../config/app_colors.dart';
 import 'transaction_detail_screen.dart';
 import 'create_transaction_screen.dart';
 
@@ -228,7 +229,7 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
                         subtitle:
                             'GHS ${stats.purchases.totalSpent.toStringAsFixed(2)}',
                         icon: Icons.shopping_bag,
-                        color: Colors.blue,
+                        color: AppColors.statsActiveText,
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -239,7 +240,7 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
                         subtitle:
                             'GHS ${stats.sales.totalEarned.toStringAsFixed(2)}',
                         icon: Icons.sell,
-                        color: Colors.green,
+                        color: AppColors.success,
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -249,7 +250,7 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
                         value: stats.deliveries.total.toString(),
                         subtitle: 'Completed',
                         icon: Icons.delivery_dining,
-                        color: Colors.orange,
+                        color: AppColors.warning,
                       ),
                     ),
                   ],
@@ -396,16 +397,16 @@ class _StatCard extends StatelessWidget {
             ),
             Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 11,
-                color: Colors.grey.shade600,
+                color: AppColors.textSecondary,
               ),
             ),
             Text(
               subtitle,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 10,
-                color: Colors.grey.shade500,
+                color: AppColors.textMuted,
               ),
             ),
           ],
@@ -436,17 +437,17 @@ class _TransactionCard extends StatelessWidget {
   Color _getStatusColor() {
     switch (transaction.status) {
       case 'in_escrow':
-        return Colors.blue;
+        return AppColors.primary;
       case 'completed':
-        return Colors.green;
+        return AppColors.success;
       case 'disputed':
-        return Colors.red;
+        return AppColors.error;
       case 'cancelled':
-        return Colors.grey;
+        return AppColors.textMuted;
       case 'refunded':
-        return Colors.orange;
+        return AppColors.warning;
       default:
-        return Colors.grey;
+        return AppColors.textMuted;
     }
   }
 
@@ -459,7 +460,7 @@ class _TransactionCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -472,7 +473,7 @@ class _TransactionCard extends StatelessWidget {
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: _getStatusColor().withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(AppTheme.radiusXs),
                     ),
                     child: Text(
                       transaction.statusDisplay,
@@ -488,8 +489,8 @@ class _TransactionCard extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(4),
+                      color: AppColors.background,
+                      borderRadius: BorderRadius.circular(AppTheme.radiusXs),
                     ),
                     child: Text(
                       _getRole(),
@@ -519,13 +520,13 @@ class _TransactionCard extends StatelessWidget {
               const SizedBox(height: 8),
               Row(
                 children: [
-                  Icon(Icons.receipt, size: 14, color: Colors.grey.shade600),
+                  const Icon(Icons.receipt, size: 14, color: AppColors.textSecondary),
                   const SizedBox(width: 4),
                   Text(
                     transaction.transactionRef,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
-                      color: Colors.grey.shade600,
+                      color: AppColors.textSecondary,
                     ),
                   ),
                 ],
@@ -536,16 +537,16 @@ class _TransactionCard extends StatelessWidget {
                   Icon(
                     isBuyer ? Icons.sell : Icons.shopping_bag,
                     size: 14,
-                    color: Colors.grey.shade600,
+                    color: AppColors.textSecondary,
                   ),
                   const SizedBox(width: 4),
                   Text(
                     isBuyer
                         ? 'Seller: ${transaction.seller.fullName}'
                         : 'Buyer: ${transaction.buyer.fullName}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
-                      color: Colors.grey.shade600,
+                      color: AppColors.textSecondary,
                     ),
                   ),
                 ],
@@ -553,14 +554,14 @@ class _TransactionCard extends StatelessWidget {
               const SizedBox(height: 8),
               Row(
                 children: [
-                  Icon(Icons.access_time,
-                      size: 14, color: Colors.grey.shade600),
+                  const Icon(Icons.access_time,
+                      size: 14, color: AppColors.textSecondary),
                   const SizedBox(width: 4),
                   Text(
                     dateFormat.format(transaction.createdAt),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
-                      color: Colors.grey.shade600,
+                      color: AppColors.textSecondary,
                     ),
                   ),
                 ],

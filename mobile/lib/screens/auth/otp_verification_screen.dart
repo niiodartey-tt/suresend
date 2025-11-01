@@ -154,7 +154,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
       ),
       decoration: BoxDecoration(
         color: Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
         border: Border.all(color: Colors.grey.shade300),
       ),
     );

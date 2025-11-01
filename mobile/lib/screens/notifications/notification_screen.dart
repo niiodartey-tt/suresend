@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../config/theme.dart';
+import '../../config/app_colors.dart';
 import '../../providers/notification_provider.dart';
 import '../../models/notification.dart' as app_notification;
 import '../../widgets/skeleton_loader.dart';
@@ -256,11 +257,11 @@ class _NotificationCard extends StatelessWidget {
   Color _getTypeColor() {
     switch (notification.type) {
       case 'transaction':
-        return Colors.blue;
+        return AppColors.primary;
       case 'delivery':
-        return Colors.orange;
+        return AppColors.warning;
       case 'dispute':
-        return Colors.red;
+        return AppColors.error;
       case 'system':
         return Colors.purple;
       default:
@@ -294,12 +295,12 @@ class _NotificationCard extends StatelessWidget {
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 20),
         decoration: BoxDecoration(
-          color: Colors.red,
-          borderRadius: BorderRadius.circular(12),
+          color: AppColors.error,
+          borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
         ),
         child: const Icon(
           Icons.delete,
-          color: Colors.white,
+          color: AppColors.card,
         ),
       ),
       confirmDismiss: (direction) async {
@@ -317,7 +318,7 @@ class _NotificationCard extends StatelessWidget {
               TextButton(
                 onPressed: () => Navigator.pop(context, true),
                 child:
-                    const Text('Delete', style: TextStyle(color: Colors.red)),
+                    const Text('Delete', style: TextStyle(color: AppColors.error)),
               ),
             ],
           ),
@@ -326,10 +327,10 @@ class _NotificationCard extends StatelessWidget {
       onDismissed: (direction) => onDelete(),
       child: Card(
         margin: const EdgeInsets.only(bottom: 12),
-        color: notification.isRead ? Colors.white : Colors.blue.shade50,
+        color: notification.isRead ? AppColors.card : AppColors.accentBackground,
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Row(
@@ -374,7 +375,7 @@ class _NotificationCard extends StatelessWidget {
                               width: 8,
                               height: 8,
                               decoration: const BoxDecoration(
-                                color: Colors.blue,
+                                color: AppColors.primary,
                                 shape: BoxShape.circle,
                               ),
                             ),

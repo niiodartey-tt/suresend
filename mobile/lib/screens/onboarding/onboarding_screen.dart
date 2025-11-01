@@ -29,7 +29,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       description:
           'Your funds are protected in secure escrow until both parties confirm the transaction',
       color: AppColors.primary,
-      backgroundColor: const Color(0xFFCED9E5),
+      backgroundColor: AppColors.onboardingIllustrationBg,
     ),
     OnboardingSlide(
       icon: Icons.lock_outline,
@@ -142,7 +142,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                           color: _currentPage == index
                               ? AppColors.primary
                               : AppColors.textMuted.withValues(alpha: 0.3),
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(AppTheme.radiusXs),
                         ),
                       ),
                     ),

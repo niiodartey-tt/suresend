@@ -136,7 +136,7 @@ class EscrowSuccessScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
                           color: AppColors.card,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
                           border: Border.all(color: AppColors.border),
                           boxShadow: [
                             BoxShadow(
@@ -173,7 +173,7 @@ class EscrowSuccessScreen extends StatelessWidget {
                                 ),
                                 decoration: BoxDecoration(
                                   color: AppColors.statusEscrowBg,
-                                  borderRadius: BorderRadius.circular(4),
+                                  borderRadius: BorderRadius.circular(AppTheme.radiusXs),
                                 ),
                                 child: Text(
                                   status,
@@ -220,7 +220,7 @@ class EscrowSuccessScreen extends StatelessWidget {
                         backgroundColor: AppColors.primary,
                         foregroundColor: AppColors.primaryForeground,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                         ),
                         elevation: 0,
                       ),
@@ -260,7 +260,7 @@ class EscrowSuccessScreen extends StatelessWidget {
                             side: const BorderSide(color: AppColors.border),
                             padding: const EdgeInsets.symmetric(vertical: 14),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                             ),
                           ),
                         ),
@@ -287,7 +287,7 @@ class EscrowSuccessScreen extends StatelessWidget {
                             side: const BorderSide(color: AppColors.border),
                             padding: const EdgeInsets.symmetric(vertical: 14),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                             ),
                           ),
                         ),

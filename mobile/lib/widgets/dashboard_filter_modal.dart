@@ -127,7 +127,7 @@ class _DashboardFilterModalState extends State<DashboardFilterModal> {
                           isSelected ? FontWeight.w600 : FontWeight.w400,
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                       side: BorderSide(
                         color: isSelected
                             ? AppColors.primary
@@ -170,7 +170,7 @@ class _DashboardFilterModalState extends State<DashboardFilterModal> {
                           isSelected ? FontWeight.w600 : FontWeight.w400,
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                       side: BorderSide(
                         color: isSelected
                             ? AppColors.primary

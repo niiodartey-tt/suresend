@@ -136,7 +136,7 @@ class _TransactionTypeOption extends StatelessWidget {
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: iconBgColor,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppTheme.radiusMd),
               ),
               child: Icon(icon, color: iconColor, size: 24),
             ),

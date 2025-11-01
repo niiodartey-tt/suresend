@@ -112,7 +112,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog> {
         constraints: const BoxConstraints(maxWidth: 400),
         decoration: BoxDecoration(
           color: AppColors.card,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -123,8 +123,8 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog> {
               decoration: const BoxDecoration(
                 color: AppColors.primary,
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  topRight: Radius.circular(12),
+                  topLeft: Radius.circular(AppTheme.cardBorderRadius),
+                  topRight: Radius.circular(AppTheme.cardBorderRadius),
                 ),
               ),
               child: Row(
@@ -133,7 +133,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog> {
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       color: AppColors.primaryForeground.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                     ),
                     child: const Icon(
                       Icons.lock_outline,
@@ -190,7 +190,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog> {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: AppColors.background,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                       border: Border.all(color: AppColors.border),
                     ),
                     child: Column(
@@ -291,7 +291,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog> {
                       ),
                       decoration: BoxDecoration(
                         color: AppColors.background,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                         border: Border.all(color: AppColors.border),
                       ),
                     ),
@@ -305,7 +305,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog> {
                       ),
                       decoration: BoxDecoration(
                         color: AppColors.background,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                         border: Border.all(color: AppColors.primary, width: 2),
                       ),
                     ),
@@ -319,7 +319,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog> {
                       ),
                       decoration: BoxDecoration(
                         color: AppColors.background,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                         border: Border.all(color: AppColors.error, width: 2),
                       ),
                     ),
@@ -366,7 +366,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog> {
                         backgroundColor: const Color(0xFF6B95C0),
                         foregroundColor: AppColors.primaryForeground,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                         ),
                         elevation: 0,
                       ),
@@ -404,7 +404,7 @@ class _PinConfirmationDialogState extends State<PinConfirmationDialog> {
                         foregroundColor: AppColors.textPrimary,
                         side: const BorderSide(color: AppColors.border),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(AppTheme.radiusMd),
                         ),
                       ),
                       child: const Text(

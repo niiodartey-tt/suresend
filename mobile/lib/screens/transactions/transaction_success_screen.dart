@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../config/theme.dart';
+import '../../config/app_colors.dart';
 import '../navigation/main_navigation.dart';
 
 class TransactionSuccessScreen extends StatelessWidget {
@@ -32,14 +33,14 @@ class TransactionSuccessScreen extends StatelessWidget {
               Container(
                 width: 120,
                 height: 120,
-                decoration: BoxDecoration(
-                  color: Colors.green.shade50,
+                decoration: const BoxDecoration(
+                  color: AppColors.successLight,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.check_circle,
                   size: 80,
-                  color: Colors.green.shade600,
+                  color: AppColors.successDark,
                 ),
               ),
               const SizedBox(height: 32),
@@ -130,7 +131,7 @@ class TransactionSuccessScreen extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.primaryColor,
-                  foregroundColor: Colors.white,
+                  foregroundColor: AppColors.primaryForeground,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
                   minimumSize: const Size(double.infinity, 56),

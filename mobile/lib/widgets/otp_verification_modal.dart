@@ -169,18 +169,29 @@ class _OTPVerificationModalState extends State<OTPVerificationModal> {
         constraints: const BoxConstraints(maxWidth: 400),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.2),
+              blurRadius: 24,
+              offset: const Offset(0, 8),
+            ),
+          ],
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Navy Blue Header
+            // Navy Blue Header with Gradient
             Container(
               padding: const EdgeInsets.all(20),
-              decoration: const BoxDecoration(
-                color: AppColors.primary,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [AppColors.primary, AppColors.primaryDark],
+                ),
                 borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(16),
+                  top: Radius.circular(AppTheme.cardBorderRadius),
                 ),
               ),
               child: Row(
@@ -284,19 +295,19 @@ class _OTPVerificationModalState extends State<OTPVerificationModal> {
                             counterText: '',
                             contentPadding: EdgeInsets.zero,
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
                               borderSide: const BorderSide(
                                 color: AppColors.border,
                               ),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
                               borderSide: const BorderSide(
                                 color: AppColors.border,
                               ),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
                               borderSide: const BorderSide(
                                 color: AppColors.primary,
                                 width: 2,
@@ -367,7 +378,7 @@ class _OTPVerificationModalState extends State<OTPVerificationModal> {
                         backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppTheme.buttonBorderRadius),
                         ),
                         disabledBackgroundColor: AppColors.textMuted,
                       ),
@@ -385,7 +396,7 @@ class _OTPVerificationModalState extends State<OTPVerificationModal> {
                               'Verify',
                               style: TextStyle(
                                 fontSize: 16,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                     ),
@@ -402,14 +413,14 @@ class _OTPVerificationModalState extends State<OTPVerificationModal> {
                         foregroundColor: AppColors.textPrimary,
                         side: const BorderSide(color: AppColors.border),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppTheme.buttonBorderRadius),
                         ),
                       ),
                       child: const Text(
                         'Cancel',
                         style: TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),

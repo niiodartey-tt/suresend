@@ -31,22 +31,22 @@ class AppTheme {
   static const double spacingXl = spacing32;
 
   // ============================================
-  // BORDER RADIUS CONSTANTS (All 0px - fully square per requirements)
+  // BORDER RADIUS CONSTANTS (1px per Figma design - sharp corners)
   // ============================================
-  static const double radiusBase = 0.0; // No rounded corners
-  static const double radiusXs = 0.0;
-  static const double radiusSm = 0.0;
-  static const double radiusMd = 0.0;
-  static const double radiusLg = 0.0;
-  static const double radiusXl = 0.0;
-  static const double radius2xl = 0.0;
-  static const double radiusFull = 0.0; // Even circular elements are square
+  static const double radiusBase = 1.0; // Sharp 1px corners per Figma
+  static const double radiusXs = 1.0;
+  static const double radiusSm = 1.0;
+  static const double radiusMd = 1.0;
+  static const double radiusLg = 1.0;
+  static const double radiusXl = 1.0;
+  static const double radius2xl = 1.0;
+  static const double radiusFull = 1.0; // Even circular elements use 1px
 
-  // Border radius for specific components (all 0px - fully square)
-  static const double cardBorderRadius = 0.0;
-  static const double buttonBorderRadius = 0.0;
-  static const double inputBorderRadius = 0.0;
-  static const double badgeBorderRadius = 0.0;
+  // Border radius for specific components (all 1px per Figma - sharp corners)
+  static const double cardBorderRadius = 1.0;
+  static const double buttonBorderRadius = 1.0;
+  static const double inputBorderRadius = 1.0;
+  static const double badgeBorderRadius = 1.0;
 
   // ============================================
   // ELEVATION/SHADOW CONSTANTS

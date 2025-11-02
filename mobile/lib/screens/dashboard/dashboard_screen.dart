@@ -71,7 +71,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header with gradient background
+              // Gradient Header Section (flat - no rounded corners)
               Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
@@ -80,7 +80,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     colors: [AppColors.primary, AppColors.primaryDark],
                   ),
                 ),
-                padding: const EdgeInsets.all(AppTheme.spacing24),
+                padding: const EdgeInsets.fromLTRB(16, 24, 16, 80),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -93,14 +93,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           children: [
                             Text(
                               'Welcome back,',
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: AppColors.primaryForeground.withValues(alpha: 0.9),
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: AppColors.primaryForeground.withValues(alpha: 0.8),
                                   ),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               'John Doe',
-                              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                     color: AppColors.primaryForeground,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -124,7 +124,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   icon: const Icon(
                                     Icons.notifications_outlined,
                                     color: AppColors.primaryForeground,
-                                    size: 28,
+                                    size: 24,
                                   ),
                                 ),
                                 if (unreadCount > 0)
@@ -134,7 +134,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     child: Container(
                                       padding: const EdgeInsets.all(4),
                                       decoration: const BoxDecoration(
-                                        color: Colors.red,
+                                        color: AppColors.error,
                                         shape: BoxShape.circle,
                                       ),
                                       constraints: const BoxConstraints(
@@ -160,7 +160,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                     const SizedBox(height: 24),
 
-                    // Balance Cards Row
+                    // Balance Display Grid
                     Row(
                       children: [
                         Expanded(
@@ -174,16 +174,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     ),
                               ),
                               const SizedBox(height: 4),
-                              FittedBox(
-                                fit: BoxFit.scaleDown,
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  '\$4,500.00',
-                                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                        color: AppColors.primaryForeground,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                ),
+                              Text(
+                                '\$4,500.00',
+                                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                      color: AppColors.primaryForeground,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                               ),
                             ],
                           ),
@@ -200,16 +196,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     ),
                               ),
                               const SizedBox(height: 4),
-                              FittedBox(
-                                fit: BoxFit.scaleDown,
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  '\$200.00',
-                                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                        color: AppColors.primaryForeground,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                ),
+                              Text(
+                                '\$200.00',
+                                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                      color: AppColors.primaryForeground,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                               ),
                             ],
                           ),
@@ -220,22 +212,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
 
-              // Stats Card (White card with 4 stats)
-              Padding(
-                padding: const EdgeInsets.all(AppTheme.spacing16),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.card,
-                    borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  padding: const EdgeInsets.all(AppTheme.spacing16),
+              // Stats Card (White card that overlays header bottom)
+              Transform.translate(
+                offset: const Offset(0, -56),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.card,
+                      borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          blurRadius: 16,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    padding: const EdgeInsets.all(20),
                   child: Column(
                     children: [
                       // First row: Active and Completed
@@ -292,57 +286,77 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
 
-              // Action Buttons
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacing16),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) => const FundWalletScreen()),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          foregroundColor: AppColors.primaryForeground,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(AppTheme.buttonBorderRadius),
+              // Action Buttons (adjusted for negative margin)
+              Transform.translate(
+                offset: const Offset(0, -40),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => const FundWalletScreen()),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: AppColors.primaryForeground,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(AppTheme.buttonBorderRadius),
+                            ),
+                            elevation: 2,
+                          ),
+                          child: const Text(
+                            '+ Top up wallet',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
-                        icon: const Icon(Icons.add, size: 18),
-                        label: const Text('Top up wallet'),
                       ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) => const WithdrawFundsScreen()),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF1F2937),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(AppTheme.buttonBorderRadius),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => const WithdrawFundsScreen()),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.secondary,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(AppTheme.buttonBorderRadius),
+                            ),
+                            elevation: 2,
+                          ),
+                          child: const Text(
+                            'Withdraw',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
-                        child: const Text('Withdraw'),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(height: 24),
+
+              // Add spacing adjustment (compensate for negative margins above)
+              const SizedBox(height: 8),
 
               // Recent Transactions Header
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacing16),
+              Transform.translate(
+                offset: const Offset(0, -32),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -377,8 +391,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   _showFilter = !_showFilter;
                                 });
                               },
-                              icon: const Icon(Icons.filter_list),
-                              color: AppColors.primary,
+                              icon: const Icon(Icons.filter_list, size: 20),
+                              color: AppColors.textSecondary,
                             ),
                             TextButton(
                               onPressed: () {
@@ -388,7 +402,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   ),
                                 );
                               },
-                              child: const Text('See all'),
+                              child: const Text(
+                                'See all',
+                                style: TextStyle(
+                                  color: AppColors.primary,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -397,37 +418,43 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
+                ),
+              const SizedBox(height: 0),
 
               // Filter Section with Search
               if (_showFilter) ...[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacing16),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search transactions...',
-                      prefixIcon: const Icon(Icons.search, size: 20),
-                      filled: true,
-                      fillColor: AppColors.background,
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: AppColors.border),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: AppColors.border),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: AppColors.primary, width: 2),
+                Transform.translate(
+                  offset: const Offset(0, -32),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Search transactions...',
+                        prefixIcon: const Icon(Icons.search, size: 20),
+                        filled: true,
+                        fillColor: AppColors.card,
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
+                          borderSide: const BorderSide(color: AppColors.border),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
+                          borderSide: const BorderSide(color: AppColors.border),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppTheme.inputBorderRadius),
+                          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+                        ),
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 12),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacing16),
+                const SizedBox(height: 0),
+                Transform.translate(
+                  offset: const Offset(0, -24),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -445,19 +472,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 12),
+                ),
+                const SizedBox(height: 0),
               ],
 
-              // Transaction List
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacing16),
-                itemCount: _filteredTransactions.length,
-                itemBuilder: (context, index) {
-                  final transaction = _filteredTransactions[index];
-                  return _buildTransactionCard(transaction);
-                },
+              // Transaction List (adjusted for negative margins)
+              Transform.translate(
+                offset: Offset(0, _showFilter ? -16 : -32),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  itemCount: _filteredTransactions.length.clamp(0, 3),
+                  itemBuilder: (context, index) {
+                    final transaction = _filteredTransactions[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: _buildTransactionCard(transaction),
+                    );
+                  },
+                ),
               ),
               const SizedBox(height: 80), // Space for bottom nav
             ],
@@ -516,18 +550,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
         });
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF1E3A5F) : AppColors.card,
-          borderRadius: BorderRadius.circular(8),
+          color: isSelected ? AppColors.primary : AppColors.card,
+          borderRadius: BorderRadius.circular(AppTheme.badgeBorderRadius),
           border: Border.all(
-            color: isSelected ? const Color(0xFF1E3A5F) : AppColors.border,
+            color: isSelected ? AppColors.primary : AppColors.border,
             width: 1,
           ),
         ),
         child: Text(
           label,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: isSelected ? AppColors.primaryForeground : AppColors.textPrimary,
                 fontWeight: FontWeight.w500,
               ),
@@ -563,8 +597,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
         statusBgColor = AppColors.background;
     }
 
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.card,
+        borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(
@@ -587,21 +631,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 children: [
                   Text(
                     transaction['id'],
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: AppColors.textSecondary,
+                          fontSize: 12,
                         ),
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: statusBgColor,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(AppTheme.badgeBorderRadius),
+                      border: Border.all(color: statusColor.withValues(alpha: 0.2)),
                     ),
                     child: Text(
                       transaction['status'],
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: statusColor,
                             fontWeight: FontWeight.w500,
+                            fontSize: 11,
                           ),
                     ),
                   ),
@@ -612,52 +659,71 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 transaction['date'],
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: AppColors.textMuted,
+                      fontSize: 12,
                     ),
               ),
               const SizedBox(height: 12),
-              // Amount
-              Text(
-                '\$${transaction['amount'].toStringAsFixed(2)}',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-              ),
-              const SizedBox(height: 8),
-              // Description and Seller
-              Text(
-                transaction['description'],
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'Seller: ${transaction['seller']}',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-              ),
-              const SizedBox(height: 12),
-              // Details button
-              Align(
-                alignment: Alignment.centerRight,
-                child: OutlinedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => TransactionDetailScreen(
-                          transactionId: transaction['id'],
+              // Amount and Description
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '\$${transaction['amount'].toStringAsFixed(2)}',
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
                         ),
-                      ),
-                    );
-                  },
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    side: const BorderSide(color: AppColors.primary),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppTheme.buttonBorderRadius),
+                        const SizedBox(height: 6),
+                        Text(
+                          transaction['description'],
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: AppColors.textSecondary,
+                              ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Seller: ${transaction['seller']}',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: AppColors.textMuted,
+                                fontSize: 12,
+                              ),
+                        ),
+                      ],
                     ),
                   ),
-                  child: const Text('Details'),
-                ),
+                  const SizedBox(width: 12),
+                  OutlinedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => TransactionDetailScreen(
+                            transactionId: transaction['id'],
+                          ),
+                        ),
+                      );
+                    },
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      side: const BorderSide(color: AppColors.primary),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppTheme.buttonBorderRadius),
+                      ),
+                      minimumSize: const Size(0, 36),
+                    ),
+                    child: const Text(
+                      'Details',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

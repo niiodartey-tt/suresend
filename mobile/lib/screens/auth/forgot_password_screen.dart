@@ -79,20 +79,20 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       const SizedBox(height: AppTheme.spacing16),
 
                       // Title
-                      Text(
+                      const Text(
                         'Forgot Password?',
-                        style:
-                            Theme.of(context).textTheme.displaySmall?.copyWith(
-                                  color: AppColors.primaryForeground,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
                       ),
                       const SizedBox(height: AppTheme.spacing8),
 
                       // Subtitle
                       Text(
                         'No worries, we\'ll send you reset instructions',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: AppColors.primaryForeground
                                   .withValues(alpha: 0.8),
                             ),
@@ -118,22 +118,29 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // Email field
-                            Text(
+                            const Text(
                               'Email Address',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelLarge
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.textPrimary,
+                              ),
                             ),
                             const SizedBox(height: AppTheme.spacing8),
                             TextFormField(
                               controller: _emailController,
                               keyboardType: TextInputType.emailAddress,
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
+                              ),
                               decoration: const InputDecoration(
                                 hintText: 'your@email.com',
-                                prefixIcon: Icon(Icons.email_outlined),
+                                prefixIcon: Icon(
+                                  Icons.email_outlined,
+                                  size: 20,
+                                  color: AppColors.textMuted,
+                                ),
                               ),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -177,7 +184,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                           ),
                                         ),
                                       )
-                                    : const Text('Send Reset Link'),
+                                    : const Text(
+                                        'Send Reset Link',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
                               ),
                             ),
                           ],
@@ -291,7 +304,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: const Text('Back to Login'),
+                        child: const Text(
+                          'Back to Login',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                       ),
                     ),
                   ],

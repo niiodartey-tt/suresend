@@ -124,17 +124,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       constraints: const BoxConstraints(),
                     ),
                     const SizedBox(height: 24),
-                    Text(
+                    const Text(
                       'Create Account',
-                      style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                            color: AppColors.primaryForeground,
-                            fontWeight: FontWeight.w600,
-                          ),
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       'Join us today',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: AppColors.primaryForeground
                                 .withValues(alpha: 0.8),
                           ),
@@ -168,12 +169,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       // Full Name
-                      Text(
+                      const Text(
                         'Full Name',
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                              color: AppColors.textPrimary,
-                              fontWeight: FontWeight.w500,
-                            ),
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.textPrimary,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
@@ -220,12 +222,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       const SizedBox(height: 16),
 
                       // Username
-                      Text(
+                      const Text(
                         'Username',
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                              color: AppColors.textPrimary,
-                              fontWeight: FontWeight.w500,
-                            ),
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.textPrimary,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
@@ -282,12 +285,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       const SizedBox(height: 16),
 
                       // Email Address
-                      Text(
+                      const Text(
                         'Email Address',
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                              color: AppColors.textPrimary,
-                              fontWeight: FontWeight.w500,
-                            ),
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.textPrimary,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
@@ -336,12 +340,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       const SizedBox(height: 16),
 
                       // Phone Number
-                      Text(
+                      const Text(
                         'Phone Number',
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                              color: AppColors.textPrimary,
-                              fontWeight: FontWeight.w500,
-                            ),
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.textPrimary,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
@@ -395,12 +400,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       const SizedBox(height: 16),
 
                       // Password
-                      Text(
+                      const Text(
                         'Password',
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                              color: AppColors.textPrimary,
-                              fontWeight: FontWeight.w500,
-                            ),
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.textPrimary,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
@@ -463,12 +469,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       const SizedBox(height: 16),
 
                       // Confirm Password
-                      Text(
+                      const Text(
                         'Confirm Password',
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                              color: AppColors.textPrimary,
-                              fontWeight: FontWeight.w500,
-                            ),
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.textPrimary,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
@@ -597,7 +604,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                       // Create Account Button
                       SizedBox(
-                        height: 52,
+                        height: 48,
+                        width: double.infinity,
                         child: ElevatedButton(
                           onPressed: authProvider.isLoading ? null : _handleRegister,
                           style: ElevatedButton.styleFrom(
@@ -622,7 +630,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   'Create Account',
                                   style: TextStyle(
                                     fontSize: 16,
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                         ),
